@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WeightSerialPortParam xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <m_nComNo>12</m_nComNo>
+  <m_strName />
+  <m_nBaudRate>9600</m_nBaudRate>
+  <m_nDataBit>8</m_nDataBit>
+  <m_strPartiy>None</m_strPartiy>
+  <m_strStopBit>1</m_strStopBit>
+  <m_strFlowCtrl>None</m_strFlowCtrl>
+  <m_nTime>1000</m_nTime>
+  <m_nBufferSzie>4096</m_nBufferSzie>
+  <m_strLineFlag>CRLF</m_strLineFlag>
+</WeightSerialPortParam>

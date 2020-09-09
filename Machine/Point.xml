@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<StationPoint>
+  <左AA站>
+    <Point Name="1" x="2" y="3" z="4" u="5" tx="6" ty="7" handlesystem="True" />
+  </左AA站>
+</StationPoint>

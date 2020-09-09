@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<StationPoint>
+  <自动标定>
+    <Point Name="sd" x="1" y="1" z="1" u="1" tx="1" ty="1" />
+  </自动标定>
+  <左点胶>
+    <Point Name="df" x="12" y="23" z="0" u="0" tx="0" ty="0" />
+  </左点胶>
+  <左移栽>
+    <Point Name="上料位" x="0" y="0" z="0" u="0" tx="0" ty="0" />
+  </左移栽>
+  <机械手工站>
+    <Point Name="2号治具第1个放料过渡点" x="269.686695006219" y="246.758260393265" z="-30.013" u="160.695" tx="0" ty="0" handlesystem="False" />
+    <Point Name="2号治具第2个放料过渡点" x="257.424" y="-99.4028" z="-30.013" u="-51.4546" tx="0" ty="0" handlesystem="False" />
+    <Point Name="2号治具放料点" x="351.674712794991" y="-99.6418098661364" z="-105.273" u="-47.139" tx="0" ty="0" handlesystem="False" />
+    <Point Name="1号治具放料点" x="347.683410445681" y="279.323440075777" z="-105.081" u="-47.1847" tx="0" ty="0" handlesystem="False" />
+    <Point Name="1号治具取料点" x="348.797103328601" y="281.530792721704" z="-104.424" u="71.5601" tx="0" ty="0" handlesystem="False" />
+    <Point Name="2号治具取料点" x="350.77849316094" y="-98.1654706461701" z="-105.535" u="71.7579" tx="0" ty="0" handlesystem="False" />
+    <Point Name="1号治具取料过渡点" x="262.69" y="279.323440075777" z="-30.013" u="72.409" tx="0" ty="0" handlesystem="False" />
+    <Point Name="1号治具取完料过渡点" x="112.900230437666" y="552.620733628076" z="-30.013" u="250.619" tx="0" ty="0" handlesystem="False" />
+    <Point Name="2号治具第1个取料过渡点" x="269.686598194368" y="246.758181004091" z="-30.013" u="160.695" tx="0" ty="0" handlesystem="False" />
+    <Point Name="2号治具第2个取料过渡点" x="278.479762608551" y="-99.079643573796" z="-75.2726" u="71.7574" tx="0" ty="0" handlesystem="False" />
+    <Point Name="拉带第1个取料点" x="-98.1613943467911" y="249.993360518379" z="-123.958" u="222.225" tx="0" ty="0" handlesystem="False" />
+    <Point Name="拉带第2个取料点" x="-224.560794982362" y="149.709261589916" z="-125.053" u="41.6749" tx="0" ty="0" handlesystem="False" />
+    <Point Name="拉带第3个取料点" x="-158.124400930038" y="250.392270992773" z="-123.458" u="222.22" tx="0" ty="0" handlesystem="False" />
+    <Point Name="OK料第1个放料点" x="-96.8911547204753" y="251.238267901912" z="-122.513" u="-17.9668" tx="0" ty="0" handlesystem="False" />
+    <Point Name="2号治具取完料第2个过渡点" x="248.394311597217" y="117.220015356011" z="-30.013" u="146.575" tx="0" ty="0" handlesystem="False" />
+    <Point Name="2号治具取完料第1个过渡点" x="263.562451496554" y="-85.2612634672686" z="-30.013" u="55.5077" tx="0" ty="0" handlesystem="False" />
+    <Point Name="2号治具取完料第3个过渡点" x="112.899" y="552.621" z="-30.013" u="250.62" tx="0" ty="0" handlesystem="False" />
+    <Point Name="2号治具放料过渡点1" x="269.686695006219" y="246.758260393265" z="-30.013" u="160.695" tx="0" ty="0" handlesystem="False" />
+    <Point Name="2号治具取料过渡点1" x="246.737046497508" y="-99.634591786292" z="-30.013" u="-47.1567" tx="0" ty="0" handlesystem="False" />
+    <Point Name="2号治具过渡点2" x="257.424" y="-99.4028" z="-30.013" u="-51.4546" tx="0" ty="0" handlesystem="False" />
+    <Point Name="2号治具取料过渡点2" x="278.476513672694" y="-99.0791509330651" z="-30.013" u="71.7616" tx="0" ty="0" handlesystem="False" />
+    <Point Name="2号治具取完料过渡点1" x="263.562451496554" y="-85.2612634672686" z="-30.013" u="55.5077" tx="0" ty="0" handlesystem="False" />
+    <Point Name="2号治具取完料过渡点2" x="248.394311597217" y="117.220015356011" z="-30.013" u="146.575" tx="0" ty="0" handlesystem="False" />
+    <Point Name="2号治具取完料过渡点3" x="112.899" y="552.621" z="-30.013" u="250.62" tx="0" ty="0" handlesystem="False" />
+    <Point Name="2号治具放料过渡点2" x="257.424" y="-99.4028" z="-30.013" u="-51.4546" tx="0" ty="0" handlesystem="False" />
+    <Point Name="拉带第4个取料点" x="-284.585864716303" y="151.706445411266" z="-124.053" u="42.1636" tx="0" ty="0" handlesystem="False" />
+    <Point Name="拉带第6个取料点" x="-344.591780281469" y="149.717627328151" z="-124.053" u="42.1483" tx="0" ty="0" handlesystem="False" />
+    <Point Name="拉带第5个取料点" x="-218.142670856686" y="248.392312593567" z="-123.458" u="221.698" tx="0" ty="0" handlesystem="False" />
+    <Point Name="拉带第11个取料点" x="-218.624780566779" y="377.935369654021" z="-123.475" u="222.086" tx="0" ty="0" handlesystem="False" />
+    <Point Name="拉带第7个取料点" x="-98.2634776793129" y="378.042019231581" z="-123.375" u="222.026" tx="0" ty="0" handlesystem="False" />
+    <Point Name="拉带第9个取料点" x="-157.424724368529" y="379.4978223211" z="-123.775" u="222.055" tx="0" ty="0" handlesystem="False" />
+    <Point Name="拉带第8个取料点" x="-225.127727387374" y="278.754385106792" z="-123.253" u="42.1005" tx="0" ty="0" handlesystem="False" />
+    <Point Name="拉带第10个取料点" x="-284.54289270873" y="281.149202398757" z="-123.053" u="42.0176" tx="0" ty="0" handlesystem="False" />
+    <Point Name="拉带第12个取料点" x="-345.073513006662" y="281.183075109399" z="-123.553" u="41.9825" tx="0" ty="0" handlesystem="False" />
+    <Point Name="OK料第3个放料点" x="-156.755285084599" y="251.293576210337" z="-124.013" u="-18.0142" tx="0" ty="0" handlesystem="False" />
+    <Point Name="OK料第2个放料点" x="-224.484202738775" y="151.620579277723" z="-123.013" u="161.804" tx="0" ty="0" handlesystem="False" />
+    <Point Name="OK料第4个放料点" x="-285.444782906467" y="151.697552121529" z="-123.013" u="161.786" tx="0" ty="0" handlesystem="False" />
+    <Point Name="OK料第9个放料点" x="-157.424724368529" y="379.4978223211" z="-123.775" u="-18.0142" tx="0" ty="0" handlesystem="False" />
+    <Point Name="OK料第8个放料点" x="-223.647744323785" y="281.346398349684" z="-123.775" u="161.786" tx="0" ty="0" handlesystem="False" />
+    <Point Name="OK料第7个放料点" x="-97.2614204653309" y="379.539794510508" z="-123.775" u="-17.9668" tx="0" ty="0" handlesystem="False" />
+    <Point Name="OK料第6个放料点" x="-344.594732920549" y="151.710109099093" z="-123.775" u="161.786" tx="0" ty="0" handlesystem="False" />
+    <Point Name="OK料第5个放料点" x="-218.132876961572" y="250.390917294473" z="-123.775" u="-17.9668" tx="0" ty="0" handlesystem="False" />
+    <Point Name="OK料第12个放料点" x="-345.073513006662" y="281.183075109399" z="-123.775" u="161.786" tx="0" ty="0" handlesystem="False" />
+    <Point Name="OK料第11个放料点" x="-218.125794311387" y="379.431029321209" z="-123.775" u="-17.9668" tx="0" ty="0" handlesystem="False" />
+    <Point Name="OK料第10个放料点" x="-284.54289270873" y="281.149202398757" z="-123.775" u="161.786" tx="0" ty="0" handlesystem="False" />
+    <Point Name="安全位置" x="229" y="367.319676218478" z="-22.0532" u="-17.9626" tx="0" ty="0" handlesystem="False" />
+    <Point Name="拍照位置" x="-149.939752553324" y="204.794899329448" z="-69.4255" u="-28.9697" tx="0" ty="0" handlesystem="False" />
+    <Point Name="拍照位置2" x="-146.251808678227" y="435.343468974405" z="-44.4043" u="127.432" tx="0" ty="0" handlesystem="False" />
+    <Point Name="拍照位置3" x="-149.936998862869" y="204.794802257689" z="-77.4268" u="-28.9579" tx="0" ty="0" handlesystem="False" />
+    <Point Name="标定点" x="320.047797312148" y="424.908855663183" z="-21.9255" u="-28.9718" tx="0" ty="0" handlesystem="False" />
+  </机械手工站>
+  <机械手标定>
+    <Point Name="标定点" x="321.05" y="424.924" z="-21.9279" u="-29.0091" tx="0" ty="0" handlesystem="False" />
+    <Point Name="机器人点1" x="-246.208" y="414.392" z="-69.7559" u="-78.3331" tx="0" ty="0" handlesystem="False" />
+    <Point Name="机器人点2" x="-246.208" y="414.392" z="-69.7559" u="-78.3331" tx="0" ty="0" handlesystem="False" />
+    <Point Name="机器人点3" x="-246.208" y="414.392" z="-69.7559" u="-78.3331" tx="0" ty="0" handlesystem="False" />
+    <Point Name="机器人点5" x="-246.208" y="414.392" z="-69.7559" u="-78.3331" tx="0" ty="0" handlesystem="False" />
+    <Point Name="机器人点4" x="-246.208" y="414.392" z="-69.7559" u="-78.3331" tx="0" ty="0" handlesystem="False" />
+    <Point Name="机器人点6" x="-246.208" y="414.392" z="-69.7559" u="-78.3331" tx="0" ty="0" handlesystem="False" />
+    <Point Name="机器人点7" x="-246.208" y="414.392" z="-69.7559" u="-78.3331" tx="0" ty="0" handlesystem="False" />
+    <Point Name="机器人点8" x="-246.208" y="414.392" z="-69.7559" u="-78.3331" tx="0" ty="0" handlesystem="False" />
+  </机械手标定>
+</StationPoint>

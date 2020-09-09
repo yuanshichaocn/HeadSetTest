@@ -1,0 +1,13 @@
+D:\03.MyProject\StationDemo\StationDemo\obj\x86\Debug\StationDemo.Form_Set.resources
+D:\03.MyProject\StationDemo\StationDemo\obj\x86\Debug\StationDemo.Properties.Resources.resources
+D:\03.MyProject\StationDemo\StationDemo\obj\x86\Debug\StationDemo.StationForm.resources
+D:\03.MyProject\StationDemo\StationDemo\obj\x86\Debug\StationDemo.csproj.GenerateResource.Cache
+D:\03.MyProject\StationDemo\StationDemo\bin\Debug\StationDemo.exe
+D:\03.MyProject\StationDemo\StationDemo\bin\Debug\StationDemo.pdb
+D:\03.MyProject\StationDemo\StationDemo\obj\x86\Debug\StationDemo.exe
+D:\03.MyProject\StationDemo\StationDemo\obj\x86\Debug\StationDemo.pdb
+D:\03.MyProject\StationDemo\StationDemo\obj\x86\Debug\StationDemo.Form1.resources
+D:\03.MyProject\StationDemo\StationDemo\obj\x86\Debug\StationDemo.Form_Auto.resources
+D:\03.MyProject\StationDemo\StationDemo\obj\x86\Debug\StationDemo.Form_HalconWnd.resources
+D:\03.MyProject\StationDemo\StationDemo\bin\Debug\halcondotnetxl.dll
+D:\03.MyProject\StationDemo\StationDemo\bin\Debug\halcondotnetxl.xml

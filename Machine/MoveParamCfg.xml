@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<MoveParamCfg>
+  <MoveParam>
+    <MoveParam 轴号="0" 轴定义="0" 轴类型="SEVER" VelH="20" VelM="20" VelL="20" AccH="20" AccM="20" AccL="20" DccH="20" DccM="20" DccL="20" />
+    <MoveParam 轴号="1" 轴定义="1" 轴类型="SEVER" VelH="20" VelM="20" VelL="20" AccH="20" AccM="20" AccL="20" DccH="20" DccM="20" DccL="20" />
+    <MoveParam 轴号="2" 轴定义="2" 轴类型="SEVER" VelH="20" VelM="20" VelL="20" AccH="20" AccM="20" AccL="20" DccH="20" DccM="20" DccL="20" />
+    <MoveParam 轴号="3" 轴定义="3" 轴类型="SEVER" VelH="20" VelM="20" VelL="20" AccH="20" AccM="20" AccL="20" DccH="20" DccM="20" DccL="20" />
+    <MoveParam 轴号="4" 轴定义="4" 轴类型="SEVER" VelH="20" VelM="20" VelL="20" AccH="20" AccM="20" AccL="20" DccH="20" DccM="20" DccL="20" />
+    <MoveParam 轴号="5" 轴定义="5" 轴类型="SEVER" VelH="20" VelM="20" VelL="20" AccH="20" AccM="20" AccL="20" DccH="20" DccM="20" DccL="20" />
+    <MoveParam 轴号="6" 轴定义="6" 轴类型="SEVER" VelH="20" VelM="20" VelL="20" AccH="20" AccM="20" AccL="20" DccH="20" DccM="20" DccL="20" />
+    <MoveParam 轴号="7" 轴定义="7" 轴类型="SEVER" VelH="20" VelM="20" VelL="20" AccH="20" AccM="20" AccL="20" DccH="20" DccM="20" DccL="20" />
+    <MoveParam 轴号="8" 轴定义="0" 轴类型="SEVER" VelH="20" VelM="20" VelL="20" AccH="20" AccM="20" AccL="20" DccH="20" DccM="20" DccL="20" />
+    <MoveParam 轴号="9" 轴定义="1" 轴类型="SEVER" VelH="20" VelM="20" VelL="20" AccH="20" AccM="20" AccL="20" DccH="20" DccM="20" DccL="20" />
+    <MoveParam 轴号="10" 轴定义="2" 轴类型="SEVER" VelH="20" VelM="20" VelL="20" AccH="20" AccM="20" AccL="20" DccH="20" DccM="20" DccL="20" />
+    <MoveParam 轴号="11" 轴定义="3" 轴类型="SEVER" VelH="20" VelM="20" VelL="20" AccH="20" AccM="20" AccL="20" DccH="20" DccM="20" DccL="20" />
+    <MoveParam 轴号="12" 轴定义="4" 轴类型="SEVER" VelH="20" VelM="20" VelL="20" AccH="20" AccM="20" AccL="20" DccH="20" DccM="20" DccL="20" />
+    <MoveParam 轴号="13" 轴定义="5" 轴类型="SEVER" VelH="20" VelM="20" VelL="20" AccH="20" AccM="20" AccL="20" DccH="20" DccM="20" DccL="20" />
+    <MoveParam 轴号="14" 轴定义="6" 轴类型="SEVER" VelH="20" VelM="20" VelL="20" AccH="20" AccM="20" AccL="20" DccH="20" DccM="20" DccL="20" />
+    <MoveParam 轴号="15" 轴定义="7" 轴类型="SEVER" VelH="20" VelM="20" VelL="20" AccH="20" AccM="20" AccL="20" DccH="20" DccM="20" DccL="20" />
+    <MoveParam 轴号="16" 轴定义="0" 轴类型="SEVER" VelH="20" VelM="20" VelL="20" AccH="20" AccM="20" AccL="20" DccH="20" DccM="20" DccL="20" />
+    <MoveParam 轴号="17" 轴定义="1" 轴类型="SEVER" VelH="20" VelM="20" VelL="20" AccH="20" AccM="20" AccL="20" DccH="20" DccM="20" DccL="20" />
+    <MoveParam 轴号="18" 轴定义="2" 轴类型="SEVER" VelH="20" VelM="20" VelL="20" AccH="20" AccM="20" AccL="20" DccH="20" DccM="20" DccL="20" />
+    <MoveParam 轴号="19" 轴定义="3" 轴类型="SEVER" VelH="20" VelM="20" VelL="20" AccH="20" AccM="20" AccL="20" DccH="20" DccM="20" DccL="20" />
+  </MoveParam>
+  <HomeParam>
+    <HomeParam 轴号="0" 轴定义="0" HomeMode="0" HomeHighVel="20" HomeHighAcc="5" HomeHighDec="5" HomeLowVel="3" HomeLowAcc="1" HomeLowDec="1" HomeDir="False" HomeOffst="1000" />
+    <HomeParam 轴号="1" 轴定义="1" HomeMode="0" HomeHighVel="20" HomeHighAcc="5" HomeHighDec="5" HomeLowVel="3" HomeLowAcc="1" HomeLowDec="1" HomeDir="False" HomeOffst="1000" />
+    <HomeParam 轴号="2" 轴定义="2" HomeMode="0" HomeHighVel="20" HomeHighAcc="5" HomeHighDec="5" HomeLowVel="3" HomeLowAcc="1" HomeLowDec="1" HomeDir="True" HomeOffst="1000" />
+    <HomeParam 轴号="3" 轴定义="3" HomeMode="0" HomeHighVel="20" HomeHighAcc="5" HomeHighDec="5" HomeLowVel="3" HomeLowAcc="1" HomeLowDec="1" HomeDir="True" HomeOffst="1000" />
+    <HomeParam 轴号="4" 轴定义="4" HomeMode="0" HomeHighVel="20" HomeHighAcc="5" HomeHighDec="5" HomeLowVel="3" HomeLowAcc="1" HomeLowDec="1" HomeDir="True" HomeOffst="1000" />
+    <HomeParam 轴号="5" 轴定义="5" HomeMode="0" HomeHighVel="20" HomeHighAcc="5" HomeHighDec="5" HomeLowVel="3" HomeLowAcc="1" HomeLowDec="1" HomeDir="True" HomeOffst="1000" />
+    <HomeParam 轴号="6" 轴定义="6" HomeMode="0" HomeHighVel="20" HomeHighAcc="5" HomeHighDec="5" HomeLowVel="3" HomeLowAcc="1" HomeLowDec="1" HomeDir="True" HomeOffst="1000" />
+    <HomeParam 轴号="7" 轴定义="7" HomeMode="0" HomeHighVel="20" HomeHighAcc="5" HomeHighDec="5" HomeLowVel="3" HomeLowAcc="1" HomeLowDec="1" HomeDir="True" HomeOffst="1000" />
+    <HomeParam 轴号="8" 轴定义="0" HomeMode="0" HomeHighVel="20" HomeHighAcc="5" HomeHighDec="5" HomeLowVel="3" HomeLowAcc="1" HomeLowDec="1" HomeDir="False" HomeOffst="1000" />
+    <HomeParam 轴号="9" 轴定义="1" HomeMode="0" HomeHighVel="20" HomeHighAcc="5" HomeHighDec="5" HomeLowVel="3" HomeLowAcc="1" HomeLowDec="1" HomeDir="False" HomeOffst="1000" />
+    <HomeParam 轴号="10" 轴定义="2" HomeMode="0" HomeHighVel="20" HomeHighAcc="5" HomeHighDec="5" HomeLowVel="3" HomeLowAcc="1" HomeLowDec="1" HomeDir="True" HomeOffst="1000" />
+    <HomeParam 轴号="11" 轴定义="3" HomeMode="0" HomeHighVel="20" HomeHighAcc="5" HomeHighDec="5" HomeLowVel="3" HomeLowAcc="1" HomeLowDec="1" HomeDir="True" HomeOffst="1000" />
+    <HomeParam 轴号="12" 轴定义="4" HomeMode="0" HomeHighVel="20" HomeHighAcc="5" HomeHighDec="5" HomeLowVel="3" HomeLowAcc="1" HomeLowDec="1" HomeDir="True" HomeOffst="1000" />
+    <HomeParam 轴号="13" 轴定义="5" HomeMode="0" HomeHighVel="20" HomeHighAcc="5" HomeHighDec="5" HomeLowVel="3" HomeLowAcc="1" HomeLowDec="1" HomeDir="True" HomeOffst="1000" />
+    <HomeParam 轴号="14" 轴定义="6" HomeMode="0" HomeHighVel="20" HomeHighAcc="5" HomeHighDec="5" HomeLowVel="3" HomeLowAcc="1" HomeLowDec="1" HomeDir="True" HomeOffst="1000" />
+    <HomeParam 轴号="15" 轴定义="7" HomeMode="0" HomeHighVel="20" HomeHighAcc="5" HomeHighDec="5" HomeLowVel="3" HomeLowAcc="1" HomeLowDec="1" HomeDir="True" HomeOffst="1000" />
+    <HomeParam 轴号="16" 轴定义="0" HomeMode="0" HomeHighVel="20" HomeHighAcc="5" HomeHighDec="5" HomeLowVel="3" HomeLowAcc="1" HomeLowDec="1" HomeDir="False" HomeOffst="1000" />
+    <HomeParam 轴号="17" 轴定义="1" HomeMode="0" HomeHighVel="20" HomeHighAcc="5" HomeHighDec="5" HomeLowVel="3" HomeLowAcc="1" HomeLowDec="1" HomeDir="False" HomeOffst="1000" />
+    <HomeParam 轴号="18" 轴定义="2" HomeMode="0" HomeHighVel="20" HomeHighAcc="5" HomeHighDec="5" HomeLowVel="3" HomeLowAcc="1" HomeLowDec="1" HomeDir="True" HomeOffst="1000" />
+    <HomeParam 轴号="19" 轴定义="3" HomeMode="0" HomeHighVel="20" HomeHighAcc="5" HomeHighDec="5" HomeLowVel="3" HomeLowAcc="1" HomeLowDec="1" HomeDir="True" HomeOffst="1000" />
+  </HomeParam>
+</MoveParamCfg>

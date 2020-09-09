@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<UserParamCfg>
+  <UserSet>
+    <UserSet UserName="admin" PassWord="admin" UserRight="超级管理员" />
+    <UserSet UserName="engineer" PassWord="engineer" UserRight="软件工程师" />
+    <UserSet UserName="user" PassWord="user" UserRight="客户操作员" />
+  </UserSet>
+</UserParamCfg>

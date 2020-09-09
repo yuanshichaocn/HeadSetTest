@@ -1,0 +1,807 @@
+﻿using DevExpress;
+namespace StationDemo
+{
+    partial class StationFormRobot
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            this.button_Ypositive = new System.Windows.Forms.Button();
+            this.button_Upositive = new System.Windows.Forms.Button();
+            this.button_stop = new System.Windows.Forms.Button();
+            this.button_Xpositive = new System.Windows.Forms.Button();
+            this.button_Xnegtive = new System.Windows.Forms.Button();
+            this.button_Zpositive = new System.Windows.Forms.Button();
+            this.button_Znegtive = new System.Windows.Forms.Button();
+            this.button_Ynegtive = new System.Windows.Forms.Button();
+            this.button_Unegtive = new System.Windows.Forms.Button();
+            this.dataGridView_PointInfo = new System.Windows.Forms.DataGridView();
+            this.button_SingleAxisMove = new System.Windows.Forms.Button();
+            this.button_AllAxisMove = new System.Windows.Forms.Button();
+            this.button_Save = new System.Windows.Forms.Button();
+            this.comboBox_SelMotionType = new System.Windows.Forms.ComboBox();
+            this.button_homeX = new System.Windows.Forms.Button();
+            this.button_ServoOnX = new System.Windows.Forms.Button();
+            this.button_RecordPoint = new System.Windows.Forms.Button();
+            this.button_ContinuousSnap = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.comboBox_SelCamera = new System.Windows.Forms.ComboBox();
+            this.button_start = new System.Windows.Forms.Button();
+            this.labelControl4 = new DevExpress.XtraEditors.LabelControl();
+            this.dataGridView_ioInput = new System.Windows.Forms.DataGridView();
+            this.IoName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.IoInputState = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridView_IoOutput = new System.Windows.Forms.DataGridView();
+            this.IoOutputNmae = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.IoOutputState = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.IoOutOperate = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.btn_Del = new System.Windows.Forms.Button();
+            this.button_homeY = new System.Windows.Forms.Button();
+            this.button_homeZ = new System.Windows.Forms.Button();
+            this.button_homeU = new System.Windows.Forms.Button();
+            this.button_ServoOnY = new System.Windows.Forms.Button();
+            this.button_ServoOnZ = new System.Windows.Forms.Button();
+            this.button_ServoOnU = new System.Windows.Forms.Button();
+            this.button_Txpositive = new System.Windows.Forms.Button();
+            this.button_Txnegtive = new System.Windows.Forms.Button();
+            this.button_Typositive = new System.Windows.Forms.Button();
+            this.button_Tynegtive = new System.Windows.Forms.Button();
+            this.button_homeTx = new System.Windows.Forms.Button();
+            this.button_homeTy = new System.Windows.Forms.Button();
+            this.button_ServoOnTx = new System.Windows.Forms.Button();
+            this.button_ServoOnTy = new System.Windows.Forms.Button();
+            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Xpos = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Ypos = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ZPos = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.UPos = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView_PointInfo)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView_ioInput)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView_IoOutput)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // button_Ypositive
+            // 
+            this.button_Ypositive.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.button_Ypositive.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.button_Ypositive.ForeColor = System.Drawing.Color.Red;
+            this.button_Ypositive.Location = new System.Drawing.Point(74, 74);
+            this.button_Ypositive.Name = "button_Ypositive";
+            this.button_Ypositive.Size = new System.Drawing.Size(53, 50);
+            this.button_Ypositive.TabIndex = 0;
+            this.button_Ypositive.Text = "Y+";
+            this.button_Ypositive.UseVisualStyleBackColor = true;
+            this.button_Ypositive.Click += new System.EventHandler(this.button_Ypostive_Click);
+            this.button_Ypositive.MouseDown += new System.Windows.Forms.MouseEventHandler(this.JogStart);
+            this.button_Ypositive.MouseUp += new System.Windows.Forms.MouseEventHandler(this.JogEnd);
+            // 
+            // button_Upositive
+            // 
+            this.button_Upositive.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.button_Upositive.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.button_Upositive.ForeColor = System.Drawing.Color.Red;
+            this.button_Upositive.Location = new System.Drawing.Point(5, 74);
+            this.button_Upositive.Name = "button_Upositive";
+            this.button_Upositive.Size = new System.Drawing.Size(53, 50);
+            this.button_Upositive.TabIndex = 1;
+            this.button_Upositive.Text = "U+";
+            this.button_Upositive.UseVisualStyleBackColor = true;
+            this.button_Upositive.Click += new System.EventHandler(this.button_Upostive_Click);
+            this.button_Upositive.MouseDown += new System.Windows.Forms.MouseEventHandler(this.JogStart);
+            this.button_Upositive.MouseUp += new System.Windows.Forms.MouseEventHandler(this.JogEnd);
+            // 
+            // button_stop
+            // 
+            this.button_stop.Location = new System.Drawing.Point(74, 128);
+            this.button_stop.Name = "button_stop";
+            this.button_stop.Size = new System.Drawing.Size(53, 50);
+            this.button_stop.TabIndex = 2;
+            this.button_stop.Text = "stop";
+            this.button_stop.UseVisualStyleBackColor = true;
+            this.button_stop.Click += new System.EventHandler(this.button_stop_Click);
+            // 
+            // button_Xpositive
+            // 
+            this.button_Xpositive.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.button_Xpositive.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.button_Xpositive.ForeColor = System.Drawing.Color.Red;
+            this.button_Xpositive.Location = new System.Drawing.Point(139, 128);
+            this.button_Xpositive.Name = "button_Xpositive";
+            this.button_Xpositive.Size = new System.Drawing.Size(53, 50);
+            this.button_Xpositive.TabIndex = 3;
+            this.button_Xpositive.Text = "X+";
+            this.button_Xpositive.UseVisualStyleBackColor = true;
+            this.button_Xpositive.Click += new System.EventHandler(this.button_Xpositive_Click);
+            this.button_Xpositive.MouseDown += new System.Windows.Forms.MouseEventHandler(this.JogStart);
+            this.button_Xpositive.MouseUp += new System.Windows.Forms.MouseEventHandler(this.JogEnd);
+            // 
+            // button_Xnegtive
+            // 
+            this.button_Xnegtive.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.button_Xnegtive.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.button_Xnegtive.ForeColor = System.Drawing.Color.Red;
+            this.button_Xnegtive.Location = new System.Drawing.Point(5, 128);
+            this.button_Xnegtive.Name = "button_Xnegtive";
+            this.button_Xnegtive.Size = new System.Drawing.Size(53, 50);
+            this.button_Xnegtive.TabIndex = 4;
+            this.button_Xnegtive.Text = "X-";
+            this.button_Xnegtive.UseVisualStyleBackColor = true;
+            this.button_Xnegtive.Click += new System.EventHandler(this.button_Xnegtive_Click);
+            this.button_Xnegtive.MouseDown += new System.Windows.Forms.MouseEventHandler(this.JogStart);
+            this.button_Xnegtive.MouseUp += new System.Windows.Forms.MouseEventHandler(this.JogEnd);
+            // 
+            // button_Zpositive
+            // 
+            this.button_Zpositive.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.button_Zpositive.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.button_Zpositive.ForeColor = System.Drawing.Color.Red;
+            this.button_Zpositive.Location = new System.Drawing.Point(139, 74);
+            this.button_Zpositive.Name = "button_Zpositive";
+            this.button_Zpositive.Size = new System.Drawing.Size(53, 50);
+            this.button_Zpositive.TabIndex = 5;
+            this.button_Zpositive.Text = "Z+";
+            this.button_Zpositive.UseVisualStyleBackColor = true;
+            this.button_Zpositive.Click += new System.EventHandler(this.button_Zpostive_Click);
+            this.button_Zpositive.MouseDown += new System.Windows.Forms.MouseEventHandler(this.JogStart);
+            this.button_Zpositive.MouseUp += new System.Windows.Forms.MouseEventHandler(this.JogEnd);
+            // 
+            // button_Znegtive
+            // 
+            this.button_Znegtive.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.button_Znegtive.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.button_Znegtive.ForeColor = System.Drawing.Color.Red;
+            this.button_Znegtive.Location = new System.Drawing.Point(139, 180);
+            this.button_Znegtive.Name = "button_Znegtive";
+            this.button_Znegtive.Size = new System.Drawing.Size(53, 50);
+            this.button_Znegtive.TabIndex = 6;
+            this.button_Znegtive.Text = "Z-";
+            this.button_Znegtive.UseVisualStyleBackColor = true;
+            this.button_Znegtive.Click += new System.EventHandler(this.button_Znegtive_Click);
+            this.button_Znegtive.MouseDown += new System.Windows.Forms.MouseEventHandler(this.JogStart);
+            this.button_Znegtive.MouseUp += new System.Windows.Forms.MouseEventHandler(this.JogEnd);
+            // 
+            // button_Ynegtive
+            // 
+            this.button_Ynegtive.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.button_Ynegtive.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.button_Ynegtive.ForeColor = System.Drawing.Color.Red;
+            this.button_Ynegtive.Location = new System.Drawing.Point(74, 180);
+            this.button_Ynegtive.Name = "button_Ynegtive";
+            this.button_Ynegtive.Size = new System.Drawing.Size(53, 50);
+            this.button_Ynegtive.TabIndex = 7;
+            this.button_Ynegtive.Text = "Y-";
+            this.button_Ynegtive.UseVisualStyleBackColor = true;
+            this.button_Ynegtive.Click += new System.EventHandler(this.button_Ynegtive_Click);
+            this.button_Ynegtive.MouseDown += new System.Windows.Forms.MouseEventHandler(this.JogStart);
+            this.button_Ynegtive.MouseUp += new System.Windows.Forms.MouseEventHandler(this.JogEnd);
+            // 
+            // button_Unegtive
+            // 
+            this.button_Unegtive.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.button_Unegtive.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.button_Unegtive.ForeColor = System.Drawing.Color.Red;
+            this.button_Unegtive.Location = new System.Drawing.Point(5, 180);
+            this.button_Unegtive.Name = "button_Unegtive";
+            this.button_Unegtive.Size = new System.Drawing.Size(53, 50);
+            this.button_Unegtive.TabIndex = 8;
+            this.button_Unegtive.Text = "U-";
+            this.button_Unegtive.UseVisualStyleBackColor = true;
+            this.button_Unegtive.Click += new System.EventHandler(this.buttonU_negtive_Click);
+            this.button_Unegtive.MouseDown += new System.Windows.Forms.MouseEventHandler(this.JogStart);
+            this.button_Unegtive.MouseUp += new System.Windows.Forms.MouseEventHandler(this.JogEnd);
+            // 
+            // dataGridView_PointInfo
+            // 
+            this.dataGridView_PointInfo.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView_PointInfo.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Column1,
+            this.Xpos,
+            this.Ypos,
+            this.ZPos,
+            this.UPos});
+            this.dataGridView_PointInfo.GridColor = System.Drawing.SystemColors.Control;
+            this.dataGridView_PointInfo.Location = new System.Drawing.Point(7, 291);
+            this.dataGridView_PointInfo.Name = "dataGridView_PointInfo";
+            this.dataGridView_PointInfo.RowHeadersVisible = false;
+            this.dataGridView_PointInfo.RowTemplate.Height = 20;
+            this.dataGridView_PointInfo.Size = new System.Drawing.Size(405, 323);
+            this.dataGridView_PointInfo.TabIndex = 9;
+            this.dataGridView_PointInfo.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
+            this.dataGridView_PointInfo.RowsRemoved += new System.Windows.Forms.DataGridViewRowsRemovedEventHandler(this.PointDel);
+            // 
+            // button_SingleAxisMove
+            // 
+            this.button_SingleAxisMove.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.button_SingleAxisMove.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.button_SingleAxisMove.Location = new System.Drawing.Point(418, 384);
+            this.button_SingleAxisMove.Name = "button_SingleAxisMove";
+            this.button_SingleAxisMove.Size = new System.Drawing.Size(66, 40);
+            this.button_SingleAxisMove.TabIndex = 10;
+            this.button_SingleAxisMove.Text = "点动";
+            this.button_SingleAxisMove.UseVisualStyleBackColor = false;
+            this.button_SingleAxisMove.Click += new System.EventHandler(this.button_SingleAxisMove_Click);
+            // 
+            // button_AllAxisMove
+            // 
+            this.button_AllAxisMove.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.button_AllAxisMove.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.button_AllAxisMove.Location = new System.Drawing.Point(418, 431);
+            this.button_AllAxisMove.Name = "button_AllAxisMove";
+            this.button_AllAxisMove.Size = new System.Drawing.Size(66, 40);
+            this.button_AllAxisMove.TabIndex = 11;
+            this.button_AllAxisMove.Text = "联动";
+            this.button_AllAxisMove.UseVisualStyleBackColor = false;
+            this.button_AllAxisMove.Click += new System.EventHandler(this.button_AllAxisMove_Click);
+            // 
+            // button_Save
+            // 
+            this.button_Save.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.button_Save.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.button_Save.Location = new System.Drawing.Point(418, 291);
+            this.button_Save.Name = "button_Save";
+            this.button_Save.Size = new System.Drawing.Size(66, 40);
+            this.button_Save.TabIndex = 12;
+            this.button_Save.Text = "保存点位";
+            this.button_Save.UseVisualStyleBackColor = false;
+            this.button_Save.Click += new System.EventHandler(this.button_Save_Click);
+            // 
+            // comboBox_SelMotionType
+            // 
+            this.comboBox_SelMotionType.FormattingEnabled = true;
+            this.comboBox_SelMotionType.Items.AddRange(new object[] {
+            "0.1",
+            "0.5",
+            "1",
+            "5",
+            "10",
+            "50",
+            "100",
+            "1000"});
+            this.comboBox_SelMotionType.Location = new System.Drawing.Point(7, 2);
+            this.comboBox_SelMotionType.Name = "comboBox_SelMotionType";
+            this.comboBox_SelMotionType.Size = new System.Drawing.Size(183, 20);
+            this.comboBox_SelMotionType.TabIndex = 13;
+            // 
+            // button_homeX
+            // 
+            this.button_homeX.BackColor = System.Drawing.Color.LightGreen;
+            this.button_homeX.Location = new System.Drawing.Point(7, 29);
+            this.button_homeX.Name = "button_homeX";
+            this.button_homeX.Size = new System.Drawing.Size(77, 33);
+            this.button_homeX.TabIndex = 14;
+            this.button_homeX.Text = "回原点";
+            this.button_homeX.UseVisualStyleBackColor = false;
+            this.button_homeX.Click += new System.EventHandler(this.button_homeX_Click);
+            // 
+            // button_ServoOnX
+            // 
+            this.button_ServoOnX.BackColor = System.Drawing.Color.LightGreen;
+            this.button_ServoOnX.Location = new System.Drawing.Point(108, 32);
+            this.button_ServoOnX.Name = "button_ServoOnX";
+            this.button_ServoOnX.Size = new System.Drawing.Size(82, 30);
+            this.button_ServoOnX.TabIndex = 15;
+            this.button_ServoOnX.Text = "伺服On";
+            this.button_ServoOnX.UseVisualStyleBackColor = false;
+            this.button_ServoOnX.Click += new System.EventHandler(this.button_ServoOnX_Click);
+            // 
+            // button_RecordPoint
+            // 
+            this.button_RecordPoint.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.button_RecordPoint.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.button_RecordPoint.Location = new System.Drawing.Point(418, 338);
+            this.button_RecordPoint.Name = "button_RecordPoint";
+            this.button_RecordPoint.Size = new System.Drawing.Size(66, 40);
+            this.button_RecordPoint.TabIndex = 17;
+            this.button_RecordPoint.Text = "记录点位";
+            this.button_RecordPoint.UseVisualStyleBackColor = false;
+            this.button_RecordPoint.Click += new System.EventHandler(this.button_RecordPoint_Click);
+            // 
+            // button_ContinuousSnap
+            // 
+            this.button_ContinuousSnap.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.button_ContinuousSnap.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.button_ContinuousSnap.Location = new System.Drawing.Point(202, 43);
+            this.button_ContinuousSnap.Name = "button_ContinuousSnap";
+            this.button_ContinuousSnap.Size = new System.Drawing.Size(81, 32);
+            this.button_ContinuousSnap.TabIndex = 25;
+            this.button_ContinuousSnap.Text = "连续采集";
+            this.button_ContinuousSnap.UseVisualStyleBackColor = false;
+            this.button_ContinuousSnap.Click += new System.EventHandler(this.button_ContinuousSnap_Click);
+            // 
+            // button2
+            // 
+            this.button2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.button2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.button2.Location = new System.Drawing.Point(203, 82);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(81, 32);
+            this.button2.TabIndex = 26;
+            this.button2.Text = "单次采集";
+            this.button2.UseVisualStyleBackColor = false;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // comboBox_SelCamera
+            // 
+            this.comboBox_SelCamera.FormattingEnabled = true;
+            this.comboBox_SelCamera.Location = new System.Drawing.Point(203, 2);
+            this.comboBox_SelCamera.Name = "comboBox_SelCamera";
+            this.comboBox_SelCamera.Size = new System.Drawing.Size(82, 20);
+            this.comboBox_SelCamera.TabIndex = 27;
+            // 
+            // button_start
+            // 
+            this.button_start.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.button_start.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.button_start.Location = new System.Drawing.Point(202, 124);
+            this.button_start.Name = "button_start";
+            this.button_start.Size = new System.Drawing.Size(81, 32);
+            this.button_start.TabIndex = 28;
+            this.button_start.Text = "启动";
+            this.button_start.UseVisualStyleBackColor = false;
+            this.button_start.Click += new System.EventHandler(this.button_start_Click);
+            // 
+            // labelControl4
+            // 
+            this.labelControl4.Appearance.BackColor = System.Drawing.Color.Blue;
+            this.labelControl4.Appearance.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelControl4.Appearance.Options.UseBackColor = true;
+            this.labelControl4.Appearance.Options.UseFont = true;
+            this.labelControl4.Location = new System.Drawing.Point(906, 29);
+            this.labelControl4.Margin = new System.Windows.Forms.Padding(2);
+            this.labelControl4.Name = "labelControl4";
+            this.labelControl4.Size = new System.Drawing.Size(0, 19);
+            this.labelControl4.TabIndex = 42;
+            // 
+            // dataGridView_ioInput
+            // 
+            this.dataGridView_ioInput.AllowUserToAddRows = false;
+            this.dataGridView_ioInput.AllowUserToDeleteRows = false;
+            this.dataGridView_ioInput.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            this.dataGridView_ioInput.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.IoName,
+            this.IoInputState});
+            this.dataGridView_ioInput.GridColor = System.Drawing.SystemColors.Control;
+            this.dataGridView_ioInput.Location = new System.Drawing.Point(489, 291);
+            this.dataGridView_ioInput.Margin = new System.Windows.Forms.Padding(2);
+            this.dataGridView_ioInput.Name = "dataGridView_ioInput";
+            this.dataGridView_ioInput.ReadOnly = true;
+            this.dataGridView_ioInput.RowHeadersVisible = false;
+            this.dataGridView_ioInput.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            this.dataGridView_ioInput.RowTemplate.Height = 20;
+            this.dataGridView_ioInput.RowTemplate.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridView_ioInput.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.dataGridView_ioInput.Size = new System.Drawing.Size(155, 349);
+            this.dataGridView_ioInput.TabIndex = 87;
+            this.dataGridView_ioInput.SelectionChanged += new System.EventHandler(this.OnSelectionDataGridView);
+            // 
+            // IoName
+            // 
+            this.IoName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.IoName.HeaderText = "IO_IN名称";
+            this.IoName.Name = "IoName";
+            this.IoName.ReadOnly = true;
+            this.IoName.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.IoName.Width = 160;
+            // 
+            // IoInputState
+            // 
+            this.IoInputState.HeaderText = "状态";
+            this.IoInputState.Name = "IoInputState";
+            this.IoInputState.ReadOnly = true;
+            this.IoInputState.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.IoInputState.ToolTipText = "InIo状态";
+            this.IoInputState.Width = 40;
+            // 
+            // dataGridView_IoOutput
+            // 
+            this.dataGridView_IoOutput.AllowUserToAddRows = false;
+            this.dataGridView_IoOutput.AllowUserToDeleteRows = false;
+            this.dataGridView_IoOutput.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            this.dataGridView_IoOutput.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.IoOutputNmae,
+            this.IoOutputState,
+            this.IoOutOperate});
+            this.dataGridView_IoOutput.GridColor = System.Drawing.SystemColors.Control;
+            this.dataGridView_IoOutput.Location = new System.Drawing.Point(647, 291);
+            this.dataGridView_IoOutput.Margin = new System.Windows.Forms.Padding(2);
+            this.dataGridView_IoOutput.Name = "dataGridView_IoOutput";
+            this.dataGridView_IoOutput.ReadOnly = true;
+            this.dataGridView_IoOutput.RowHeadersVisible = false;
+            this.dataGridView_IoOutput.RowTemplate.Height = 20;
+            this.dataGridView_IoOutput.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.dataGridView_IoOutput.Size = new System.Drawing.Size(203, 349);
+            this.dataGridView_IoOutput.TabIndex = 88;
+            this.dataGridView_IoOutput.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_IoOutput_CellContentClick);
+            this.dataGridView_IoOutput.SelectionChanged += new System.EventHandler(this.OnSelectionDataGridView);
+            // 
+            // IoOutputNmae
+            // 
+            this.IoOutputNmae.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.IoOutputNmae.HeaderText = "IO_Out名称";
+            this.IoOutputNmae.Name = "IoOutputNmae";
+            this.IoOutputNmae.ReadOnly = true;
+            this.IoOutputNmae.Width = 160;
+            // 
+            // IoOutputState
+            // 
+            this.IoOutputState.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.IoOutputState.HeaderText = "状态";
+            this.IoOutputState.Name = "IoOutputState";
+            this.IoOutputState.ReadOnly = true;
+            this.IoOutputState.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.IoOutputState.ToolTipText = "IoOut状态";
+            this.IoOutputState.Width = 40;
+            // 
+            // IoOutOperate
+            // 
+            this.IoOutOperate.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.IoOutOperate.HeaderText = "操作";
+            this.IoOutOperate.Name = "IoOutOperate";
+            this.IoOutOperate.ReadOnly = true;
+            this.IoOutOperate.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.IoOutOperate.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.IoOutOperate.Width = 30;
+            // 
+            // btn_Del
+            // 
+            this.btn_Del.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.btn_Del.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btn_Del.Location = new System.Drawing.Point(418, 478);
+            this.btn_Del.Name = "btn_Del";
+            this.btn_Del.Size = new System.Drawing.Size(66, 40);
+            this.btn_Del.TabIndex = 89;
+            this.btn_Del.Text = "删除";
+            this.btn_Del.UseVisualStyleBackColor = false;
+            this.btn_Del.Click += new System.EventHandler(this.btn_Del_Click);
+            // 
+            // button_homeY
+            // 
+            this.button_homeY.BackColor = System.Drawing.Color.LightGreen;
+            this.button_homeY.Location = new System.Drawing.Point(269, 214);
+            this.button_homeY.Name = "button_homeY";
+            this.button_homeY.Size = new System.Drawing.Size(55, 30);
+            this.button_homeY.TabIndex = 18;
+            this.button_homeY.Text = "回原点";
+            this.button_homeY.UseVisualStyleBackColor = false;
+            this.button_homeY.Visible = false;
+            this.button_homeY.Click += new System.EventHandler(this.button_homeY_Click);
+            // 
+            // button_homeZ
+            // 
+            this.button_homeZ.BackColor = System.Drawing.Color.LightGreen;
+            this.button_homeZ.Location = new System.Drawing.Point(306, 237);
+            this.button_homeZ.Name = "button_homeZ";
+            this.button_homeZ.Size = new System.Drawing.Size(55, 30);
+            this.button_homeZ.TabIndex = 19;
+            this.button_homeZ.Text = "回原点";
+            this.button_homeZ.UseVisualStyleBackColor = false;
+            this.button_homeZ.Visible = false;
+            this.button_homeZ.Click += new System.EventHandler(this.button_homeZ_Click);
+            // 
+            // button_homeU
+            // 
+            this.button_homeU.BackColor = System.Drawing.Color.LightGreen;
+            this.button_homeU.Location = new System.Drawing.Point(306, 237);
+            this.button_homeU.Name = "button_homeU";
+            this.button_homeU.Size = new System.Drawing.Size(55, 30);
+            this.button_homeU.TabIndex = 20;
+            this.button_homeU.Text = "回原点";
+            this.button_homeU.UseVisualStyleBackColor = false;
+            this.button_homeU.Visible = false;
+            this.button_homeU.Click += new System.EventHandler(this.button_homeU_Click);
+            // 
+            // button_ServoOnY
+            // 
+            this.button_ServoOnY.BackColor = System.Drawing.Color.LightGreen;
+            this.button_ServoOnY.Location = new System.Drawing.Point(330, 214);
+            this.button_ServoOnY.Name = "button_ServoOnY";
+            this.button_ServoOnY.Size = new System.Drawing.Size(55, 30);
+            this.button_ServoOnY.TabIndex = 21;
+            this.button_ServoOnY.Text = "伺服On";
+            this.button_ServoOnY.UseVisualStyleBackColor = false;
+            this.button_ServoOnY.Visible = false;
+            this.button_ServoOnY.Click += new System.EventHandler(this.button_ServoOnY_Click);
+            // 
+            // button_ServoOnZ
+            // 
+            this.button_ServoOnZ.BackColor = System.Drawing.Color.LightGreen;
+            this.button_ServoOnZ.Location = new System.Drawing.Point(330, 221);
+            this.button_ServoOnZ.Name = "button_ServoOnZ";
+            this.button_ServoOnZ.Size = new System.Drawing.Size(55, 30);
+            this.button_ServoOnZ.TabIndex = 22;
+            this.button_ServoOnZ.Text = "伺服On";
+            this.button_ServoOnZ.UseVisualStyleBackColor = false;
+            this.button_ServoOnZ.Visible = false;
+            this.button_ServoOnZ.Click += new System.EventHandler(this.button_ServoOnZ_Click);
+            // 
+            // button_ServoOnU
+            // 
+            this.button_ServoOnU.BackColor = System.Drawing.Color.LightGreen;
+            this.button_ServoOnU.Location = new System.Drawing.Point(330, 227);
+            this.button_ServoOnU.Name = "button_ServoOnU";
+            this.button_ServoOnU.Size = new System.Drawing.Size(55, 30);
+            this.button_ServoOnU.TabIndex = 23;
+            this.button_ServoOnU.Text = "伺服On";
+            this.button_ServoOnU.UseVisualStyleBackColor = false;
+            this.button_ServoOnU.Visible = false;
+            this.button_ServoOnU.Click += new System.EventHandler(this.button_ServoOnU_Click);
+            // 
+            // button_Txpositive
+            // 
+            this.button_Txpositive.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.button_Txpositive.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.button_Txpositive.ForeColor = System.Drawing.Color.Red;
+            this.button_Txpositive.Location = new System.Drawing.Point(280, 182);
+            this.button_Txpositive.Name = "button_Txpositive";
+            this.button_Txpositive.Size = new System.Drawing.Size(53, 22);
+            this.button_Txpositive.TabIndex = 29;
+            this.button_Txpositive.Text = "TX+";
+            this.button_Txpositive.UseVisualStyleBackColor = true;
+            this.button_Txpositive.Visible = false;
+            this.button_Txpositive.MouseDown += new System.Windows.Forms.MouseEventHandler(this.JogStart);
+            this.button_Txpositive.MouseUp += new System.Windows.Forms.MouseEventHandler(this.JogEnd);
+            // 
+            // button_Txnegtive
+            // 
+            this.button_Txnegtive.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.button_Txnegtive.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.button_Txnegtive.ForeColor = System.Drawing.Color.Red;
+            this.button_Txnegtive.Location = new System.Drawing.Point(330, 183);
+            this.button_Txnegtive.Name = "button_Txnegtive";
+            this.button_Txnegtive.Size = new System.Drawing.Size(53, 23);
+            this.button_Txnegtive.TabIndex = 30;
+            this.button_Txnegtive.Text = "TX-";
+            this.button_Txnegtive.UseVisualStyleBackColor = true;
+            this.button_Txnegtive.Visible = false;
+            this.button_Txnegtive.MouseDown += new System.Windows.Forms.MouseEventHandler(this.JogStart);
+            this.button_Txnegtive.MouseUp += new System.Windows.Forms.MouseEventHandler(this.JogEnd);
+            // 
+            // button_Typositive
+            // 
+            this.button_Typositive.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.button_Typositive.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.button_Typositive.ForeColor = System.Drawing.Color.Red;
+            this.button_Typositive.Location = new System.Drawing.Point(231, 232);
+            this.button_Typositive.Name = "button_Typositive";
+            this.button_Typositive.Size = new System.Drawing.Size(53, 22);
+            this.button_Typositive.TabIndex = 31;
+            this.button_Typositive.Text = "TY+";
+            this.button_Typositive.UseVisualStyleBackColor = true;
+            this.button_Typositive.Visible = false;
+            this.button_Typositive.MouseDown += new System.Windows.Forms.MouseEventHandler(this.JogStart);
+            this.button_Typositive.MouseUp += new System.Windows.Forms.MouseEventHandler(this.JogEnd);
+            // 
+            // button_Tynegtive
+            // 
+            this.button_Tynegtive.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.button_Tynegtive.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.button_Tynegtive.ForeColor = System.Drawing.Color.Red;
+            this.button_Tynegtive.Location = new System.Drawing.Point(230, 200);
+            this.button_Tynegtive.Name = "button_Tynegtive";
+            this.button_Tynegtive.Size = new System.Drawing.Size(53, 23);
+            this.button_Tynegtive.TabIndex = 32;
+            this.button_Tynegtive.Text = "TY-";
+            this.button_Tynegtive.UseVisualStyleBackColor = true;
+            this.button_Tynegtive.Visible = false;
+            this.button_Tynegtive.MouseDown += new System.Windows.Forms.MouseEventHandler(this.JogStart);
+            this.button_Tynegtive.MouseUp += new System.Windows.Forms.MouseEventHandler(this.JogEnd);
+            // 
+            // button_homeTx
+            // 
+            this.button_homeTx.BackColor = System.Drawing.Color.LightGreen;
+            this.button_homeTx.Location = new System.Drawing.Point(278, 229);
+            this.button_homeTx.Name = "button_homeTx";
+            this.button_homeTx.Size = new System.Drawing.Size(55, 30);
+            this.button_homeTx.TabIndex = 33;
+            this.button_homeTx.Text = "回原点";
+            this.button_homeTx.UseVisualStyleBackColor = false;
+            this.button_homeTx.Visible = false;
+            this.button_homeTx.Click += new System.EventHandler(this.button_homeTx_Click);
+            // 
+            // button_homeTy
+            // 
+            this.button_homeTy.BackColor = System.Drawing.Color.LightGreen;
+            this.button_homeTy.Location = new System.Drawing.Point(272, 237);
+            this.button_homeTy.Name = "button_homeTy";
+            this.button_homeTy.Size = new System.Drawing.Size(55, 30);
+            this.button_homeTy.TabIndex = 34;
+            this.button_homeTy.Text = "回原点";
+            this.button_homeTy.UseVisualStyleBackColor = false;
+            this.button_homeTy.Visible = false;
+            this.button_homeTy.Click += new System.EventHandler(this.button_homeTy_Click);
+            // 
+            // button_ServoOnTx
+            // 
+            this.button_ServoOnTx.BackColor = System.Drawing.Color.LightGreen;
+            this.button_ServoOnTx.Location = new System.Drawing.Point(339, 224);
+            this.button_ServoOnTx.Name = "button_ServoOnTx";
+            this.button_ServoOnTx.Size = new System.Drawing.Size(55, 30);
+            this.button_ServoOnTx.TabIndex = 35;
+            this.button_ServoOnTx.Text = "伺服On";
+            this.button_ServoOnTx.UseVisualStyleBackColor = false;
+            this.button_ServoOnTx.Visible = false;
+            this.button_ServoOnTx.Click += new System.EventHandler(this.button_ServoOnTx_Click);
+            // 
+            // button_ServoOnTy
+            // 
+            this.button_ServoOnTy.BackColor = System.Drawing.Color.LightGreen;
+            this.button_ServoOnTy.Location = new System.Drawing.Point(339, 229);
+            this.button_ServoOnTy.Name = "button_ServoOnTy";
+            this.button_ServoOnTy.Size = new System.Drawing.Size(55, 30);
+            this.button_ServoOnTy.TabIndex = 36;
+            this.button_ServoOnTy.Text = "伺服On";
+            this.button_ServoOnTy.UseVisualStyleBackColor = false;
+            this.button_ServoOnTy.Visible = false;
+            this.button_ServoOnTy.Click += new System.EventHandler(this.button_ServoOnTy_Click);
+            // 
+            // Column1
+            // 
+            this.Column1.HeaderText = "点位名称";
+            this.Column1.Name = "Column1";
+            this.Column1.Width = 80;
+            // 
+            // Xpos
+            // 
+            this.Xpos.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.Xpos.HeaderText = "X";
+            this.Xpos.Name = "Xpos";
+            this.Xpos.Width = 80;
+            // 
+            // Ypos
+            // 
+            this.Ypos.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.Ypos.HeaderText = "Y";
+            this.Ypos.Name = "Ypos";
+            this.Ypos.Width = 80;
+            // 
+            // ZPos
+            // 
+            this.ZPos.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.ZPos.HeaderText = "Z";
+            this.ZPos.Name = "ZPos";
+            this.ZPos.Width = 80;
+            // 
+            // UPos
+            // 
+            this.UPos.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.UPos.HeaderText = "U";
+            this.UPos.Name = "UPos";
+            this.UPos.Width = 80;
+            // 
+            // StationFormRobot
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(924, 525);
+            this.Controls.Add(this.btn_Del);
+            this.Controls.Add(this.dataGridView_IoOutput);
+            this.Controls.Add(this.dataGridView_ioInput);
+            this.Controls.Add(this.labelControl4);
+            this.Controls.Add(this.button_ServoOnTy);
+            this.Controls.Add(this.button_ServoOnTx);
+            this.Controls.Add(this.button_homeTy);
+            this.Controls.Add(this.button_homeTx);
+            this.Controls.Add(this.button_Tynegtive);
+            this.Controls.Add(this.button_Typositive);
+            this.Controls.Add(this.button_Txnegtive);
+            this.Controls.Add(this.button_Txpositive);
+            this.Controls.Add(this.button_start);
+            this.Controls.Add(this.comboBox_SelCamera);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.button_ContinuousSnap);
+            this.Controls.Add(this.button_ServoOnU);
+            this.Controls.Add(this.button_ServoOnZ);
+            this.Controls.Add(this.button_ServoOnY);
+            this.Controls.Add(this.button_homeU);
+            this.Controls.Add(this.button_homeZ);
+            this.Controls.Add(this.button_homeY);
+            this.Controls.Add(this.button_RecordPoint);
+            this.Controls.Add(this.button_ServoOnX);
+            this.Controls.Add(this.button_homeX);
+            this.Controls.Add(this.comboBox_SelMotionType);
+            this.Controls.Add(this.button_Save);
+            this.Controls.Add(this.button_AllAxisMove);
+            this.Controls.Add(this.button_SingleAxisMove);
+            this.Controls.Add(this.dataGridView_PointInfo);
+            this.Controls.Add(this.button_Unegtive);
+            this.Controls.Add(this.button_Ynegtive);
+            this.Controls.Add(this.button_Znegtive);
+            this.Controls.Add(this.button_Zpositive);
+            this.Controls.Add(this.button_Xnegtive);
+            this.Controls.Add(this.button_Xpositive);
+            this.Controls.Add(this.button_stop);
+            this.Controls.Add(this.button_Upositive);
+            this.Controls.Add(this.button_Ypositive);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Name = "StationFormRobot";
+            this.Text = "StationForm";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.CloseForm);
+            this.Load += new System.EventHandler(this.StationForm_Load);
+            this.Shown += new System.EventHandler(this.ShowFirist);
+            this.SizeChanged += new System.EventHandler(this.OnSizeChanged);
+            this.VisibleChanged += new System.EventHandler(this.OnVisibleChanged);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView_PointInfo)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView_ioInput)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView_IoOutput)).EndInit();
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
+        }
+
+        #endregion
+
+        private System.Windows.Forms.Button button_Ypositive;
+        private System.Windows.Forms.Button button_Upositive;
+        private System.Windows.Forms.Button button_stop;
+        private System.Windows.Forms.Button button_Xpositive;
+        private System.Windows.Forms.Button button_Xnegtive;
+        private System.Windows.Forms.Button button_Zpositive;
+        private System.Windows.Forms.Button button_Znegtive;
+        private System.Windows.Forms.Button button_Ynegtive;
+        private System.Windows.Forms.Button button_Unegtive;
+        private System.Windows.Forms.DataGridView dataGridView_PointInfo;
+        private System.Windows.Forms.Button button_SingleAxisMove;
+        private System.Windows.Forms.Button button_AllAxisMove;
+        private System.Windows.Forms.Button button_Save;
+        private System.Windows.Forms.ComboBox comboBox_SelMotionType;
+        private System.Windows.Forms.Button button_homeX;
+        private System.Windows.Forms.Button button_ServoOnX;
+        private System.Windows.Forms.Button button_RecordPoint;
+        private HalconDotNet.HWindowControl hWindowControl1;
+        private System.Windows.Forms.Button button_ContinuousSnap;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.ComboBox comboBox_SelCamera;
+        private System.Windows.Forms.Button button_start;
+        private DevExpress.XtraEditors.LabelControl labelControl4;
+        private System.Windows.Forms.DataGridView dataGridView_ioInput;
+        private System.Windows.Forms.DataGridView dataGridView_IoOutput;
+        private System.Windows.Forms.DataGridViewTextBoxColumn IoName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn IoInputState;
+        private System.Windows.Forms.DataGridViewTextBoxColumn IoOutputNmae;
+        private System.Windows.Forms.DataGridViewTextBoxColumn IoOutputState;
+        private System.Windows.Forms.DataGridViewButtonColumn IoOutOperate;
+        private System.Windows.Forms.Button btn_Del;
+        private System.Windows.Forms.Button button_homeY;
+        private System.Windows.Forms.Button button_homeZ;
+        private System.Windows.Forms.Button button_homeU;
+        private System.Windows.Forms.Button button_ServoOnY;
+        private System.Windows.Forms.Button button_ServoOnZ;
+        private System.Windows.Forms.Button button_ServoOnU;
+        private System.Windows.Forms.Button button_Txpositive;
+        private System.Windows.Forms.Button button_Txnegtive;
+        private System.Windows.Forms.Button button_Typositive;
+        private System.Windows.Forms.Button button_Tynegtive;
+        private System.Windows.Forms.Button button_homeTx;
+        private System.Windows.Forms.Button button_homeTy;
+        private System.Windows.Forms.Button button_ServoOnTx;
+        private System.Windows.Forms.Button button_ServoOnTy;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Xpos;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Ypos;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ZPos;
+        private System.Windows.Forms.DataGridViewTextBoxColumn UPos;
+    }
+}

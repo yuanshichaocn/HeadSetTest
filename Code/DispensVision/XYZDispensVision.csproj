@@ -1,0 +1,187 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F5C22CC9-5F2B-454D-BB01-21606A0EA36A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>XYZDispensVision</RootNamespace>
+    <AssemblyName>XYZDispensVision</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\Machine\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="BaseDll, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Machine\BaseDll.dll</HintPath>
+    </Reference>
+    <Reference Include="Basler.Pylon, Version=1.1.0.0, Culture=neutral, PublicKeyToken=e389355f398382ab, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Machine\Basler.Pylon.dll</HintPath>
+    </Reference>
+    <Reference Include="CameraLib">
+      <HintPath>..\..\Machine\CameraLib.dll</HintPath>
+    </Reference>
+    <Reference Include="CombinationCtrl">
+      <HintPath>..\..\Machine\CombinationCtrl.dll</HintPath>
+    </Reference>
+    <Reference Include="halcondotnet, Version=12.0.0.0, Culture=neutral, PublicKeyToken=4973bed59ddbf2b8, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Machine\halcondotnet.dll</HintPath>
+    </Reference>
+    <Reference Include="HalconLib">
+      <HintPath>..\..\Machine\HalconLib.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\Machine\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Modbus">
+      <HintPath>..\..\Machine\Modbus.dll</HintPath>
+    </Reference>
+    <Reference Include="MotionLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Machine\MotionLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Machine\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="OtherDevice, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Machine\OtherDevice.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="UserCtrl, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Machine\UserCtrl.dll</HintPath>
+    </Reference>
+    <Reference Include="VisionProcess">
+      <HintPath>..\..\Machine\VisionProcess.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Calib.cs" />
+    <Compile Include="ComPartSet.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ComPartSet.Designer.cs">
+      <DependentUpon>ComPartSet.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DispTraceElement.cs" />
+    <Compile Include="DispTraceElementSet.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DispTraceElementSet.Designer.cs">
+      <DependentUpon>DispTraceElementSet.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PointValSet.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PointValSet.Designer.cs">
+      <DependentUpon>PointValSet.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TraceElemementArc.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="TraceElemementArc.Designer.cs">
+      <DependentUpon>TraceElemementArc.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TraceElementLine.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="TraceElementLine.Designer.cs">
+      <DependentUpon>TraceElementLine.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TraceElementPoint.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="TraceElementPoint.Designer.cs">
+      <DependentUpon>TraceElementPoint.cs</DependentUpon>
+    </Compile>
+    <Compile Include="XYZDispenseCtrl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="XYZDispenseCtrl.Designer.cs">
+      <DependentUpon>XYZDispenseCtrl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormLightSet.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormLightSet.Designer.cs">
+      <DependentUpon>FormLightSet.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormMoveOperate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormMoveOperate.Designer.cs">
+      <DependentUpon>FormMoveOperate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ParamData.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ComPartSet.resx">
+      <DependentUpon>ComPartSet.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DispTraceElementSet.resx">
+      <DependentUpon>DispTraceElementSet.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PointValSet.resx">
+      <DependentUpon>PointValSet.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TraceElemementArc.resx">
+      <DependentUpon>TraceElemementArc.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TraceElementLine.resx">
+      <DependentUpon>TraceElementLine.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TraceElementPoint.resx">
+      <DependentUpon>TraceElementPoint.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="XYZDispenseCtrl.resx">
+      <DependentUpon>XYZDispenseCtrl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormLightSet.resx">
+      <DependentUpon>FormLightSet.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormMoveOperate.resx">
+      <DependentUpon>FormMoveOperate.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\..\Machine\AutoFrameUI.dll" />
+    <Analyzer Include="..\..\Machine\UserCtrl.dll" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

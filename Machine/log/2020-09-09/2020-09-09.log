@@ -1,0 +1,26 @@
+2020-09-09 16:41:19,405 INFO  ConfigToolMgr - 卡类型：Advantech 卡号：738242560 初始化成功
+2020-09-09 16:41:19,426 INFO  ConfigToolMgr - 卡类型：Advantech 卡号：738242560 初始化成功
+2020-09-09 16:41:19,426 INFO  ConfigToolMgr - 卡类型：Advantech 卡号：738242560 初始化成功
+2020-09-09 16:41:19,432 INFO  ConfigToolMgr - 卡类型：Advantech 卡号：738217984 初始化成功
+2020-09-09 16:41:19,432 INFO  ConfigToolMgr - 卡类型：Advantech 卡号：738217984 初始化成功
+2020-09-09 16:41:19,432 INFO  ConfigToolMgr - 卡类型：Advantech 卡号：738217984 初始化成功
+2020-09-09 16:41:19,433 INFO  ConfigToolMgr - 卡类型：LeiSai 卡号：0 初始化成功
+2020-09-09 16:41:21,389 WARN  MotionIoLib.IoCtrl_Advantech - 738217984 号卡IoCtrl_Advantech 打开失败 请检查配置
+2020-09-09 16:41:23,817 WARN  MotionIoLib.IoCtrl_Advantech - 738217984 号卡IoCtrl_Advantech 打开失败 请检查配置
+2020-09-09 16:41:24,312 WARN  MotionIoLib.IoCtrl_Advantech - 738217984 号卡IoCtrl_Advantech 打开失败 请检查配置
+2020-09-09 16:41:24,818 WARN  MotionIoLib.IoCtrl_LeiSai - 0 号卡IoCtrl_LeiSai 打开失败 请检查配置
+2020-09-09 16:41:31,481 INFO  LineStation - 流水线 sd加载成功
+2020-09-09 16:41:31,487 INFO  LineStation - 机械手 sd加载成功
+2020-09-09 16:41:31,496 INFO  Stationbase - 取料站 sd加载成功
+2020-09-09 16:41:31,501 INFO  Stationbase - Barrel站 sd加载成功
+2020-09-09 16:41:31,510 INFO  Stationbase - 点胶站 sd加载成功
+2020-09-09 16:41:33,326 WARN  VisionShapMatch - mb读取项目：搜索区域读取失败
+2020-09-09 16:41:33,346 WARN  VisionShapMatch - mb读取项目：roi读取失败
+2020-09-09 16:41:33,399 WARN  VisionShapMatch - hu读取项目：搜索区域读取失败
+2020-09-09 16:41:33,418 WARN  VisionShapMatch - hu读取项目：roi读取失败
+2020-09-09 16:41:33,451 WARN  VisionShapMatch - ku读取项目：搜索区域读取失败
+2020-09-09 16:41:33,466 WARN  VisionShapMatch - ku读取项目：roi读取失败
+2020-09-09 16:42:08,981 WARN  VisionShapMatch - mb读取项目：搜索区域读取失败
+2020-09-09 16:42:08,982 WARN  VisionShapMatch - mb读取项目：roi读取失败
+2020-09-09 16:42:16,952 WARN  VisionShapMatch - mb读取项目：搜索区域读取失败
+2020-09-09 16:42:16,953 WARN  VisionShapMatch - mb读取项目：roi读取失败

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SerialDictionary_x0060_2 name="SerialDictionary">
+  <SerialDictionary>
+    <element>
+      <key>
+        <string>左上相机标定光源</string>
+      </key>
+      <value>
+        <LightSet xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+          <nCh>0</nCh>
+          <lightval>40</lightval>
+        </LightSet>
+      </value>
+    </element>
+    <element>
+      <key>
+        <string>左下相机标定光源</string>
+      </key>
+      <value>
+        <LightSet xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+          <nCh>1</nCh>
+          <lightval>90</lightval>
+        </LightSet>
+      </value>
+    </element>
+    <element>
+      <key>
+        <string>右上相机标定光源</string>
+      </key>
+      <value>
+        <LightSet xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+          <nCh>3</nCh>
+          <lightval>40</lightval>
+        </LightSet>
+      </value>
+    </element>
+	<element>
+      <key>
+        <string>右下相机标定光源</string>
+      </key>
+      <value>
+        <LightSet xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+          <nCh>3</nCh>
+          <lightval>90</lightval>
+        </LightSet>
+      </value>
+    </element>
+	 <element>
+      <key>
+        <string>左机械手标定光源</string>
+      </key>
+      <value>
+        <LightSet xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+          <nCh>1</nCh>
+          <lightval>90</lightval>
+        </LightSet>
+      </value>
+    </element>
+	 <element>
+      <key>
+        <string>右机械手标定光源</string>
+      </key>
+      <value>
+        <LightSet xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+          <nCh>3</nCh>
+          <lightval>90</lightval>
+        </LightSet>
+      </value>
+    </element>
+	<element>
+      <key>
+        <string>左上黑帽定位</string>
+      </key>
+      <value>
+        <LightSet xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+          <nCh>0</nCh>
+          <lightval>200</lightval>
+        </LightSet>
+      </value>
+    </element>
+	<element>
+      <key>
+        <string>左下蜂鸣器定位</string>
+      </key>
+      <value>
+        <LightSet xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+          <nCh>1</nCh>
+          <lightval>180</lightval>
+        </LightSet>
+      </value>
+    </element>
+	<element>
+      <key>
+        <string>右上黑帽定位</string>
+      </key>
+      <value>
+        <LightSet xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+          <nCh>2</nCh>
+          <lightval>200</lightval>
+        </LightSet>
+      </value>
+    </element>
+   <element>
+      <key>
+        <string>右下蜂鸣器定位</string>
+      </key>
+      <value>
+        <LightSet xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+          <nCh>3</nCh>
+          <lightval>180</lightval>
+        </LightSet>
+      </value>
+    </element>
+   <element>
+      <key>
+        <string>上料方向判定</string>
+      </key>
+      <value>
+        <LightSet xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+          <nCh>4</nCh>
+          <lightval>160</lightval>
+        </LightSet>
+      </value>
+    </element>
+	
+  </SerialDictionary>
+</SerialDictionary_x0060_2>

@@ -1,0 +1,379 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{59FF8FE8-7D83-4D0C-AAEA-6CAA6A2B869E}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>StationDemo</RootNamespace>
+    <AssemblyName>StationDemo</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\..\Machine\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+    <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>huaya.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AutoFrameUI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Machine\AutoFrameUI.dll</HintPath>
+    </Reference>
+    <Reference Include="BaseDll, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Machine\BaseDll.dll</HintPath>
+    </Reference>
+    <Reference Include="CameraLib">
+      <HintPath>..\..\Machine\CameraLib.dll</HintPath>
+    </Reference>
+    <Reference Include="CombinationCtrl">
+      <HintPath>..\..\Machine\CombinationCtrl.dll</HintPath>
+    </Reference>
+    <Reference Include="CommonDlg">
+      <HintPath>..\..\Machine\CommonDlg.dll</HintPath>
+    </Reference>
+    <Reference Include="CommonTools, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Machine\CommonTools.dll</HintPath>
+    </Reference>
+    <Reference Include="Communicate">
+      <HintPath>..\..\Machine\Communicate.dll</HintPath>
+    </Reference>
+    <Reference Include="halcondotnet, Version=12.0.0.0, Culture=neutral, PublicKeyToken=4973bed59ddbf2b8, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Machine\halcondotnet.dll</HintPath>
+    </Reference>
+    <Reference Include="HalconLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Machine\HalconLib.dll</HintPath>
+    </Reference>
+    <Reference Include="JabilSDK">
+      <HintPath>..\..\Machine\JabilSDK.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\Machine\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="MotionLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Machine\MotionLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Machine\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Drawing.Design" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="UserCtrl, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\UpdateDll\UserCtrl.dll</HintPath>
+    </Reference>
+    <Reference Include="VisionProcess, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\UpdateDll\VisionProcess.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="LineOperate.cs" />
+    <Compile Include="LineStation.cs" />
+    <Compile Include="StationExample.cs" />
+    <Compile Include="IniF.cs" />
+    <Compile Include="ItemAdd.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ItemAdd.Designer.cs">
+      <DependentUpon>ItemAdd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SysFunConfig.cs" />
+    <Compile Include="Table.cs" />
+    <Compile Include="Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form_AllIO.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_AllIO.Designer.cs">
+      <DependentUpon>Form_AllIO.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form_Alarm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_Alarm.Designer.cs">
+      <DependentUpon>Form_Alarm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form_Auto.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_Auto.Designer.cs">
+      <DependentUpon>Form_Auto.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form_AxisTest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_AxisTest.Designer.cs">
+      <DependentUpon>Form_AxisTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form_CameraDebug.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_CameraDebug.Designer.cs">
+      <DependentUpon>Form_CameraDebug.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form_Input.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_Input.Designer.cs">
+      <DependentUpon>Form_Input.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form_Manual.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_Manual.Designer.cs">
+      <DependentUpon>Form_Manual.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form_ParamSet.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_ParamSet.Designer.cs">
+      <DependentUpon>Form_ParamSet.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form_Set.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_Set.Designer.cs">
+      <DependentUpon>Form_Set.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form_StationDispense.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_StationDispense.Designer.cs">
+      <DependentUpon>Form_StationDispense.cs</DependentUpon>
+    </Compile>
+    <Compile Include="From_OKCancel.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="From_OKCancel.Designer.cs">
+      <DependentUpon>From_OKCancel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GetDataState.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GetDataState.Designer.cs">
+      <DependentUpon>GetDataState.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LightControl.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Safe.cs" />
+    <Compile Include="StationFormRobot.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StationFormRobot.Designer.cs">
+      <DependentUpon>StationFormRobot.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StationForm.Designer.cs">
+      <DependentUpon>StationForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserConfig.cs" />
+    <Compile Include="UserManger.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UserManger.Designer.cs">
+      <DependentUpon>UserManger.cs</DependentUpon>
+    </Compile>
+    <Compile Include="VisionAddtion.cs" />
+    <Compile Include="Weight.cs" />
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form_AllIO.resx">
+      <DependentUpon>Form_AllIO.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form_Alarm.resx">
+      <DependentUpon>Form_Alarm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form_Auto.resx">
+      <DependentUpon>Form_Auto.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form_AxisTest.resx">
+      <DependentUpon>Form_AxisTest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form_CameraDebug.resx">
+      <DependentUpon>Form_CameraDebug.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form_Input.resx">
+      <DependentUpon>Form_Input.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form_Manual.resx">
+      <DependentUpon>Form_Manual.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form_ParamSet.resx">
+      <DependentUpon>Form_ParamSet.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form_Set.resx">
+      <DependentUpon>Form_Set.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form_StationDispense.resx">
+      <DependentUpon>Form_StationDispense.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="From_OKCancel.resx">
+      <DependentUpon>From_OKCancel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GetDataState.resx">
+      <DependentUpon>GetDataState.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ItemAdd.resx">
+      <DependentUpon>ItemAdd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="StationFormRobot.resx">
+      <DependentUpon>StationFormRobot.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StationForm.resx">
+      <DependentUpon>StationForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserManger.resx">
+      <DependentUpon>UserManger.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="app.config" />
+    <None Include="log4net.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="huaya.ico" />
+    <Content Include="放大镜.ico" />
+    <None Include="res\MainFramelogo\Stop.jpg" />
+    <None Include="res\MainFramelogo\alarm.jpg" />
+    <None Include="res\MainFramelogo\light_gray.png" />
+    <None Include="res\MainFramelogo\light_green.png" />
+    <None Include="res\MainFramelogo\light_red.png" />
+    <None Include="Resources\Start.jpg" />
+    <None Include="Resources\pause.jpg" />
+    <None Include="Resources\resume.jpg" />
+    <Content Include="Resources\GreenOff.ico" />
+    <Content Include="Resources\GreenOn.ico" />
+    <Content Include="Resources\RedOff.ico" />
+    <Content Include="Resources\RedOn.ico" />
+    <Content Include="Resources\YellowOff.ico" />
+    <Content Include="Resources\YellowOn.ico" />
+    <Content Include="RightArrow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DispensVision\XYZDispensVision.csproj">
+      <Project>{f5c22cc9-5f2b-454d-bb01-21606a0ea36a}</Project>
+      <Name>XYZDispensVision</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OtherDevice\OtherDevice.csproj">
+      <Project>{06919bd8-1a27-4d1c-871d-2739750747f9}</Project>
+      <Name>OtherDevice</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Safe\Safe.csproj">
+      <Project>{37b5ee16-8538-467e-a613-91b2a2247ed5}</Project>
+      <Name>Safe</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UserData\UserData.csproj">
+      <Project>{deff9013-07f5-4e3f-88ce-dc218fd01ef8}</Project>
+      <Name>UserData</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="EPsonScaraRobot\" />
+    <Folder Include="System\Windows\Forms\Design\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

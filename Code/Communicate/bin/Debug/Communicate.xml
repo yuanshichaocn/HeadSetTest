@@ -1,0 +1,708 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Communicate</name>
+    </assembly>
+    <members>
+        <member name="T:Communicate.CommandEventArgs">
+            <summary>
+            The class that contains some methods and properties to manage the remote clients.
+            </summary>
+            
+            <summary>
+            The class that contains information about received command.
+            </summary>
+        </member>
+        <member name="P:Communicate.CommandEventArgs.Command">
+            <summary>
+            The received command.
+            </summary>
+        </member>
+        <member name="M:Communicate.CommandEventArgs.#ctor(System.String)">
+            <summary>
+            Creates an instance of CommandEventArgs class.
+            </summary>
+            <param name="cmd">The received command.</param>
+        </member>
+        <member name="T:Communicate.ClientEventArgs">
+            <summary>
+            Client event args.
+            </summary>
+        </member>
+        <member name="P:Communicate.ClientEventArgs.IP">
+            <summary>
+            The ip address of remote client.
+            </summary>
+        </member>
+        <member name="P:Communicate.ClientEventArgs.Port">
+            <summary>
+            The port of remote client.
+            </summary>
+        </member>
+        <member name="M:Communicate.ClientEventArgs.#ctor(System.Net.Sockets.Socket)">
+            <summary>
+            Creates an instance of ClientEventArgs class.
+            </summary>
+            <param name="clientManagerSocket">The socket of server side socket that comunicates with the remote client.</param>
+        </member>
+        <member name="P:Communicate.ClientManager.IP">
+            <summary>
+            Gets the IP address of connected remote client.This is 'IPAddress.None' if the client is not connected.
+            </summary>
+        </member>
+        <member name="P:Communicate.ClientManager.Port">
+            <summary>
+            Gets the port number of connected remote client.This is -1 if the client is not connected.
+            </summary>
+        </member>
+        <member name="P:Communicate.ClientManager.Connected">
+            <summary>
+            [Gets] The value that specifies the remote client is connected to this server or not.
+            </summary>
+        </member>
+        <member name="P:Communicate.ClientManager.ClientName">
+            <summary>
+            The name of remote client.
+            </summary>
+        </member>
+        <member name="T:Communicate.ClientManager.DisconnectedEventHandler">
+            <summary>
+            Occurs when a remote client had been disconnected from the server.
+            </summary>
+            <param name="sender">Sender.</param>
+            <param name="e">The client information.</param>
+        </member>
+        <member name="E:Communicate.ClientManager.Disconnected">
+            <summary>
+            Occurs when a client disconnected from this server.
+            </summary>
+        </member>
+        <member name="M:Communicate.ClientManager.OnDisconnected(Communicate.ClientEventArgs)">
+            <summary>
+            Occurs when a client disconnected from this server.
+            </summary>
+            <param name="e">Client information.</param>
+        </member>
+        <!-- 对于成员“T:Communicate.ClientManager.CommandReceivedEventHandler”忽略有格式错误的 XML 注释 -->
+        <member name="E:Communicate.ClientManager.CommandReceived">
+            <summary>
+            Occurs when a command received from a remote client.
+            </summary>
+        </member>
+        <member name="M:Communicate.ClientManager.OnCommandReceived(Communicate.CommandEventArgs)">
+            <summary>
+            Occurs when a command received from a remote client.
+            </summary>
+            <param name="e">Received command.</param>
+        </member>
+        <member name="T:Communicate.ClientManager.CommandSentEventHandler">
+            <summary>
+            Occurs when a command had been sent to the remote client successfully.
+            </summary>
+            <param name="sender">Sender.</param>
+            <param name="e">EventArgs.</param>
+        </member>
+        <member name="T:Communicate.ClientManager.CommandSendingFailedEventHandler">
+            <summary>
+            Occurs when a command sending action had been failed.This is because disconnection or sending exception.
+            </summary>
+            <param name="sender">Sender.</param>
+            <param name="e">EventArgs.</param>
+        </member>
+        <member name="M:Communicate.ClientManager.#ctor(System.Net.Sockets.Socket)">
+            <summary>
+            Creates an instance of ClientManager class to comunicate with remote clients.
+            </summary>
+            <param name="clientSocket">The socket of ClientManager.</param>
+        </member>
+        <member name="M:Communicate.ClientManager.SendCommand(System.String)">
+            <summary>
+            Sends a command to the remote client if the connection is alive.
+            </summary>
+            <param name="cmd">The command to send.</param>
+        </member>
+        <member name="E:Communicate.ClientManager.CommandSent">
+            <summary>
+            Occurs when a command had been sent to the remote client successfully.
+            </summary>
+        </member>
+        <member name="M:Communicate.ClientManager.OnCommandSent(System.EventArgs)">
+            <summary>
+            Occurs when a command had been sent to the remote client successfully.
+            </summary>
+            <param name="e">The sent command.</param>
+        </member>
+        <member name="E:Communicate.ClientManager.CommandFailed">
+            <summary>
+            Occurs when a command sending action had been failed.This is because disconnection or sending exception.
+            </summary>
+        </member>
+        <member name="M:Communicate.ClientManager.OnCommandFailed(System.EventArgs)">
+            <summary>
+            Occurs when a command sending action had been failed.This is because disconnection or sending exception.
+            </summary>
+            <param name="e">The sent command.</param>
+        </member>
+        <member name="M:Communicate.ClientManager.Disconnect">
+            <summary>
+            Disconnect the current client manager from the remote client and returns true if the client had been disconnected from the server.
+            </summary>
+            <returns>True if the remote client had been disconnected from the server,otherwise false.</returns>
+        </member>
+        <member name="T:Communicate.ComLink">
+            <summary>
+            串口通讯类封装
+            </summary>
+        </member>
+        <member name="F:Communicate.ComLink.m_nComNo">
+             <summary>
+            串口号 
+             </summary>
+        </member>
+        <member name="F:Communicate.ComLink.m_strName">
+             <summary>
+            串口定义名称 
+             </summary>
+        </member>
+        <member name="F:Communicate.ComLink.m_nBaudRate">
+             <summary>
+            波特率 
+             </summary>
+        </member>
+        <member name="F:Communicate.ComLink.m_nDataBit">
+             <summary>
+            数据位 
+             </summary>
+        </member>
+        <member name="F:Communicate.ComLink.m_strPartiy">
+             <summary>
+            校验位 
+             </summary>
+        </member>
+        <member name="F:Communicate.ComLink.m_strStopBit">
+             <summary>
+            停止位 
+             </summary>
+        </member>
+        <member name="F:Communicate.ComLink.m_strFlowCtrl">
+             <summary>
+            流控制 
+             </summary>
+        </member>
+        <member name="F:Communicate.ComLink.m_nTime">
+             <summary>
+            超时时间 
+             </summary>
+        </member>
+        <member name="F:Communicate.ComLink.m_nBufferSzie">
+             <summary>
+            缓冲区大小 
+             </summary>
+        </member>
+        <member name="F:Communicate.ComLink.m_strLineFlag">
+             <summary>
+            命令分隔符标志 
+             </summary>
+        </member>
+        <member name="F:Communicate.ComLink.m_strLine">
+             <summary>
+            命令分隔符 
+             </summary>
+        </member>
+        <member name="T:Communicate.ComLink.StateChangedHandler">
+            <summary>
+            状态变更委托
+            </summary>
+            <param name="com"></param>
+        </member>
+        <member name="E:Communicate.ComLink.StateChangedEvent">
+            <summary>
+            定义状态变更事件
+            </summary>
+        </member>
+        <member name="F:Communicate.ComLink.m_serialPort">
+            <summary>
+            系统串口类引用
+            </summary>
+        </member>
+        <member name="F:Communicate.ComLink.m_bTimeOut">
+            <summary>
+            读取数据过程中是否已经超时
+            </summary>
+        </member>
+        <member name="M:Communicate.ComLink.#ctor(System.Int32,System.String,System.Int32,System.Int32,System.String,System.String,System.String,System.Int32,System.Int32,System.String)">
+            <summary>
+            构造函数
+            </summary>
+            <param name="nComNo"></param>
+            <param name="strName"></param>
+            <param name="nBaudRate"></param>
+            <param name="nDataBit"></param>
+            <param name="strPartiy"></param>
+            <param name="strStopBit"></param>
+            <param name="strFlowCtrl"></param>
+            <param name="nTime"></param>
+            <param name="nBufferSzie"></param>
+            <param name="strLine"></param>
+        </member>
+        <member name="M:Communicate.ComLink.Open">
+             <summary>
+            打开串口
+             </summary>
+             <returns></returns>
+        </member>
+        <member name="M:Communicate.ComLink.IsOpen">
+            <summary>
+            判断是否已经打开
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Communicate.ComLink.IsTimeOut">
+            <summary>
+            判断是否超时
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Communicate.ComLink.WriteData(System.Byte[],System.Int32)">
+             <summary>
+            向串口写入数据 
+             </summary>
+             <param name="sendBytes"></param>
+             <param name="nLen"></param>
+             <returns></returns>
+        </member>
+        <member name="M:Communicate.ComLink.WriteString(System.String)">
+             <summary>
+            向串口写入字符串 
+             </summary>
+             <param name="strData"></param>
+             <returns></returns>
+        </member>
+        <member name="M:Communicate.ComLink.WriteLine(System.String)">
+             <summary>
+            向串口写入一行字符 
+             </summary>
+             <param name="strData"></param>
+             <returns></returns>
+        </member>
+        <member name="M:Communicate.ComLink.ReadData(System.Byte[],System.Int32)">
+             <summary>
+            从串口读取数据 
+             </summary>
+             <param name="bytes"></param>
+             <param name="nLen"></param>
+             <returns></returns>
+        </member>
+        <member name="M:Communicate.ComLink.ReadLine(System.String@)">
+             <summary>
+            从串口读取一行数据 
+             </summary>
+             <param name="strData"></param>
+             <returns></returns>
+        </member>
+        <member name="M:Communicate.ComLink.Close">
+             <summary>
+            关闭串口 
+             </summary>
+        </member>
+        <member name="M:Communicate.ComLink.ClearBuffer(System.Boolean,System.Boolean)">
+            <summary>
+            清除缓冲区
+            </summary>
+            <param name="bIn">是否清除输入缓冲区</param>
+            <param name="bOut">是否清除输出缓冲区</param>
+        </member>
+        <member name="T:Communicate.ComMgr">
+            <summary>
+            串口系统管理类
+            </summary>
+        </member>
+        <member name="F:Communicate.ComMgr.m_strDescribe">
+            <summary>
+            串口定义描述
+            </summary>
+        </member>
+        <member name="F:Communicate.ComMgr.m_listComLink">
+            <summary>
+            串口定义列表
+            </summary>
+        </member>
+        <member name="M:Communicate.ComMgr.ReadCfgFromXml(System.Xml.XmlDocument)">
+            <summary>
+            从xml文件中读取定义的串口信息
+            </summary>
+            <param name="doc">已打开的xml文档</param>
+        </member>
+        <member name="M:Communicate.ComMgr.UpdateGridFromParam(System.Windows.Forms.DataGridView)">
+            <summary>
+            跟新内存参数到表格数据
+            </summary>
+            <param name="grid">界面串口表格控件</param>
+        </member>
+        <member name="M:Communicate.ComMgr.UpdateParamFromGrid(System.Windows.Forms.DataGridView)">
+            <summary>
+            更新表格数据到内存参数
+            </summary>
+            <param name="grid">界面串口表格控件</param>
+        </member>
+        <member name="M:Communicate.ComMgr.SaveCfgXML(System.Xml.XmlDocument)">
+            <summary>
+            保存内存参数到xml文件
+            </summary>
+            <param name="doc">已打开的xml文档</param>
+        </member>
+        <member name="M:Communicate.ComMgr.GetComLink(System.Int32)">
+            <summary>
+            返回对应索引的对象
+            </summary>
+            <param name="nIndex">索引号</param>
+            <returns></returns>
+        </member>
+        <member name="P:Communicate.ComMgr.Count">
+            <summary>
+            获取系统串口总数
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Communicate.SocketAcceptDelegate">
+            <summary> 
+            服务器接受客户端连接请求代理 
+            </summary> 
+            <param name="sender"></param> 
+            <param name="e"></param> 
+        </member>
+        <member name="T:Communicate.RecvFileMessageDelegate">
+            <summary> 
+            SOCKET接收非字符串数据代理 
+            </summary> 
+            <param name="sender"></param> 
+            <param name="e"></param> 
+        </member>
+        <member name="T:Communicate.RecvStringMessageDelegate">
+            <summary> 
+            SOCKET接收到字符串数据代理 
+            </summary> 
+            <param name="sender"></param> 
+            <param name="e"></param> 
+        </member>
+        <member name="T:Communicate.SocketErrorDelegate">
+            <summary> 
+            SOCKET错误函数代理 
+            </summary> 
+            <param name="sender"></param> 
+            <param name="e"></param> 
+        </member>
+        <member name="T:Communicate.BeginRecvBufferDelegate">
+            <summary> 
+            开始准备接收数据代理 
+            </summary> 
+            <param name="sender"></param> 
+            <param name="e"></param> 
+        </member>
+        <member name="T:Communicate.RecvBufferDelegate">
+            <summary> 
+            正在接收数据代理 
+            </summary> 
+            <param name="sender"></param> 
+            <param name="e"></param> 
+        </member>
+        <member name="T:Communicate.BeginSendBufferDelegate">
+            <summary> 
+            准备发送函数代理 
+            </summary> 
+            <param name="sender"></param> 
+            <param name="e"></param> 
+        </member>
+        <member name="T:Communicate.SendBufferDelegate">
+            <summary> 
+            正在发送函数代理 
+            </summary> 
+            <param name="sender"></param> 
+            <param name="e"></param> 
+        </member>
+        <member name="T:Communicate.TcpLink">
+            <summary>
+            网络连接封装类
+            </summary>
+        </member>
+        <member name="F:Communicate.TcpLink.m_nIndex">
+             <summary>
+            网口号 
+             </summary>
+        </member>
+        <member name="F:Communicate.TcpLink.m_strName">
+             <summary>
+            网口定义 
+             </summary>
+        </member>
+        <member name="F:Communicate.TcpLink.m_strIP">
+             <summary>
+            对方IP地址 
+             </summary>
+        </member>
+        <member name="F:Communicate.TcpLink.m_nPort">
+             <summary>
+            端口号 
+             </summary>
+        </member>
+        <member name="F:Communicate.TcpLink.m_nTime">
+             <summary>
+            超时时间 
+             </summary>
+        </member>
+        <member name="F:Communicate.TcpLink.m_strLineFlag">
+             <summary>
+            命令分隔 
+             </summary>
+        </member>
+        <member name="F:Communicate.TcpLink.m_recvBuffer">
+            <summary> 
+            内部接受数据数组 
+            </summary> 
+        </member>
+        <member name="F:Communicate.TcpLink.m_recvLength">
+            <summary> 
+            已经接收到数据的大小 
+            </summary> 
+        </member>
+        <member name="F:Communicate.TcpLink.m_recvString">
+            <summary> 
+            接收到字符串缓冲 
+            </summary> 
+        </member>
+        <member name="F:Communicate.TcpLink.m_isRecvHeadMessage">
+            <summary> 
+            判断当前是否已经接收到消息的头部 
+            </summary> 
+        </member>
+        <member name="F:Communicate.TcpLink.m_sendEvent">
+            <summary> 
+            控制发送线程信号量 
+            </summary> 
+        </member>
+        <member name="F:Communicate.TcpLink.m_path">
+            <summary> 
+            文件保存的地址 
+            </summary> 
+        </member>
+        <member name="F:Communicate.TcpLink.m_strLine">
+             <summary>
+            命令分隔符 
+             </summary>
+        </member>
+        <member name="T:Communicate.TcpLink.StateChangedHandler">
+            <summary>
+            状态变更委托函数定义
+            </summary>
+            <param name="tcp"></param>
+        </member>
+        <member name="E:Communicate.TcpLink.StateChangedEvent">
+            <summary>
+            状态变更委托事件
+            </summary>
+        </member>
+        <member name="E:Communicate.TcpLink.RecvFileMessageEvent">
+            <summary> 
+            接受到非字符消息触发事件 
+            </summary> 
+        </member>
+        <member name="E:Communicate.TcpLink.RecvStringMessageEvent">
+            <summary> 
+            接收到字符串消息触发事件 
+            </summary> 
+        </member>
+        <member name="E:Communicate.TcpLink.SocketErrorEvent">
+            <summary> 
+            当SOCKET发生异常的时候触发事件 
+            </summary> 
+        </member>
+        <member name="E:Communicate.TcpLink.BeginRecvBufferEvent">
+            <summary> 
+            开始准备接收数据触发事件 
+            </summary> 
+        </member>
+        <member name="E:Communicate.TcpLink.RecvBufferEvent">
+            <summary> 
+            接收到数据触发事件 
+            </summary> 
+        </member>
+        <member name="E:Communicate.TcpLink.BeginSendBufferEvent">
+            <summary> 
+            准备发送数据触发事件 
+            </summary> 
+        </member>
+        <member name="E:Communicate.TcpLink.SendBufferEvent">
+            <summary> 
+            每次发送一个数据块的触发事件 
+            </summary> 
+        </member>
+        <member name="M:Communicate.TcpLink.RaiseDataReceived(System.Byte[])">
+            <summary>  
+            接收到数据事件  
+            </summary>  
+        </member>
+        <member name="M:Communicate.TcpLink.#ctor(System.Int32,System.String,System.String,System.Int32,System.Int32,System.String)">
+            <summary>
+            构造函数
+            </summary>
+            <param name="nIndex"></param>
+            <param name="strName"></param>
+            <param name="strIP"></param>
+            <param name="nPort"></param>
+            <param name="nTime"></param>
+            <param name="strLine"></param>
+        </member>
+        <member name="P:Communicate.TcpLink.IsReceiveProess">
+            <summary>
+            接收导数据是否处理数据
+            </summary>
+        </member>
+        <member name="M:Communicate.TcpLink.IsTimeOut">
+            <summary>
+            判断是否超时
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Communicate.TcpLink.Disconnect">
+            <summary> 
+            关闭远程服务器连接 
+            </summary> 
+        </member>
+        <member name="M:Communicate.TcpLink.ReceiveProess(System.Int32)">
+            <summary>
+             获取网口缓存数据    直到有结束符
+             /// </summary>
+            <param name="count"></param>
+        </member>
+        <member name="M:Communicate.TcpLink.RecvCallBack(System.IAsyncResult)">
+            <summary> 
+            接收数据操作回调函数 
+            </summary> 
+            <param name="ar"></param> 
+        </member>
+        <member name="M:Communicate.TcpLink.CallBackConnect(System.IAsyncResult)">
+             <summary>
+            网口打开时通过回调检测是否连接超时。 5秒种 
+             </summary>
+             <param name="asyncResult"></param>
+        </member>
+        <member name="M:Communicate.TcpLink.Open">
+             <summary>
+            打开网口 
+             </summary>
+             <returns></returns>
+        </member>
+        <member name="M:Communicate.TcpLink.IsOpen">
+            <summary>
+            判断网口是否打开
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Communicate.TcpLink.WriteData(System.Byte[],System.Int32)">
+             <summary>
+            向网口写入数据 
+             </summary>
+             <param name="sendBytes"></param>
+             <param name="nLen"></param>
+             <returns></returns>
+        </member>
+        <member name="M:Communicate.TcpLink.WriteString(System.String)">
+             <summary>
+            向网口写入字符串 
+             </summary>
+             <param name="strData"></param>
+             <returns></returns>
+        </member>
+        <member name="M:Communicate.TcpLink.WriteLine(System.String)">
+             <summary>
+            向网口写入一行字符 
+             </summary>
+             <param name="strData"></param>
+             <returns></returns>
+        </member>
+        <member name="M:Communicate.TcpLink.ReadData(System.Byte[],System.Int32)">
+             <summary>
+            从网口读取数据 
+             </summary>
+             <param name="bytes"></param>
+             <param name="nLen"></param>
+             <returns></returns>
+        </member>
+        <member name="M:Communicate.TcpLink.ReadLine(System.String@)">
+             <summary>
+            从网口读取一行数据 
+             </summary>
+             <param name="strData"></param>
+             <returns></returns>
+        </member>
+        <member name="M:Communicate.TcpLink.Close">
+             <summary>
+            关闭网口 
+             </summary>
+        </member>
+        <member name="M:Communicate.TcpLink.ClearBuffer">
+            <summary>
+            清除缓冲区
+            </summary>
+        </member>
+        <member name="T:Communicate.TcpMgr">
+            <summary>
+            网口类管理器
+            </summary>
+        </member>
+        <member name="F:Communicate.TcpMgr.m_strDescribe">
+            <summary>
+            网口描述定义
+            </summary>
+        </member>
+        <member name="F:Communicate.TcpMgr.m_listTcpLink">
+            <summary>
+            网络连接列表
+            </summary>
+        </member>
+        <member name="M:Communicate.TcpMgr.GetTcpLink(System.Int32)">
+            <summary>
+            返回对应索引号的对象
+            </summary>
+            <param name="index">网口索引号</param>
+            <returns></returns>
+        </member>
+        <member name="M:Communicate.TcpMgr.GetTcpLink(System.String)">
+            <summary>
+            通过名字获取网口的引用
+            </summary>
+            <param name="strEthName"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Communicate.TcpMgr.Count">
+            <summary>
+            获取系统中网络连接总数
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Communicate.TcpMgr.ReadCfgFromXml(System.Xml.XmlDocument)">
+            <summary>
+            从xml文件中读取定义的网口信息
+            </summary>
+            <param name="doc">已打开的xml文档</param>
+        </member>
+        <member name="M:Communicate.TcpMgr.UpdateGridFromParam(System.Windows.Forms.DataGridView)">
+            <summary>
+            跟新内存参数到表格数据
+            </summary>
+            <param name="grid">界面网口表格控件</param>
+        </member>
+        <member name="M:Communicate.TcpMgr.UpdateParamFromGrid(System.Windows.Forms.DataGridView)">
+            <summary>
+            跟新表格数据到内存参数
+            </summary>
+            <param name="grid">界面网口表格控件</param>
+        </member>
+        <member name="M:Communicate.TcpMgr.SaveCfgXML(System.Xml.XmlDocument)">
+            <summary>
+            保存内存参数到xml文件
+            </summary>
+            <param name="doc">已打开的xml文档</param>
+        </member>
+    </members>
+</doc>

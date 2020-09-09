@@ -1,0 +1,584 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>AutoFrameUI</name>
+    </assembly>
+    <members>
+        <member name="T:AutoFrameUI.HalfRing">
+            <summary>
+            半圆环良率显示控件
+            </summary>
+        </member>
+        <member name="M:AutoFrameUI.HalfRing.#ctor">
+            <summary>
+            构造函数
+            </summary>
+        </member>
+        <member name="M:AutoFrameUI.HalfRing.#ctor(System.ComponentModel.IContainer)">
+            <summary>
+            构造函数
+            </summary>
+            <param name="container"></param>
+        </member>
+        <member name="P:AutoFrameUI.HalfRing.setCircleRadius">
+            <summary>
+            中心圆半径
+            </summary>
+        </member>
+        <member name="P:AutoFrameUI.HalfRing.setInRadius">
+            <summary>
+            内圆环半径
+            </summary>
+        </member>
+        <member name="P:AutoFrameUI.HalfRing.setOutRadius">
+            <summary>
+            外圆环半径
+            </summary>
+        </member>
+        <member name="P:AutoFrameUI.HalfRing.setLength">
+            <summary>
+            圆环的宽度
+            </summary>
+        </member>
+        <member name="P:AutoFrameUI.HalfRing.setColorGreen">
+            <summary>
+            ok的颜色
+            </summary>
+        </member>
+        <member name="P:AutoFrameUI.HalfRing.setColorRed">
+            <summary>
+            Fail部分的颜色
+            </summary>
+        </member>
+        <member name="P:AutoFrameUI.HalfRing.setRateOut">
+            <summary>
+            外环部分的比率
+            </summary>
+        </member>
+        <member name="P:AutoFrameUI.HalfRing.setRateIn">
+            <summary>
+            内环部分的比率
+            </summary>
+        </member>
+        <member name="P:AutoFrameUI.HalfRing.setResult">
+            <summary>
+            表示当前的结果
+            </summary>
+        </member>
+        <member name="P:AutoFrameUI.HalfRing.setResultFont">
+            <summary>
+            显示结果的字体
+            </summary>
+        </member>
+        <member name="P:AutoFrameUI.HalfRing.setScriptOut">
+            <summary>
+            外环的注解
+            </summary>
+        </member>
+        <member name="P:AutoFrameUI.HalfRing.setScriptIn">
+            <summary>
+            内环的注解
+            </summary>
+        </member>
+        <member name="M:AutoFrameUI.HalfRing.OnPaint(System.Windows.Forms.PaintEventArgs)">
+            <summary>
+            绘图，重绘响应
+            </summary>
+            <param name="pe"></param>
+        </member>
+        <member name="M:AutoFrameUI.HalfRing.OnResize(System.EventArgs)">
+            <summary>
+            控件大小变更事件响应
+            </summary>
+            <param name="eventargs"></param>
+        </member>
+        <member name="F:AutoFrameUI.HalfRing.components">
+            <summary>
+            必需的设计器变量。
+            </summary>
+        </member>
+        <member name="M:AutoFrameUI.HalfRing.Dispose(System.Boolean)">
+            <summary>
+            清理所有正在使用的资源。
+            </summary>
+            <param name="disposing">如果应释放托管资源，为 true；否则为 false。</param>
+        </member>
+        <member name="M:AutoFrameUI.HalfRing.InitializeComponent">
+            <summary>
+            设计器支持所需的方法 - 不要修改
+            使用代码编辑器修改此方法的内容。
+            </summary>
+        </member>
+        <member name="T:AutoFrameUI.LampButton">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:AutoFrameUI.LampButton.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:AutoFrameUI.LampButton.ControlState">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:AutoFrameUI.LampButton.ControlState.Normal">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:AutoFrameUI.LampButton.ControlState.Hover">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:AutoFrameUI.LampButton.ControlState.Pressed">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:AutoFrameUI.LampButton.OnMouseLeave(System.EventArgs)">
+            <summary>
+            
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:AutoFrameUI.LampButton.OnMouseMove(System.Windows.Forms.MouseEventArgs)">
+            <summary>
+            
+            </summary>
+            <param name="mevent"></param>
+        </member>
+        <member name="M:AutoFrameUI.LampButton.OnMouseDown(System.Windows.Forms.MouseEventArgs)">
+            <summary>
+            
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:AutoFrameUI.LampButton.OnMouseUp(System.Windows.Forms.MouseEventArgs)">
+            <summary>
+            
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:AutoFrameUI.LampButton.RenderBackGroundInternal(System.Drawing.Graphics,System.Drawing.Rectangle,AutoFrameUI.RoundStyle,System.Int32)">
+            <summary>
+            画边框与背景
+            </summary>
+            <param name="g"></param>
+            <param name="rect"></param>
+            <param name="style"></param>
+            <param name="roundWidth"></param>
+        </member>
+        <member name="M:AutoFrameUI.LampButton.OnPaint(System.Windows.Forms.PaintEventArgs)">
+            <summary>
+            
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="F:AutoFrameUI.LampButton.components">
+            <summary> 
+            必需的设计器变量。
+            </summary>
+        </member>
+        <member name="M:AutoFrameUI.LampButton.Dispose(System.Boolean)">
+            <summary> 
+            清理所有正在使用的资源。
+            </summary>
+            <param name="disposing">如果应释放托管资源，为 true；否则为 false。</param>
+        </member>
+        <member name="M:AutoFrameUI.LampButton.InitializeComponent">
+            <summary> 
+            设计器支持所需的方法 - 不要修改
+            使用代码编辑器修改此方法的内容。
+            </summary>
+        </member>
+        <member name="T:AutoFrameUI.RightTab">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:AutoFrameUI.RightTab.#ctor">
+            <summary>
+            构造函数
+            </summary>
+        </member>
+        <member name="P:AutoFrameUI.RightTab.TabColor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:AutoFrameUI.RightTab.OnPaint(System.Windows.Forms.PaintEventArgs)">
+            <summary>
+            
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:AutoFrameUI.RightTab.DrawControl(System.Drawing.Graphics)">
+            <summary>
+            
+            </summary>
+            <param name="g"></param>
+        </member>
+        <member name="M:AutoFrameUI.RightTab.DrawTab(System.Drawing.Graphics,System.Windows.Forms.TabPage,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="g"></param>
+            <param name="tabPage"></param>
+            <param name="nIndex"></param>
+        </member>
+        <member name="F:AutoFrameUI.RightTab.components">
+            <summary>
+            必需的设计器变量。
+            </summary>
+        </member>
+        <member name="M:AutoFrameUI.RightTab.Dispose(System.Boolean)">
+            <summary>
+            清理所有正在使用的资源。
+            </summary>
+            <param name="disposing">如果应释放托管资源，为 true；否则为 false。</param>
+        </member>
+        <member name="M:AutoFrameUI.RightTab.InitializeComponent">
+            <summary>
+            设计器支持所需的方法 - 不要修改
+            使用代码编辑器修改此方法的内容。
+            </summary>
+        </member>
+        <member name="T:AutoFrameUI.ControlState">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:AutoFrameUI.ControlState.Normal">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:AutoFrameUI.ControlState.Hover">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:AutoFrameUI.ControlState.Pressed">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:AutoFrameUI.RoundStyle">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:AutoFrameUI.RoundStyle.None">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:AutoFrameUI.RoundStyle.All">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:AutoFrameUI.RoundStyle.Left">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:AutoFrameUI.RoundStyle.Right">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:AutoFrameUI.RoundStyle.Top">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:AutoFrameUI.RoundStyle.Bottom">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:AutoFrameUI.RoundStyle.BottomLeft">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:AutoFrameUI.RoundStyle.BottomRight">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:AutoFrameUI.GraphicsPathHelper">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:AutoFrameUI.GraphicsPathHelper.CreatePath(System.Drawing.Rectangle,System.Int32,AutoFrameUI.RoundStyle,System.Boolean)">
+            <summary>
+            建立带有圆角样式的路径。
+            </summary>
+            <param name="rect">用来建立路径的矩形。</param>
+            <param name="radius">圆角的大小。</param>
+            <param name="style">圆角的样式。</param>
+            <param name="correction">是否把矩形长宽减 1,以便画出边框。</param>
+            <returns>建立的路径。</returns>
+        </member>
+        <member name="T:AutoFrameUI.RoundButton">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="E:AutoFrameUI.RoundButton.OnButtonClick">
+            <summary>         /// 普通按钮按下事件         /// </summary> 
+        </member>
+        <member name="E:AutoFrameUI.RoundButton.OnSpliteButtonClick">
+            <summary>         /// 分割按钮按下事件         /// </summary>     
+        </member>
+        <member name="T:AutoFrameUI.RoundButton.ButtonMousePosition">
+            <summary>         /// 鼠标的当前位置         /// </summary> 
+        </member>
+        <member name="F:AutoFrameUI.RoundButton.ButtonMousePosition.None">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:AutoFrameUI.RoundButton.ButtonMousePosition.Button">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:AutoFrameUI.RoundButton.ButtonMousePosition.Splitebutton">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:AutoFrameUI.RoundButton.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:AutoFrameUI.RoundButton.ContextOffset">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:AutoFrameUI.RoundButton.ShowSpliteButton">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:AutoFrameUI.RoundButton.SpliteButtonWidth">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:AutoFrameUI.RoundButton.PressOffset">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:AutoFrameUI.RoundButton.AlwaysShowBorder">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:AutoFrameUI.RoundButton.BaseColor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:AutoFrameUI.RoundButton.BaseColorEnd">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:AutoFrameUI.RoundButton.ImageWidth">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:AutoFrameUI.RoundButton.ImageHeight">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:AutoFrameUI.RoundButton.RoundStyle">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:AutoFrameUI.RoundButton.Radius">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:AutoFrameUI.RoundButton.ImageTextSpace">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:AutoFrameUI.RoundButton.ControlState">
+            <summary>         /// 按钮当前状态         /// </summary>         
+        </member>
+        <member name="P:AutoFrameUI.RoundButton.CurrentMousePosition">
+            <summary>         /// 鼠标当前所在位置         /// </summary>         
+        </member>
+        <member name="P:AutoFrameUI.RoundButton.ButtonRect">
+            <summary>         /// 普通按钮矩形位置         /// </summary>         
+        </member>
+        <member name="P:AutoFrameUI.RoundButton.SpliteButtonRect">
+            <summary>         /// 分割按钮矩形位置         /// </summary>         
+        </member>
+        <member name="M:AutoFrameUI.RoundButton.OnMouseLeave(System.EventArgs)">
+            <summary>
+            
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:AutoFrameUI.RoundButton.OnMouseMove(System.Windows.Forms.MouseEventArgs)">
+            <summary>
+            
+            </summary>
+            <param name="mevent"></param>
+        </member>
+        <member name="M:AutoFrameUI.RoundButton.OnMouseDown(System.Windows.Forms.MouseEventArgs)">
+            <summary>
+            
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:AutoFrameUI.RoundButton.OnMouseUp(System.Windows.Forms.MouseEventArgs)">
+            <summary>
+            
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:AutoFrameUI.RoundButton.ContextMenuStrip_Closed(System.Object,System.Windows.Forms.ToolStripDropDownClosedEventArgs)">
+            <summary>
+            
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:AutoFrameUI.RoundButton.ContextMenuStrip_Opening(System.Object,System.ComponentModel.CancelEventArgs)">
+            <summary>
+            
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:AutoFrameUI.RoundButton.OnPaint(System.Windows.Forms.PaintEventArgs)">
+            <summary>
+            
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:AutoFrameUI.RoundButton.CalculateRect(System.Drawing.Rectangle@,System.Drawing.Rectangle@,System.Drawing.Graphics)">
+            <summary>
+            获取图像以及文字的位置
+            </summary>
+            <param name="imageRect"></param>
+            <param name="textRect"></param>
+            <param name="g"></param>
+        </member>
+        <member name="M:AutoFrameUI.RoundButton.RenderBackGroundInternal(System.Drawing.Graphics,System.Drawing.Rectangle,AutoFrameUI.RoundStyle,System.Int32)">
+            <summary>
+            画边框与背景 
+            </summary>
+            <param name="g"></param>
+            <param name="rect"></param>
+            <param name="style"></param>
+            <param name="roundWidth"></param>
+        </member>
+        <member name="M:AutoFrameUI.RoundButton.RenderSpliteButton(System.Drawing.Graphics,System.Drawing.Rectangle)">
+            <summary>
+            画分割按钮
+            </summary>
+            <param name="g"></param>
+            <param name="rect"></param>       
+        </member>
+        <member name="M:AutoFrameUI.RoundButton.GetTextFormatFlags(System.Drawing.ContentAlignment,System.Boolean)">
+            <summary>
+            
+            </summary>
+            <param name="alignment"></param>
+            <param name="rightToleft"></param>
+            <returns></returns>
+        </member>
+        <member name="F:AutoFrameUI.RoundButton.components">
+            <summary> 
+            必需的设计器变量。
+            </summary>
+        </member>
+        <member name="M:AutoFrameUI.RoundButton.Dispose(System.Boolean)">
+            <summary> 
+            清理所有正在使用的资源。
+            </summary>
+            <param name="disposing">如果应释放托管资源，为 true；否则为 false。</param>
+        </member>
+        <member name="M:AutoFrameUI.RoundButton.InitializeComponent">
+            <summary> 
+            设计器支持所需的方法 - 不要修改
+            使用代码编辑器修改此方法的内容。
+            </summary>
+        </member>
+        <member name="T:AutoFrameUI.RoundPanel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:AutoFrameUI.RoundPanel.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:AutoFrameUI.RoundPanel._setRoundRadius">
+            <summary>圆角弧度(0为不要圆角)</summary>
+        </member>
+        <member name="M:AutoFrameUI.RoundPanel.Round(System.Drawing.Region)">
+            <summary>
+            圆角代码
+            </summary>
+            <param name="region"></param>
+        </member>
+        <member name="M:AutoFrameUI.RoundPanel.#ctor(System.ComponentModel.IContainer)">
+            <summary>
+            
+            </summary>
+            <param name="container"></param>
+        </member>
+        <member name="M:AutoFrameUI.RoundPanel.OnPaint(System.Windows.Forms.PaintEventArgs)">
+            <summary>
+            
+            </summary>
+            <param name="pe"></param>
+        </member>
+        <member name="M:AutoFrameUI.RoundPanel.OnResize(System.EventArgs)">
+            <summary>
+            
+            </summary>
+            <param name="eventargs"></param>
+        </member>
+        <member name="F:AutoFrameUI.RoundPanel.components">
+            <summary>
+            必需的设计器变量。
+            </summary>
+        </member>
+        <member name="M:AutoFrameUI.RoundPanel.Dispose(System.Boolean)">
+            <summary>
+            清理所有正在使用的资源。
+            </summary>
+            <param name="disposing">如果应释放托管资源，为 true；否则为 false。</param>
+        </member>
+        <member name="M:AutoFrameUI.RoundPanel.InitializeComponent">
+            <summary>
+            设计器支持所需的方法 - 不要修改
+            使用代码编辑器修改此方法的内容。
+            </summary>
+        </member>
+    </members>
+</doc>
