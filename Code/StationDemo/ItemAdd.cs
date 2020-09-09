@@ -64,6 +64,7 @@ namespace StationDemo
                 visionSetpBase = Activator.CreateInstance(ty, ItemName) as VisionSetpBase;
                 visionSetpBase.m_camparam.m_dExposureTime = Exposure;
                 visionSetpBase.m_camparam.m_dGain = Gain;
+                visionSetpBase.m_camparam.m_strCamName = CamName;
                 StepVisionInfo stepVisionInfo = new StepVisionInfo();
                 stepVisionInfo.CamParam = visionSetpBase.m_camparam;
                 stepVisionInfo.VisionType = ty.ToString();
