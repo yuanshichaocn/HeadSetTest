@@ -97,6 +97,9 @@
     <Reference Include="JabilSDK">
       <HintPath>..\..\Machine\JabilSDK.dll</HintPath>
     </Reference>
+	  <Reference Include="JabilSDK">
+      <HintPath>..\..\Machine\SmallMesClients.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\Machine\log4net.dll</HintPath>
     </Reference>
