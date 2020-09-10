@@ -36,7 +36,6 @@ E:\淳安\Clenit\Machine\SmallMesClients.pdb
 E:\淳安\Clenit\StationDemo_Ver1.0UserX64_Clent\SmallMesClients\obj\Debug\SmallMesClients.csprojAssemblyReference.cache
 G:\StationDemoX64V2.0\Machine\SmallMesClients.dll
 G:\StationDemoX64V2.0\Machine\SmallMesClients.pdb
-G:\StationDemoX64V2.0\Code\SmallMesClients\obj\Debug\SmallMesClients.csprojAssemblyReference.cache
 G:\StationDemoX64V2.0\Code\SmallMesClients\obj\Debug\SmallMesClients.csproj.CoreCompileInputs.cache
 G:\StationDemoX64V2.0\Code\SmallMesClients\obj\Debug\SmallMesClients.csproj.CopyComplete
 G:\StationDemoX64V2.0\Code\SmallMesClients\obj\Debug\SmallMesClients.dll

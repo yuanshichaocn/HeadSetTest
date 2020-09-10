@@ -97,7 +97,7 @@
     <Reference Include="JabilSDK">
       <HintPath>..\..\Machine\JabilSDK.dll</HintPath>
     </Reference>
-	  <Reference Include="JabilSDK">
+    <Reference Include="SmallMesClients">
       <HintPath>..\..\Machine\SmallMesClients.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
@@ -150,22 +150,22 @@
     </Compile>
     <Compile Include="SysFunConfig.cs" />
     <Compile Include="Table.cs" />
-    <Compile Include="Form1.cs">
+    <Compile Include="ComForm\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
+    <Compile Include="ComForm\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form_AllIO.cs">
+    <Compile Include="ComForm\Form_AllIO.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form_AllIO.Designer.cs">
+    <Compile Include="ComForm\Form_AllIO.Designer.cs">
       <DependentUpon>Form_AllIO.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form_Alarm.cs">
+    <Compile Include="ComForm\Form_Alarm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form_Alarm.Designer.cs">
+    <Compile Include="ComForm\Form_Alarm.Designer.cs">
       <DependentUpon>Form_Alarm.cs</DependentUpon>
     </Compile>
     <Compile Include="Form_Auto.cs">
@@ -180,16 +180,16 @@
     <Compile Include="Form_AxisTest.Designer.cs">
       <DependentUpon>Form_AxisTest.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form_CameraDebug.cs">
+    <Compile Include="ComForm\Form_CameraDebug.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form_CameraDebug.Designer.cs">
+    <Compile Include="ComForm\Form_CameraDebug.Designer.cs">
       <DependentUpon>Form_CameraDebug.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form_Input.cs">
+    <Compile Include="ComForm\Form_Input.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form_Input.Designer.cs">
+    <Compile Include="ComForm\Form_Input.Designer.cs">
       <DependentUpon>Form_Input.cs</DependentUpon>
     </Compile>
     <Compile Include="Form_Manual.cs">
@@ -198,34 +198,34 @@
     <Compile Include="Form_Manual.Designer.cs">
       <DependentUpon>Form_Manual.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form_ParamSet.cs">
+    <Compile Include="ComForm\Form_ParamSet.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form_ParamSet.Designer.cs">
+    <Compile Include="ComForm\Form_ParamSet.Designer.cs">
       <DependentUpon>Form_ParamSet.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form_Set.cs">
+    <Compile Include="ComForm\Form_Set.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form_Set.Designer.cs">
+    <Compile Include="ComForm\Form_Set.Designer.cs">
       <DependentUpon>Form_Set.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form_StationDispense.cs">
+    <Compile Include="ComForm\Form_StationDispense.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form_StationDispense.Designer.cs">
+    <Compile Include="ComForm\Form_StationDispense.Designer.cs">
       <DependentUpon>Form_StationDispense.cs</DependentUpon>
     </Compile>
-    <Compile Include="From_OKCancel.cs">
+    <Compile Include="ComForm\From_OKCancel.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="From_OKCancel.Designer.cs">
+    <Compile Include="ComForm\From_OKCancel.Designer.cs">
       <DependentUpon>From_OKCancel.cs</DependentUpon>
     </Compile>
-    <Compile Include="GetDataState.cs">
+    <Compile Include="ComForm\GetDataState.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GetDataState.Designer.cs">
+    <Compile Include="ComForm\GetDataState.Designer.cs">
       <DependentUpon>GetDataState.cs</DependentUpon>
     </Compile>
     <Compile Include="LightControl.cs" />
@@ -253,13 +253,13 @@
     </Compile>
     <Compile Include="VisionAddtion.cs" />
     <Compile Include="Weight.cs" />
-    <EmbeddedResource Include="Form1.resx">
+    <EmbeddedResource Include="ComForm\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form_AllIO.resx">
+    <EmbeddedResource Include="ComForm\Form_AllIO.resx">
       <DependentUpon>Form_AllIO.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form_Alarm.resx">
+    <EmbeddedResource Include="ComForm\Form_Alarm.resx">
       <DependentUpon>Form_Alarm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form_Auto.resx">
@@ -268,28 +268,28 @@
     <EmbeddedResource Include="Form_AxisTest.resx">
       <DependentUpon>Form_AxisTest.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form_CameraDebug.resx">
+    <EmbeddedResource Include="ComForm\Form_CameraDebug.resx">
       <DependentUpon>Form_CameraDebug.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form_Input.resx">
+    <EmbeddedResource Include="ComForm\Form_Input.resx">
       <DependentUpon>Form_Input.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form_Manual.resx">
       <DependentUpon>Form_Manual.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form_ParamSet.resx">
+    <EmbeddedResource Include="ComForm\Form_ParamSet.resx">
       <DependentUpon>Form_ParamSet.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form_Set.resx">
+    <EmbeddedResource Include="ComForm\Form_Set.resx">
       <DependentUpon>Form_Set.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form_StationDispense.resx">
+    <EmbeddedResource Include="ComForm\Form_StationDispense.resx">
       <DependentUpon>Form_StationDispense.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="From_OKCancel.resx">
+    <EmbeddedResource Include="ComForm\From_OKCancel.resx">
       <DependentUpon>From_OKCancel.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GetDataState.resx">
+    <EmbeddedResource Include="ComForm\GetDataState.resx">
       <DependentUpon>GetDataState.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ItemAdd.resx">

@@ -1,0 +1,12 @@
+SmallMes 的使用方法
+
+A 服务器端
+  1 引用客户端的库 SmallMesClients.dll
+  2  SmallMes.Ins.SeverInit();
+B 客户端
+  1 引用客户端的库 SmallMesClients.dll
+  2 生成对象 public SmallMesClient smallMesClient = new SmallMesClient();
+  3 初始化 smallMesClient.Init(TcpMgr.GetInstance().GetTcpLink("Sever"), null); 或者 smallMesClient.Init(MachineName,stringIP，nPort);
+  4 使用特定命令 和服务器通讯 如 AA机 设置流水线的状态  MesCmdAnswer mesCmdAnswer=  UserConfig.smallMesClient.SetLineStateCmdExc("AA机", SmallMesClients.MachineState.上料完成, 1000);
+  5 现有命令3条 如需扩展要重写存储数据结构和 读写方法
+ 
