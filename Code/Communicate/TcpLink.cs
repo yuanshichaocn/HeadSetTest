@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System.Threading;
 using BaseDll;
 using log4net;
+using System.Net;
 
 namespace Communicate
 
@@ -432,10 +433,9 @@ namespace Communicate
                     _logger.Warn($"{m_strIP},{m_nPort}:接收数据过程中出现错误，关闭连接!11");
                     if (SocketErrorEvent != null)
                     {
-                        
                         SocketErrorEvent(this, new AsyTcpSocketEventArgs($"{m_strIP},{m_nPort}:接收数据过程中出现错误，关闭连接!"));
                     }
-                  //  Err("接收数据过程中出现错误!11");
+                 
                 }
 
                 if (bytesRead > 0)
@@ -515,7 +515,7 @@ namespace Communicate
                 }
             }
         }
-
+        Task taskConnetAgain = null;
         /// <summary>
         ///网口打开时通过回调检测是否连接超时。 5秒种 
         /// </summary>
@@ -553,13 +553,7 @@ namespace Communicate
 
                 TcpLink tcpLink = asyncResult.AsyncState as TcpLink;
                 TcpClient tcpClient = tcpLink.m_client;
-                if(tcpClient.Connected)
-                {
-                    tcpClient.Client.Shutdown(SocketShutdown.Both);
-                    tcpClient.Client.Disconnect(true);
-                }
-               // tcpClient.EndConnect(asyncResult);
-                tcpClient.Client.BeginConnect(tcpLink.m_strIP, tcpLink.m_nPort, new AsyncCallback(CallBackConnect), tcpLink);
+                 ConnectServer();
                 tcpLink.m_count++;
             }
             finally
@@ -568,7 +562,49 @@ namespace Communicate
                 //TimeoutObject.Set();
             }
         }
+        private int  nIsReconnecting = 1;//是否重连中;
+       
+        //连接服务器
+        public void ConnectServer()
+        {
+            Task.Run(() => {
 
+                Interlocked.CompareExchange(ref nIsReconnecting, 1, 0);
+                if (nIsReconnecting == 0)
+                    return;
+                while (!m_client.Connected)
+                {
+                    try
+                    {
+                        m_client.Close();
+                        m_client.Dispose();
+                        m_client = new TcpClient();
+                        m_client.Connect(IPAddress.Parse(m_strIP), m_nPort);
+
+                        if (m_client.Connected)
+                        {
+                            m_client.Close();
+                            m_client = new TcpClient();
+                            m_client.BeginConnect(m_strIP, m_nPort, new AsyncCallback(CallBackConnect), this);
+                        }
+
+                    }
+                    catch (Exception ex2)
+                    {
+
+                        _logger.Warn($"{m_strIP},{m_nPort}:重新链接服务器中 每隔5s链接一次");
+                    }
+                    Thread.Sleep(5000);
+
+                }
+                Interlocked.CompareExchange(ref nIsReconnecting, 0, 1);
+
+            });
+
+         
+        }
+
+      
         /// <summary>
         ///打开网口 
         /// </summary>
@@ -596,8 +632,10 @@ namespace Communicate
                 {
                     TimeoutObject.Reset();
                     socketException = null;
-                    m_client.BeginConnect(m_strIP, m_nPort, new AsyncCallback(CallBackConnect), this);
-                    if(TimeoutObject.WaitOne(100000, false))
+                      m_client.BeginConnect(m_strIP, m_nPort, new AsyncCallback(CallBackConnect), this);
+                  
+                    
+                    if (TimeoutObject.WaitOne(100000, false))
                     {
                         if (m_bConnectSuccess)
                         {
@@ -678,19 +716,26 @@ namespace Communicate
                     }
                     //netStream.Close();
                     return true;
-
                 }
                 else
                 {
                     //异步发送数据
-                    // byte[] buffer = System.Text.Encoding.Default.GetBytes(str + newLine.ToNewLine());
+              
                     m_ArrSendByte = sendBytes;
+               
+      
+                    //开始异步发送
                     m_client.Client.BeginSend(m_ArrSendByte, 0, m_ArrSendByte.Length, SocketFlags.None, new AsyncCallback(CallBackSend), this);
                     string strMsg = System.Text.Encoding.Default.GetString(m_ArrSendByte);
                  //   ShowLog(strMsg);
                 }
                
             }
+            else
+            {
+                ConnectServer();
+            }
+          
             return false;
         }
 

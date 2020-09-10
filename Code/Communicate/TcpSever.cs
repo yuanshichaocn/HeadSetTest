@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net.Sockets;
 using System.Windows.Forms;
+using System.Collections.Concurrent;
 
 namespace Communicate
 {
@@ -17,9 +18,8 @@ namespace Communicate
     {
         private ClientManager _clientManager;
         private readonly ILog _logger = LogManager.GetLogger(nameof(SocketSever));
-        private Dictionary<string, ClientManager> dicClientMgr = new Dictionary<string, ClientManager>();
-
-
+        private ConcurrentDictionary<string, ClientManager> dicClientMgr = new ConcurrentDictionary<string, ClientManager>();
+       
         private Socket _socket;
         private BackgroundWorker _background;
 
@@ -33,7 +33,7 @@ namespace Communicate
 
         public delegate void DeleagteProcessData(string data);
 
-        public delegate void DeleagteClientConnected();
+        public delegate void DeleagteClientConnected( ClientManager client);
 
 
         public DeleagteProcessData ProcessData = null;//处理收到的消息
@@ -55,7 +55,6 @@ namespace Communicate
             try
             {
                 //循环监听客户端状态，如客户端退出，此处继续等待客户端新的链接。
-
                 IPAddress serverIP = IPAddress.Any;//IPAddress.Parse(IP);
                 _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 _socket.Bind(new IPEndPoint(serverIP, Port));
@@ -65,17 +64,17 @@ namespace Communicate
                     Socket sockTmp = _socket.Accept();
                     _clientManager = new ClientManager(sockTmp);
                     _clientManager.CommandReceived += CommandReceived;
-                    _clientManager.Disconnected += ClientManagerOnDisconnected;
-                    _clientManager.CommandFailed += (obj1, obj2) =>
+                    _clientManager.Disconnected    += ClientManagerOnDisconnected;
+                    _clientManager.CommandFailed   += (obj1, obj2) =>
                     {
-                        _logger.Warn(_clientManager.IP.ToString() + "-" + DateTime.Now.ToString("yyyy-MM-dd-hh-mm-ss") + ":" + "发送失败");
+                        _logger.Info(_clientManager.IP.ToString() + "-" + DateTime.Now.ToString("yyyy-MM-dd-hh-mm-ss") + ":" + "发送失败");
                         MessageBox.Show(_clientManager.IP.ToString()+"发送失败", "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     };
-                    dicClientMgr.Add(_clientManager.IP.ToString()+"#"+_clientManager.Port.ToString(), _clientManager);
+                    dicClientMgr.TryAdd(_clientManager.IP.ToString()+"#"+_clientManager.Port.ToString(), _clientManager);
                     ConnectEvent?.Invoke(true);
                     if (ClientConnected != null)
                     {
-                        ClientConnected();
+                        ClientConnected(_clientManager);
                     }
                 }
             }
@@ -88,14 +87,17 @@ namespace Communicate
         private void ClientManagerOnDisconnected(object sender, ClientEventArgs clientEventArgs)
         {
             string stripport = clientEventArgs.IP.ToString() + "#" + clientEventArgs.Port.ToString();
+            ClientManager clientManager = null;
             if (dicClientMgr.ContainsKey(stripport))
             {
-                dicClientMgr.Remove(stripport);
+                dicClientMgr.TryRemove(stripport,out   clientManager);
+                clientManager.Disconnect();
             }
+          
             ConnectEvent?.Invoke(false);
             if (ClientDisConnected != null)
             {
-                ClientDisConnected();
+                ClientDisConnected(clientManager);
             }
           
         }
@@ -103,7 +105,6 @@ namespace Communicate
         private void CommandReceived(object sender, CommandEventArgs e)
         {
             ReceiveStr = e.Command;
-
             Event.Set();
             if (ProcessData != null)
             {

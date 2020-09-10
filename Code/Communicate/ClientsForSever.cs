@@ -156,9 +156,10 @@ namespace Communicate
         }
 
 
-        /// </summary>
+        /// <summary>
         /// <param name="sender">Sender.</param>
         /// <param name="e">The received command object.</param>
+        /// </summary> 
         public delegate void CommandReceivedEventHandler(object sender, CommandEventArgs e);
         /// <summary>
         /// Occurs when a command received from a remote client.
