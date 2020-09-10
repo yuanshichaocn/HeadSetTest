@@ -136,6 +136,7 @@
   <ItemGroup>
     <Compile Include="LineOperate.cs" />
     <Compile Include="LineStation.cs" />
+    <Compile Include="SmallMesSever.cs" />
     <Compile Include="StationExample.cs" />
     <Compile Include="IniF.cs" />
     <Compile Include="ItemAdd.cs">
