@@ -440,10 +440,10 @@ E:\淳安\自动锁附1\Machine\Safe.pdb
 E:\淳安\自动锁附1\StationDemo_Ver1.0UserX64_ZL20200831\Safe\obj\Debug\Safe.csproj.CopyComplete
 E:\淳安\自动锁附1\StationDemo_Ver1.0UserX64_ZL20200831\Safe\obj\Debug\Safe.dll
 E:\淳安\自动锁附1\StationDemo_Ver1.0UserX64_ZL20200831\Safe\obj\Debug\Safe.pdb
+G:\StationDemoX64V2.0\Code\Safe\obj\Debug\Safe.csprojAssemblyReference.cache
+G:\StationDemoX64V2.0\Code\Safe\obj\Debug\Safe.csproj.CoreCompileInputs.cache
 G:\StationDemoX64V2.0\Machine\Safe.dll
 G:\StationDemoX64V2.0\Machine\Safe.pdb
-G:\StationDemoX64V2.0\Code\Safe\obj\Debug\Safe.csproj.CoreCompileInputs.cache
 G:\StationDemoX64V2.0\Code\Safe\obj\Debug\Safe.csproj.CopyComplete
 G:\StationDemoX64V2.0\Code\Safe\obj\Debug\Safe.dll
 G:\StationDemoX64V2.0\Code\Safe\obj\Debug\Safe.pdb
-G:\StationDemoX64V2.0\Code\Safe\obj\Debug\Safe.csprojAssemblyReference.cache

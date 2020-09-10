@@ -64,11 +64,11 @@
             // 
             // tabControl_Log
             // 
-            this.tabControl_Log.Location = new System.Drawing.Point(2, 18);
+            this.tabControl_Log.Location = new System.Drawing.Point(5, 81);
             this.tabControl_Log.Margin = new System.Windows.Forms.Padding(2);
             this.tabControl_Log.Name = "tabControl_Log";
             this.tabControl_Log.SelectedIndex = 0;
-            this.tabControl_Log.Size = new System.Drawing.Size(945, 537);
+            this.tabControl_Log.Size = new System.Drawing.Size(951, 490);
             this.tabControl_Log.TabIndex = 1;
             // 
             // dataGridView_Sum
@@ -81,7 +81,7 @@
             this.CountItem,
             this.Val,
             this.ClearItem});
-            this.dataGridView_Sum.Location = new System.Drawing.Point(954, 281);
+            this.dataGridView_Sum.Location = new System.Drawing.Point(968, 279);
             this.dataGridView_Sum.Margin = new System.Windows.Forms.Padding(2);
             this.dataGridView_Sum.Name = "dataGridView_Sum";
             this.dataGridView_Sum.ReadOnly = true;
@@ -90,7 +90,7 @@
             this.dataGridView_Sum.RowTemplate.ReadOnly = true;
             this.dataGridView_Sum.RowTemplate.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.dataGridView_Sum.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.dataGridView_Sum.Size = new System.Drawing.Size(335, 245);
+            this.dataGridView_Sum.Size = new System.Drawing.Size(313, 245);
             this.dataGridView_Sum.TabIndex = 2;
             // 
             // CountItem
@@ -140,7 +140,7 @@
             // userPanel_Flag
             // 
             this.userPanel_Flag.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.userPanel_Flag.Location = new System.Drawing.Point(954, 532);
+            this.userPanel_Flag.Location = new System.Drawing.Point(13, 577);
             this.userPanel_Flag.m_nNumPerPage = 10;
             this.userPanel_Flag.m_nNumPerRow = 4;
             this.userPanel_Flag.m_page = 0;
@@ -148,7 +148,7 @@
             this.userPanel_Flag.m_splitWidth = 170;
             this.userPanel_Flag.Margin = new System.Windows.Forms.Padding(4);
             this.userPanel_Flag.Name = "userPanel_Flag";
-            this.userPanel_Flag.Size = new System.Drawing.Size(333, 245);
+            this.userPanel_Flag.Size = new System.Drawing.Size(943, 198);
             this.userPanel_Flag.TabIndex = 17;
             // 
             // MachineStatePause

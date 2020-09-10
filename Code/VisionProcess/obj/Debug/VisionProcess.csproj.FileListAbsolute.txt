@@ -1018,8 +1018,6 @@ E:\淳安\自动锁附1\StationDemo_Ver1.0UserX64_ZL20200831\VisionProcess\obj\D
 E:\淳安\自动锁附1\StationDemo_Ver1.0UserX64_ZL20200831\VisionProcess\obj\Debug\VisionProcess.csproj.CopyComplete
 E:\淳安\自动锁附1\StationDemo_Ver1.0UserX64_ZL20200831\VisionProcess\obj\Debug\VisionProcess.dll
 E:\淳安\自动锁附1\StationDemo_Ver1.0UserX64_ZL20200831\VisionProcess\obj\Debug\VisionProcess.pdb
-G:\StationDemoX64V2.0\Machine\VisionProcess.dll
-G:\StationDemoX64V2.0\Machine\VisionProcess.pdb
 G:\StationDemoX64V2.0\Code\VisionProcess\obj\Debug\VisionProcess.VisionBaseCtr.resources
 G:\StationDemoX64V2.0\Code\VisionProcess\obj\Debug\VisionProcess.RegionOut.resources
 G:\StationDemoX64V2.0\Code\VisionProcess\obj\Debug\VisionProcess.VisionFindCircleCtr.resources
@@ -1029,7 +1027,8 @@ G:\StationDemoX64V2.0\Code\VisionProcess\obj\Debug\VisionProcess.Vision2dCodeSet
 G:\StationDemoX64V2.0\Code\VisionProcess\obj\Debug\VisionProcess.VisionMatchSetCtr.resources
 G:\StationDemoX64V2.0\Code\VisionProcess\obj\Debug\VisionProcess.csproj.GenerateResource.cache
 G:\StationDemoX64V2.0\Code\VisionProcess\obj\Debug\VisionProcess.csproj.CoreCompileInputs.cache
+G:\StationDemoX64V2.0\Machine\VisionProcess.dll
+G:\StationDemoX64V2.0\Machine\VisionProcess.pdb
 G:\StationDemoX64V2.0\Code\VisionProcess\obj\Debug\VisionProcess.csproj.CopyComplete
 G:\StationDemoX64V2.0\Code\VisionProcess\obj\Debug\VisionProcess.dll
 G:\StationDemoX64V2.0\Code\VisionProcess\obj\Debug\VisionProcess.pdb
-G:\StationDemoX64V2.0\Code\VisionProcess\obj\Debug\VisionProcess.csprojAssemblyReference.cache

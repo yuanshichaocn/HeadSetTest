@@ -367,3 +367,11 @@ E:\淳安\Clenit\StationDemo_Ver1.0UserX64_Clent\Communicate\obj\Debug\Communica
 E:\淳安\Clenit\StationDemo_Ver1.0UserX64_Clent\Communicate\obj\Debug\Communicate.csproj.CopyComplete
 E:\淳安\Clenit\StationDemo_Ver1.0UserX64_Clent\Communicate\obj\Debug\Communicate.dll
 E:\淳安\Clenit\StationDemo_Ver1.0UserX64_Clent\Communicate\obj\Debug\Communicate.pdb
+G:\StationDemoX64V2.0\Machine\Communicate.dll
+G:\StationDemoX64V2.0\Machine\Communicate.pdb
+G:\StationDemoX64V2.0\Machine\Communicate.xml
+G:\StationDemoX64V2.0\Code\Communicate\obj\Debug\Communicate.csprojAssemblyReference.cache
+G:\StationDemoX64V2.0\Code\Communicate\obj\Debug\Communicate.csproj.CoreCompileInputs.cache
+G:\StationDemoX64V2.0\Code\Communicate\obj\Debug\Communicate.csproj.CopyComplete
+G:\StationDemoX64V2.0\Code\Communicate\obj\Debug\Communicate.dll
+G:\StationDemoX64V2.0\Code\Communicate\obj\Debug\Communicate.pdb

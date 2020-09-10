@@ -83,7 +83,12 @@
             </summary>
             <param name="e">Client information.</param>
         </member>
-        <!-- 对于成员“T:Communicate.ClientManager.CommandReceivedEventHandler”忽略有格式错误的 XML 注释 -->
+        <member name="T:Communicate.ClientManager.CommandReceivedEventHandler">
+            <summary>
+            <param name="sender">Sender.</param>
+            <param name="e">The received command object.</param>
+            </summary> 
+        </member>
         <member name="E:Communicate.ClientManager.CommandReceived">
             <summary>
             Occurs when a command received from a remote client.
