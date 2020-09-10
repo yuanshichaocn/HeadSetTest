@@ -45,7 +45,9 @@ namespace StationDemo
         void ULoad(string SoketName, bool bManual);
         bool IsSafeWhenURun(string SoketName);
         bool IsOpenSocket(string SoketName);
-        bool IsUload(string SoketName);
+        bool 
+            
+            (string SoketName);
     }
     public class ManualLoad : LoadPatten
     {

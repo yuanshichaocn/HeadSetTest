@@ -19,7 +19,7 @@ using UserData;
 using VisionProcess;
 using CommonDlg;
 using log4net;
-using LightControler;
+
 
 namespace StationDemo
 {
@@ -444,7 +444,7 @@ namespace StationDemo
 
 
 
-            UserConfig.InitProductParamOnMainScreenLoad();
+            UserConfig.BandEventOnForm1(this);
 
 
             

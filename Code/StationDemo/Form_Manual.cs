@@ -19,7 +19,7 @@ using System.Diagnostics;
 using System.Threading;
 using MotionIoLib;
 using System.Threading.Tasks;
-using LightControler;
+
 using System.Reflection;
 using OtherDevice;
 

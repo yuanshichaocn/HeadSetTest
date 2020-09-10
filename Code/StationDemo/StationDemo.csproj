@@ -137,19 +137,29 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LineOperate.cs" />
-    <Compile Include="LineStation.cs" />
-    <Compile Include="SmallMesSever.cs" />
-    <Compile Include="StationExample.cs" />
-    <Compile Include="IniF.cs" />
-    <Compile Include="ItemAdd.cs">
+    <Compile Include="Config\特殊数据读取.cs" />
+    <Compile Include="Config\统计数据读取并初始化.cs" />
+    <Compile Include="Config\主界面添加标志位.cs" />
+    <Compile Include="Config\料盘数据读取.cs" />
+    <Compile Include="Config\主界面事件绑定.cs" />
+    <Compile Include="Config\安全函数注册.cs" />
+    <Compile Include="Config\初始化外设关闭外设.cs" />
+    <Compile Include="Config\添加工站及初始化.cs" />
+    <Compile Include="Config\标定参数读取.cs" />
+    <Compile Include="Config\视觉参数读取.cs" />
+    <Compile Include="Config\相机初始化.cs" />
+    <Compile Include="Station\LineOperate.cs" />
+    <Compile Include="Station\LineStation.cs" />
+    <Compile Include="MesSever\SmallMesSever.cs" />
+    <Compile Include="Station\StationExample.cs" />
+    <Compile Include="ComForm\ItemAdd.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ItemAdd.Designer.cs">
+    <Compile Include="ComForm\ItemAdd.Designer.cs">
       <DependentUpon>ItemAdd.cs</DependentUpon>
     </Compile>
     <Compile Include="SysFunConfig.cs" />
-    <Compile Include="Table.cs" />
+    <Compile Include="Station\Table.cs" />
     <Compile Include="ComForm\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -174,10 +184,10 @@
     <Compile Include="Form_Auto.Designer.cs">
       <DependentUpon>Form_Auto.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form_AxisTest.cs">
+    <Compile Include="ComForm\Form_AxisTest.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form_AxisTest.Designer.cs">
+    <Compile Include="ComForm\Form_AxisTest.Designer.cs">
       <DependentUpon>Form_AxisTest.cs</DependentUpon>
     </Compile>
     <Compile Include="ComForm\Form_CameraDebug.cs">
@@ -228,31 +238,26 @@
     <Compile Include="ComForm\GetDataState.Designer.cs">
       <DependentUpon>GetDataState.cs</DependentUpon>
     </Compile>
-    <Compile Include="LightControl.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Safe.cs" />
-    <Compile Include="StationFormRobot.cs">
+    <Compile Include="ComForm\StationFormRobot.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="StationFormRobot.Designer.cs">
+    <Compile Include="ComForm\StationFormRobot.Designer.cs">
       <DependentUpon>StationFormRobot.cs</DependentUpon>
     </Compile>
-    <Compile Include="StationForm.cs">
+    <Compile Include="ComForm\StationForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="StationForm.Designer.cs">
+    <Compile Include="ComForm\StationForm.Designer.cs">
       <DependentUpon>StationForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserConfig.cs" />
-    <Compile Include="UserManger.cs">
+    <Compile Include="ComForm\UserManger.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UserManger.Designer.cs">
+    <Compile Include="ComForm\UserManger.Designer.cs">
       <DependentUpon>UserManger.cs</DependentUpon>
     </Compile>
-    <Compile Include="VisionAddtion.cs" />
-    <Compile Include="Weight.cs" />
     <EmbeddedResource Include="ComForm\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -265,7 +270,7 @@
     <EmbeddedResource Include="Form_Auto.resx">
       <DependentUpon>Form_Auto.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form_AxisTest.resx">
+    <EmbeddedResource Include="ComForm\Form_AxisTest.resx">
       <DependentUpon>Form_AxisTest.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ComForm\Form_CameraDebug.resx">
@@ -292,7 +297,7 @@
     <EmbeddedResource Include="ComForm\GetDataState.resx">
       <DependentUpon>GetDataState.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ItemAdd.resx">
+    <EmbeddedResource Include="ComForm\ItemAdd.resx">
       <DependentUpon>ItemAdd.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -305,13 +310,13 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="StationFormRobot.resx">
+    <EmbeddedResource Include="ComForm\StationFormRobot.resx">
       <DependentUpon>StationFormRobot.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="StationForm.resx">
+    <EmbeddedResource Include="ComForm\StationForm.resx">
       <DependentUpon>StationForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserManger.resx">
+    <EmbeddedResource Include="ComForm\UserManger.resx">
       <DependentUpon>UserManger.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
@@ -330,7 +335,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="huaya.ico" />
-    <Content Include="放大镜.ico" />
     <None Include="res\MainFramelogo\Stop.jpg" />
     <None Include="res\MainFramelogo\alarm.jpg" />
     <None Include="res\MainFramelogo\light_gray.png" />
@@ -345,7 +349,6 @@
     <Content Include="Resources\RedOn.ico" />
     <Content Include="Resources\YellowOff.ico" />
     <Content Include="Resources\YellowOn.ico" />
-    <Content Include="RightArrow.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DispensVision\XYZDispensVision.csproj">
@@ -367,6 +370,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="EPsonScaraRobot\" />
+    <Folder Include="logConfig\" />
     <Folder Include="System\Windows\Forms\Design\" />
   </ItemGroup>
   <ItemGroup>

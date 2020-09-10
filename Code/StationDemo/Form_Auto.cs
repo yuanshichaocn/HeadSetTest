@@ -30,7 +30,7 @@ namespace StationDemo
         {
             InitializeComponent();
         }
-        public delegate void ShowSomeOnAutoScreenHander(string dealtype, params object[] osbjs);
+        public delegate void ShowSomeOnAutoScreenHander( string dealtype, params object[] osbjs);
         public static ShowSomeOnAutoScreenHander ShowEventOnAutoScreen;
 
         List<string> m_listFlag = new List<string>();
@@ -242,8 +242,7 @@ namespace StationDemo
                 //}
             }
             
-            sdf.a =1;
-            sdf.b = 1;
+
 
             MachineStateEmg.Name = "急停";
             MachineStateStop.Name = "停止";
@@ -282,11 +281,11 @@ namespace StationDemo
 
          
             UserConfig.InitHardWare();
-            
-            UserConfig.InitHandWareWithUI(this);
-            //初始化产品
-            UserConfig.InitProductOnAutoScreenLoad();
-      
+            UserConfig.CalibDataRead();
+            UserConfig.ReadVisionData();
+            UserConfig.UpdataTrayData();
+            UserConfig.ReadAndUpdatStatisticaldata(this);
+       
 
         }
 
