@@ -8,13 +8,17 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using MotionIoLib;
+using System.IO.Ports;
+
 namespace UserData
 {
 
     public enum LineSegementState
     {
-
-        
+        /// <summary>
+        /// 未知状态
+        /// </summary>
+        UnKnow,
         /// <summary>
         /// 流水线无料状态
         /// </summary>
@@ -40,15 +44,25 @@ namespace UserData
         /// <summary>
         /// 流水线离开阶段 ，如有后段检测信号，遇到信号延时停止 无信号 直接到出料状态
         /// </summary>
-        Leaveing,//出料
+        
+
+        Leaveing,
 
         /// <summary>
         /// 流水线出料阶段 ，如有后一段流水线无料 出料
         /// </summary>
         WaitOut,
         /// <summary>
-        /// 没有下一段流水线
+        /// 出料中
         /// </summary>
+        /// 
+        
+        Outing,
+        /// <summary>
+        /// 出料完成 马上进入到None
+        /// </summary>
+        OutFinish,
+        
         NoNextLine,
 
 
@@ -89,7 +103,13 @@ namespace UserData
         前,
         后
     }
-
+    public enum OutFinishJudeType
+    { 
+        信号,
+        下一段流水线
+    
+    
+    }
 
 
     public class LineSegmentDataBase
@@ -97,6 +117,7 @@ namespace UserData
 
         public FeedMode feedMode = FeedMode.前进料;
         public LinePassMode linePassMode = LinePassMode.自动处理;
+        public OutFinishJudeType outFinishJudeType = OutFinishJudeType.下一段流水线;
         public object objLock = new object();
         private bool bIsPause = false;
         public bool IsPause
@@ -133,12 +154,24 @@ namespace UserData
             get
             {
 
-                if (ForwardMotorIo != null && ForwardMotorIo != "")
-                    if (IOMgr.GetInstace().ReadIoInBit(ForwardMotorIo))
-                        return MotorMoveDir.前;
-                if (BackMotorIo != null && BackMotorIo != "")
-                    if (IOMgr.GetInstace().ReadIoInBit(BackMotorIo))
-                        return MotorMoveDir.后;
+                if (IOMotionDir == null || IOMotionDir == "")
+                {
+                    if (ForwardMotorIo != null && ForwardMotorIo != "")
+                        if (IOMgr.GetInstace().ReadIoOutBit(ForwardMotorIo))
+                            return MotorMoveDir.前;
+                    if (BackMotorIo != null && BackMotorIo != "")
+                        if (IOMgr.GetInstace().ReadIoOutBit(BackMotorIo))
+                            return MotorMoveDir.后;
+                }
+                else
+                {
+                        if (IOMgr.GetInstace().ReadIoOutBit(IOMotionDir))
+                            return MotorMoveDir.前;
+                       else
+                            return MotorMoveDir.后;
+
+                }
+                 
                 return MotorMoveDir.停止;
             }
 
@@ -147,7 +180,7 @@ namespace UserData
         public int Index = 0;
         public string strBarCode2d;
         public string strBarCode1d;
-        private LineSegementState lineSegementState = LineSegementState.None;
+        private LineSegementState lineSegementState = LineSegementState.UnKnow;
         public string LineName = "";
         public void StopAllTimer()
         {
@@ -166,6 +199,7 @@ namespace UserData
                 switch (value)
                 {
                     case LineSegementState.None:
+                    case LineSegementState.UnKnow:
                         Index = 0;
                         strBarCode2d = "";
                         strBarCode1d = "";
@@ -191,30 +225,43 @@ namespace UserData
                         LeaveTimer.Stop();
                         OutTimer.Stop();
                         break;
-                       
-
-
                 }
-
                 lineSegementState = value;
             }
             get
             {
                 return lineSegementState;
             }
-        }
+        } 
+        /// <summary>
+        /// 电机正转IO
+        /// </summary>
         public string ForwardMotorIo
         {
             set;
             get;
         }
+        /// <summary>
+        /// 电机反转IO
+        /// </summary>
         public string BackMotorIo
         {
             set;
             get;
         }
-        public void PauseDeal()
+
+        /// <summary>
+        /// 电机方IO
+        /// </summary>
+        public string IOMotionDir
         {
+            get;
+            set;
+        }
+
+        protected void PauseDeal()
+        {
+          
             EnterTimer.PauseTimer();
             EnterDelayTimer.PauseTimer();
             BackEnterDelayTimer.PauseTimer();
@@ -225,14 +272,33 @@ namespace UserData
             MotionStop();
             Pause();
         }
+        
         public virtual void Pause()
         {
-           
-
+          
 
         }
-        public  void ResumeDeal()
+
+        public virtual  void Stop()
         {
+         ;
+
+        }
+        public virtual void StopDeal()
+        {
+           
+            EnterTimer.Stop();
+            EnterDelayTimer.Stop();
+            BackEnterDelayTimer.Stop();
+            LeaveTimer.Stop();
+            LeaveDelayTimer.Stop();
+            OutTimer.Stop();
+            MotionStop();
+            Stop();
+        }
+        protected void ResumeDeal()
+        {
+         
             EnterTimer.resumeTimer();
             EnterDelayTimer.resumeTimer();
             BackEnterDelayTimer.resumeTimer();
@@ -259,40 +325,90 @@ namespace UserData
             
         }
 
-        public void MotionForwardRun()
+        public void MotionForwardRun(bool bRunDir=true)
         {
-            if (ForwardMotorIo != null && ForwardMotorIo != "")
-                IOMgr.GetInstace().WriteIoBit(ForwardMotorIo, true);
-            if (BackMotorIo != null && BackMotorIo != "")
-                IOMgr.GetInstace().WriteIoBit(BackMotorIo, false);
+            if (IOMotionDir == null || IOMotionDir == "")
+            {
+                if (ForwardMotorIo != null && ForwardMotorIo != "")
+                    IOMgr.GetInstace().WriteIoBit(ForwardMotorIo, true);
+                if (BackMotorIo != null && BackMotorIo != "")
+                    IOMgr.GetInstace().WriteIoBit(BackMotorIo, false);
+            }
+            else
+            {
+                if (ForwardMotorIo != null && ForwardMotorIo != "")
+                    IOMgr.GetInstace().WriteIoBit(ForwardMotorIo, true);
+                if (IOMotionDir != null && IOMotionDir != "")
+                    IOMgr.GetInstace().WriteIoBit(IOMotionDir, bRunDir);
+            }
         }
 
-        public void MotionBackRun()
+        public void MotionBackRun( bool bRunDir = false)
         {
-            if (BackMotorIo != null && BackMotorIo != "")
-                IOMgr.GetInstace().WriteIoBit(BackMotorIo, true);
-            if (ForwardMotorIo != null && ForwardMotorIo != "")
-                IOMgr.GetInstace().WriteIoBit(ForwardMotorIo, false);
+            if (IOMotionDir == null || IOMotionDir == "")
+            {
+                if (BackMotorIo != null && BackMotorIo != "")
+                    IOMgr.GetInstace().WriteIoBit(BackMotorIo, true);
+                if (ForwardMotorIo != null && ForwardMotorIo != "")
+                    IOMgr.GetInstace().WriteIoBit(ForwardMotorIo, false);
+            }
+            else
+            {
+                if (ForwardMotorIo != null && ForwardMotorIo != "")
+                    IOMgr.GetInstace().WriteIoBit(ForwardMotorIo, true);
+                if (IOMotionDir != null && IOMotionDir != "")
+                    IOMgr.GetInstace().WriteIoBit(IOMotionDir, bRunDir);
+
+            }
+          
         }
         public void MotionStop()
         {
-            if (BackMotorIo != null && BackMotorIo != "")
-                IOMgr.GetInstace().WriteIoBit(BackMotorIo, false);
-            if (ForwardMotorIo != null && ForwardMotorIo != "")
-                IOMgr.GetInstace().WriteIoBit(ForwardMotorIo, false);
+            if (IOMotionDir == null || IOMotionDir == "")
+            {
+
+                if (BackMotorIo != null && BackMotorIo != "")
+                    IOMgr.GetInstace().WriteIoBit(BackMotorIo, false);
+                if (ForwardMotorIo != null && ForwardMotorIo != "")
+                    IOMgr.GetInstace().WriteIoBit(ForwardMotorIo, false);
+            }
+            else
+            {
+                if (ForwardMotorIo != null && ForwardMotorIo != "")
+                    IOMgr.GetInstace().WriteIoBit(ForwardMotorIo, false);
+                if (IOMotionDir != null && IOMotionDir != "")
+                    IOMgr.GetInstace().WriteIoBit(IOMotionDir, false);
+            }
         }
-        public int nEnteryTimeout
+               
+        public long nEnteryTimeout
         {
-            set;
-            get;
+            set=> EnterTimer.SetTimeDelay(value);
+            get=>EnterTimer.SetedTime;
+            
+        }
+        public long nEnteryDelay
+        {
+            set =>  EnterDelayTimer.SetTimeDelay(value);
+            get => EnterDelayTimer.SetedTime;
         }
 
-        public int nLeaveTimeout
+        public long nLeaveDelay
         {
-            set;
-            get;
+            set => LeaveDelayTimer.SetTimeDelay(value);
+            get =>  LeaveDelayTimer.SetedTime;
         }
-
+        public long nOutTimeout
+        {
+            set => OutTimer.SetTimeDelay(value);
+            get =>  OutTimer.SetedTime;
+ 
+        }
+        public long nBackEnterDelay
+        {
+            set => BackEnterDelayTimer.SetTimeDelay(value);
+            get =>  BackEnterDelayTimer.SetedTime;
+        }
         /// <summary>
         /// 阻挡气缸上升
         /// </summary>
@@ -333,50 +449,6 @@ namespace UserData
         /// </summary>
         public string JackUpCylinderDownIoInPos = "";
 
-        ///// <summary>
-        ///// 前阻挡气缸上升
-        ///// </summary>
-        //public string FrontStopCylinderUpIo = "";
-
-        ///// <summary>
-        ///// 前阻挡气缸下降
-        ///// </summary>
-        //public string FrontStopCylinderDownIo = "";
-
-        ///// <summary>
-        /////  前阻挡气缸上升到位
-        ///// </summary>
-        //public string FrontStopCylinderUpInPosIo = "";
-
-
-        ///// <summary>
-        ///// 前阻挡气缸下降到位
-        ///// </summary>
-        //public string FrontStopCylinderDwonInPosIo = "";
-
-
-        ///// <summary>
-        ///// 后阻挡气缸上升
-        ///// </summary>
-        //public string BackStopCylinderUpIo = "";
-
-        ///// <summary>
-        ///// 后阻挡气缸下降
-        ///// </summary>
-        //public string BackStopCylinderDownIo = "";
-
-        ///// <summary>
-        /////  后阻挡气缸上升到位
-        ///// </summary>
-        //public string BackStopCylinderUpInPosIo = "";
-
-
-        ///// <summary>
-        ///// 后阻挡气缸下降到位
-        ///// </summary>
-        //public string BackStopCylinderDwonInPosIo = "";
-
-
 
         /// <summary>
         /// 入料感应
@@ -394,26 +466,11 @@ namespace UserData
         /// </summary>
         public string InPosCheckIo = "";
 
-        ///// <summary>
-        ///// 后阻挡气缸
-        ///// </summary>
-        //public string BackStopCliyder = "";
-
-        ///// <summary>
-        ///// 前阻挡气缸
-        ///// </summary>
-        //public string FrontStopCliyder = "";
-
-
-        public double dCurrentAngle = 0;
-        public int TrayIndexFrom = 0;//Barrel 来自那个盘
-        public int TrayCellIndexFrom = 0;//Barrel 来自盘的哪个位置
         public void ClearData()
         {
             Index = 0;
             strBarCode2d = "";
             strBarCode1d = "";
-
         }
 
 
@@ -425,13 +482,16 @@ namespace UserData
         {
 
         }
-        public cUserTimer EnterTimer = new cUserTimer(10000);
-        public cUserTimer EnterDelayTimer = new cUserTimer(100);
-        public cUserTimer BackEnterDelayTimer = new cUserTimer(10000);
-        public cUserTimer LeaveTimer = new cUserTimer(10000);
-        public cUserTimer LeaveDelayTimer = new cUserTimer(100);
-        public cUserTimer OutTimer = new cUserTimer(10000);
-
+        protected cUserTimer EnterTimer = new cUserTimer(10000);
+        protected cUserTimer EnterDelayTimer = new cUserTimer(100);
+        protected cUserTimer BackEnterDelayTimer = new cUserTimer(10000);
+        protected cUserTimer LeaveTimer = new cUserTimer(10000);
+        protected cUserTimer LeaveDelayTimer = new cUserTimer(100);
+        protected cUserTimer OutTimer = new cUserTimer(10000);
+        /// <summary>
+        /// 阻挡气缸上升 true 上升 false 下降
+        /// </summary>
+        /// <param name="bUp"></param>
         public void StopClinderUp(bool bUp)
         {
             if (bUp)
@@ -450,6 +510,10 @@ namespace UserData
                     IOMgr.GetInstace().WriteIoBit(StopCylinderDownIo, true);
             }
         }
+        /// <summary>
+        /// 顶升气缸上升 bUP true 顶升 false  下降
+        /// </summary>
+        /// <param name="bUp"></param>
         public void JackUpCliyderUp(bool bUp)
         {
 
@@ -462,6 +526,12 @@ namespace UserData
                 IOMgr.GetInstace().WriteIoBit(JackUpCylinderDownIo, !bUp);
             }
         }
+
+        /// <summary>
+        /// 检查顶升气缸 到位 bUp true 顶升到位，false 下降到位
+        /// </summary>
+        /// <param name="bUp"></param>
+        /// <returns></returns>
         public bool CheckJackUpCliyderStateInPos(bool bUp)
         {
             if (bUp && (JackUpCylinderUpIoInPos == null || JackUpCylinderUpIoInPos == ""))
@@ -477,6 +547,11 @@ namespace UserData
 
         }
 
+        /// <summary>
+        /// 检查阻挡气缸到位情况 up 阻挡顶升到位 down 顶升下降到位
+        /// </summary>
+        /// <param name="bUp"></param>
+        /// <returns></returns>
         public bool CheckStopCliyderStateInPos(bool bUp)
         {
             if (bUp && (StopCylinderUpInPosIo == null || StopCylinderUpInPosIo == ""))
@@ -489,6 +564,9 @@ namespace UserData
                 return true;
             return false;
         }
+        /// <summary>
+        /// 流水线初始化
+        /// </summary>
         public void Init()
         {
             LeaveTimer.Stop();
@@ -499,7 +577,9 @@ namespace UserData
             lineSegementState = LineSegementState.None;
 
         }
-        //出料电机运动 true 正向  false 反向
+        /// <summary>
+        ///  出料电机运动方向 true 正向  false 反向
+        /// </summary>
         public bool bOutMotorRunDir = true;
     }
 

@@ -150,18 +150,18 @@
     <Compile Include="Config\标定参数读取.cs" />
     <Compile Include="Config\视觉参数读取.cs" />
     <Compile Include="Config\相机初始化.cs" />
-    <Compile Include="Station\LineOperate.cs" />
-    <Compile Include="Station\LineStation.cs" />
     <Compile Include="MesSever\SmallMesSever.cs" />
-    <Compile Include="Station\StationExample.cs" />
     <Compile Include="ComForm\ItemAdd.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ComForm\ItemAdd.Designer.cs">
       <DependentUpon>ItemAdd.cs</DependentUpon>
     </Compile>
+    <Compile Include="Station\流水线\IPipeline.cs" />
+    <Compile Include="Station\流水线\LineOperate.cs" />
+    <Compile Include="Station\流水线\LineStation.cs" />
+    <Compile Include="Station\流水线\LineStation_IPipe.cs" />
     <Compile Include="SysFunConfig.cs" />
-    <Compile Include="Station\Table.cs" />
     <Compile Include="ComForm\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -373,6 +373,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="logConfig\" />
+    <Folder Include="Station\转盘\" />
     <Folder Include="System\Windows\Forms\Design\" />
   </ItemGroup>
   <ItemGroup>
