@@ -20,24 +20,7 @@ using Newtonsoft.Json;
 namespace StationDemo
 {
 
-    public enum IO
-    {
-        SHU
-
-    }
-    public static class ExternIO
-    {
-        public static bool  Set(this IO s, bool bVal)
-        {
-            return IOMgr.GetInstace().WriteIoBit(IO.SHU.ToString(), bVal);
-        }
-
-
-
-
-    }
-
-
+ 
     public interface LoadPatten
     {
         bool IsLoadOK(string SoketName, bool bManual);
@@ -63,7 +46,8 @@ namespace StationDemo
 
         public bool IsOpenSocket(string SoketName)
         {
-            string Soket = SoketName;
+     
+                   string Soket = SoketName;
             return !IOMgr.GetInstace().ReadIoInBit($"{Soket}治具盖上检测");
         }
 

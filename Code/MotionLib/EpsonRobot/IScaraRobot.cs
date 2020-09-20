@@ -11,7 +11,7 @@ namespace EpsonRobot
     {
         bool Jump(Coordinate coordinate, HandDirection direction, double limz, bool bCheckHandleSys);
         bool Go(Coordinate coordinate, HandDirection direction,bool  bCheckHandleSys);
-        bool Move(Coordinate coordinate, bool bCheckHandleSys);
+        bool Move(Coordinate coordinate, HandDirection direction, bool bCheckHandleSys);
         void Stop();
         bool Home();
         void SetOutput(int index, bool value);

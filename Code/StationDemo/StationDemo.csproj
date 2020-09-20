@@ -137,6 +137,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Config\IO配置.cs" />
     <Compile Include="Config\特殊数据读取.cs" />
     <Compile Include="Config\统计数据读取并初始化.cs" />
     <Compile Include="Config\主界面添加标志位.cs" />
@@ -258,6 +259,7 @@
     <Compile Include="ComForm\UserManger.Designer.cs">
       <DependentUpon>UserManger.cs</DependentUpon>
     </Compile>
+    <Compile Include="扩展方法\IO扩展.cs" />
     <EmbeddedResource Include="ComForm\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
