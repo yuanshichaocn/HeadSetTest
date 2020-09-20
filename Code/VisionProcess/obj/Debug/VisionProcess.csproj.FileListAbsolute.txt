@@ -1032,3 +1032,4 @@ G:\StationDemoX64V2.0\Machine\VisionProcess.pdb
 G:\StationDemoX64V2.0\Code\VisionProcess\obj\Debug\VisionProcess.csproj.CopyComplete
 G:\StationDemoX64V2.0\Code\VisionProcess\obj\Debug\VisionProcess.dll
 G:\StationDemoX64V2.0\Code\VisionProcess\obj\Debug\VisionProcess.pdb
+G:\StationDemoX64V2.0\Code\VisionProcess\obj\Debug\VisionProcess.csprojAssemblyReference.cache

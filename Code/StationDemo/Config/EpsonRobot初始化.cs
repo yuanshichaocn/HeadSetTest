@@ -20,33 +20,34 @@ using CameraLib;
 using OtherDevice;
 using XYZDispensVision;
 using MachineSafe;
-
+using System.Threading.Tasks;
 
 namespace StationDemo
 {
     public static partial class UserConfig
     {
-      
+
+        public static bool IsHaveEpson = false;
+        public static IOOut robotStart;
+        public static IOOut robotReaset;
         /// <summary>
-        /// 增加IO处理前安全判断函数 
+        /// 初始化Epson 4轴机械手 
         /// </summary>
-        public static void AddIoSafeOperate()
+        public static void InitEpson4Robot()
         {
-
-            //    IOMgr.GetInstace().m_eventIsSafeWhenOutIo += Safe.IsSafeYAxisCliyder;
-
+            if (IsHaveEpson == false)
+                return;
+                Task.Run(() => {
+                    IOMgr.GetInstace().WriteIoBit("机器人程序启动", true);
+                    Thread.Sleep(10000);
+                    ScaraRobot.GetInstance().Init(out string msg);
+                });
         }
+   
+   
 
 
-        /// <summary>
-        /// 添加运动处理前的安全判断函数
-        /// </summary>
-        public static void AddAxisSafeOperate()
-        {
-           // MotionMgr.GetInstace().m_eventIsSafeWhenAxisMove += Safe.IsSafeWhenXYMoveDisp;
-           
-        }
-        
+    
 
 
     

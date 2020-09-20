@@ -279,12 +279,13 @@ namespace StationDemo
             sys.g_User = sys.g_listUser.Find(t => t._userName == "admin");
 
 
-         
+            UserConfig.InitEpson4Robot();
             UserConfig.InitHardWare();
             UserConfig.CalibDataRead();
             UserConfig.ReadVisionData();
             UserConfig.UpdataTrayData();
             UserConfig.ReadAndUpdatStatisticaldata(this);
+
        
 
         }

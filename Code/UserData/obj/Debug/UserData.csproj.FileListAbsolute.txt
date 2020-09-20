@@ -544,3 +544,4 @@ G:\StationDemoX64V2.0\Machine\UserData.pdb
 G:\StationDemoX64V2.0\Code\UserData\obj\Debug\UserData.csproj.CopyComplete
 G:\StationDemoX64V2.0\Code\UserData\obj\Debug\UserData.dll
 G:\StationDemoX64V2.0\Code\UserData\obj\Debug\UserData.pdb
+G:\StationDemoX64V2.0\Code\UserData\obj\Debug\UserData.csprojAssemblyReference.cache

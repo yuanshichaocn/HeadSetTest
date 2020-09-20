@@ -21,7 +21,7 @@ using OtherDevice;
 using XYZDispensVision;
 using MachineSafe;
 
-
+//在此文件中配置好相应的输入输出IO
 namespace StationDemo
 {
 
@@ -34,6 +34,7 @@ namespace StationDemo
     {
         
     }
+   
 
 
 }
