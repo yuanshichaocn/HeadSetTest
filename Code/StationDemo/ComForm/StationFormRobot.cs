@@ -1801,50 +1801,6 @@ namespace StationDemo
         }
     }
 
-    public static class RoboteExt
-    {
-        static string RobotPauseIo = "";
-        static string RobotResumeIo = "";
-        public static WaranResult  JumpInPos(this ScaraRobot scaraRobot, Coordinate coordinate, HandDirection direction, double limz, bool bCheckHandleSys=false,bool bmauanl=false)
-        {
-              WaranResult waran = WaranResult.Failture;
-              bool bcmd=   ScaraRobot.GetInstance().Jump(coordinate, direction, limz);
-             DoWhile doWhile = new DoWhile((nTimeed, doWhile2, bmanual, objs) =>
-             {
-                 if(!bmanual)
-                 {
-                     if (GlobalVariable.g_StationState == StationState.StationStatePause)
-                     {
-                         if (!IOMgr.GetInstace().ReadIoOutBit(RobotPauseIo))
-                         {
-                             IOMgr.GetInstace().WriteIoBit(RobotPauseIo, true);
-                             IOMgr.GetInstace().WriteIoBit(RobotResumeIo, false);
-                         }
-
-                     }
-                     else if (GlobalVariable.g_StationState == StationState.StationStateRun)
-                     {
-                         IOMgr.GetInstace().WriteIoBit(RobotPauseIo, false);
-                         IOMgr.GetInstace().WriteIoBit(RobotResumeIo, true);
-                     }
-                 }
-
-                
-                 bool bInPosX = Math.Abs(ScaraRobot.GetInstance().CurrentPosition.X - coordinate.X) < 0.03;
-                 bool bInPosY = Math.Abs(ScaraRobot.GetInstance().CurrentPosition.Y - coordinate.Y) < 0.03;
-                 bool bInPosZ = Math.Abs(ScaraRobot.GetInstance().CurrentPosition.Z - coordinate.Z) < 0.03;
-                 bool bInPosU = Math.Abs(ScaraRobot.GetInstance().CurrentPosition.U - coordinate.U) < 0.03;
-                 bool bInPos = bInPosX && bInPosY && bInPosZ && bInPosU;
-                 if (ScaraRobot.GetInstance().InPos && bInPos)
-                     return WaranResult.Run;
-                 else
-                     return WaranResult.CheckAgain;
-             }
-            , 30000);
-           return  doWhile.doSomething2(null, doWhile, bmauanl, null);
-
-        }
-    }
-
+   
     
 }

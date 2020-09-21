@@ -260,6 +260,7 @@
     <Compile Include="ComForm\UserManger.Designer.cs">
       <DependentUpon>UserManger.cs</DependentUpon>
     </Compile>
+    <Compile Include="扩展方法\Epson4ScaraRobot.cs" />
     <Compile Include="扩展方法\IO扩展.cs" />
     <EmbeddedResource Include="ComForm\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>

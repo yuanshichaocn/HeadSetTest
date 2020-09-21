@@ -370,7 +370,7 @@ namespace StationDemo
                 }
                 if(lineSenor.feedMode == FeedMode.后进料)
                 {
-                    if (lineSenor.LineSegState >=LineSegementState.BeforeHave)
+                    if (lineSenor.LineSegState >=LineSegementState.BackEntryReady)
                     {
                         lineSenor.feedMode = FeedMode.前进料;
                     }
