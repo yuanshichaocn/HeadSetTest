@@ -30,9 +30,13 @@ namespace UserData
         Entrying,//进料阶段
 
         /// <summary>
+        /// 后段进料准备阶段
+        /// </summary>
+        BackEntryReady,
+        /// <summary>
         /// 流水线到位 对流水线上相关部件（治具，Tray）处理，处理完成 进入Have状态
         /// </summary>
-        BeforeHave,//有料前准备
+        ReadyIng,//有料前准备
         /// <summary>
         /// 流水线到位 相关工站 开始工作，流水线等待
         /// </summary>
@@ -44,8 +48,6 @@ namespace UserData
         /// <summary>
         /// 流水线离开阶段 ，如有后段检测信号，遇到信号延时停止 无信号 直接到出料状态
         /// </summary>
-        
-
         Leaveing,
 
         /// <summary>
@@ -63,7 +65,7 @@ namespace UserData
         /// </summary>
         OutFinish,
         
-        NoNextLine,
+      
 
 
     }
@@ -205,7 +207,7 @@ namespace UserData
                         strBarCode1d = "";
                         StopAllTimer();
                         break;
-                    case LineSegementState.BeforeHave:
+                    case LineSegementState.ReadyIng:
                     case LineSegementState.Have:
                         StopAllTimer();
                         break;
@@ -484,6 +486,7 @@ namespace UserData
         }
         protected cUserTimer EnterTimer = new cUserTimer(10000);
         protected cUserTimer EnterDelayTimer = new cUserTimer(100);
+
         protected cUserTimer BackEnterDelayTimer = new cUserTimer(10000);
         protected cUserTimer LeaveTimer = new cUserTimer(10000);
         protected cUserTimer LeaveDelayTimer = new cUserTimer(100);

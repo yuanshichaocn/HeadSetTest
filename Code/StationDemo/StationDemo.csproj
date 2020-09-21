@@ -373,6 +373,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="logConfig\" />
+    <Folder Include="Station\特定工站\" />
     <Folder Include="Station\转盘\" />
     <Folder Include="System\Windows\Forms\Design\" />
   </ItemGroup>

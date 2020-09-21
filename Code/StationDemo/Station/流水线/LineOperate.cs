@@ -21,7 +21,7 @@ namespace StationDemo
 
          bool IsCanEntry(  bool bmanual);
         
-         void OperateLineBeforeHave(  bool bmanual);
+         void OperateLineReadyIng(  bool bmanual);
 
          bool IsbeReady(  bool bmanual);
         
@@ -59,7 +59,7 @@ namespace StationDemo
             return lb.CheckJackUpCliyderStateInPos(false) &&
                 lb.CheckStopCliyderStateInPos(true);
         }
-        public  void OperateLineBeforeHave( bool bmanual)
+        public  void OperateLineReadyIng( bool bmanual)
         {
             lb?.JackUpCliyderUp(true);
         }
@@ -138,9 +138,19 @@ namespace StationDemo
                     ForwardRun( sb, FrontLineState,  backLineState,  bmaual);
                     break;
                 case FeedMode.后进料:
-                    BackRun( sb, FrontLineState,  backLineState,  bmaual);
+                    BackRun( sb, backLineState , FrontLineState,  bmaual);
                     break;
             }
+        }
+        private string strMsg = "";
+       public void Info(Stationbase sb,string strmsg)
+        {
+            if(strmsg!= strMsg)
+            {
+                strMsg = strmsg;
+                sb?.Info(strmsg);
+            }
+
         }
         void LeaveOperate(Stationbase sb, LineSegementState backLineState, bool bmaual)
         {
@@ -148,16 +158,12 @@ namespace StationDemo
             switch (LineSegState)
             {
                 case LineSegementState.Have:
-                    if (backLineState == LineSegementState.NoNextLine)
-                    {
-                        LineSegState = LineSegementState.None;
-                        return;
-                    }
+                   
                     if (linePassMode == LinePassMode.直通)
                     {
-                        sb?.Info($"{LineName} 直通模式 :状态 {LineSegState}--> { LineSegementState.Finish}");
+                        Info(sb,$"{LineName} 直通模式 :状态 {LineSegState}--> { LineSegementState.Finish}");
                     }
-                    //sb?.Info($"{LineName} :状态{LineSegState}");
+                    //Info(sb,($"{LineName} :状态{LineSegState}");
                     break;
                 case LineSegementState.Finish:
                      OperateLineBeforeLevave(bmaual);
@@ -170,14 +176,14 @@ namespace StationDemo
                     if (LeaveCheckIo == null || LeaveCheckIo == "")
                     {
 
-                        sb?.Info($"{LineName} ,{feedMode.ToString()}, 无后端检测IO  状态： {LineSegState}--> { LineSegementState.Leaveing}");
+                        Info(sb,$"{LineName} ,{feedMode.ToString()}, 无后端检测IO  状态： {LineSegState}--> { LineSegementState.Leaveing}");
                         if (backLineState == LineSegementState.None)
                             LineSegState = LineSegementState.Leaveing;
 
                     }
                     else if (!IOMgr.GetInstace().ReadIoInBit(LeaveCheckIo))
                     {
-                        sb?.Info($"{LineName} ,{feedMode.ToString()}, 有后端检测IO    没有信号 状态： {LineSegState}--> { LineSegementState.Leaveing}");
+                       Info(sb,$"{LineName} ,{feedMode.ToString()}, 有后端检测IO    没有信号 状态： {LineSegState}--> { LineSegementState.Leaveing}");
                         LineSegState = LineSegementState.Leaveing;
                     }
                     else
@@ -214,7 +220,7 @@ namespace StationDemo
                             LeaveDelayTimer.Stop();
                             LeaveTimer.Stop();
                             MotionStop();
-                            sb?.Info($"{LineName} ,{feedMode.ToString()}, 有后端检测IO 离开延时定时器到达 : 状态 {LineSegState}--> { LineSegementState.WaitOut}");
+                           Info(sb,$"{LineName} ,{feedMode.ToString()}, 有后端检测IO 离开延时定时器到达 : 状态 {LineSegState}--> { LineSegementState.WaitOut}");
                             LineSegState = LineSegementState.WaitOut;
                         }
                         else if (LeaveDelayTimer.IsRuning)
@@ -230,7 +236,7 @@ namespace StationDemo
                             MotionStop();
                             LeaveDelayTimer.Stop();
                             LeaveTimer.Stop();
-                            sb?.Info($"{LineName} ,{feedMode.ToString()}, 无后端检测IO :状态 {LineSegState}-->{LineSegementState.WaitOut}");
+                           Info(sb,$"{LineName} ,{feedMode.ToString()}, 无后端检测IO :状态 {LineSegState}-->{LineSegementState.WaitOut}");
                             LineSegState = LineSegementState.WaitOut;
                         }
                         else if (!(LeaveCheckIo == null || LeaveCheckIo == "") &&
@@ -243,7 +249,7 @@ namespace StationDemo
                                 MotionForwardRun();
                             else
                                 MotionBackRun();
-                            sb?.Info($"{LineName} ,{feedMode.ToString()}, 有后端检测IO 离开延时定时器开启 : 状态 {LineSegState}");
+                           Info(sb,$"{LineName} ,{feedMode.ToString()}, 有后端检测IO 离开延时定时器开启 : 状态 {LineSegState}");
 
                         }
                         else
@@ -281,7 +287,7 @@ namespace StationDemo
                             MotionForwardRun();
                         else
                             MotionBackRun();
-                        sb?.Info($"{LineName} ,{feedMode.ToString()},  出料延时定时器开启 : 状态 {LineSegState}->{LineSegementState.Outing}");
+                       Info(sb,$"{LineName} ,{feedMode.ToString()},  出料延时定时器开启 : 状态 {LineSegState}->{LineSegementState.Outing}");
                         LineSegState = LineSegementState.Outing;
                     }
                     break;
@@ -294,7 +300,7 @@ namespace StationDemo
                             MotionStop();
                             if (IsLastSegLine && (LeaveCheckIo == null || LeaveCheckIo == ""))
                             {
-                                sb?.Info($"{LineName}:{feedMode.ToString()}, 无后端检测IO, 本段是流水线最后一段 ，延时时间到 状态：{LineSegState}-->{ LineSegementState.None}");
+                               Info(sb,$"{LineName}:{feedMode.ToString()}, 无后端检测IO, 本段是流水线最后一段 ，延时时间到 状态：{LineSegState}-->{ LineSegementState.None}");
                                 LineSegState = LineSegementState.OutFinish;
                                 OutTimer.Stop();
                                 if (eventShowLastLineSegInfo != null)
@@ -313,9 +319,9 @@ namespace StationDemo
                                 {
                                     //不是最后一段
                                     //  没有出料感器 下端进料完成 
-                                    if (backLineState >= LineSegementState.BeforeHave)
+                                    if (backLineState >= LineSegementState.BackEntryReady)
                                     {
-                                        sb?.Info($"{LineName}： 状态：{LineSegState}-->{ LineSegementState.OutFinish}");
+                                       Info(sb,$"{LineName}： 状态：{LineSegState}-->{ LineSegementState.OutFinish}");
                                         LineSegState = LineSegementState.OutFinish;
                                         OutTimer.Stop();
                                         MotionStop();
@@ -329,7 +335,7 @@ namespace StationDemo
                                 {
                                     if (IOMgr.GetInstace().ReadIoInBit(LeaveCheckIo))
                                     {
-                                        sb?.Info($"{LineName}：{feedMode.ToString()}, 信号消失 状态：{LineSegState}-->{ LineSegementState.OutFinish}");
+                                       Info(sb,$"{LineName}：{feedMode.ToString()}, 信号消失 状态：{LineSegState}-->{ LineSegementState.OutFinish}");
                                         LineSegState = LineSegementState.OutFinish;
                                         MotionStop();
                                         if (eventShowLastLineSegInfo != null)
@@ -342,9 +348,9 @@ namespace StationDemo
                                     if(outFinishJudeType == OutFinishJudeType.下一段流水线)
                                     {
 
-                                        if (backLineState >= LineSegementState.BeforeHave)
+                                        if (backLineState >= LineSegementState.ReadyIng)
                                         {
-                                            sb?.Info($"{LineName}：{feedMode.ToString()}, 信号消失 状态：{LineSegState}-->{ LineSegementState.OutFinish}");
+                                           Info(sb,$"{LineName}：{feedMode.ToString()}, 信号消失 状态：{LineSegState}-->{ LineSegementState.OutFinish}");
                                             LineSegState = LineSegementState.OutFinish;
                                             MotionStop();
                                             return;
@@ -355,7 +361,7 @@ namespace StationDemo
                                         //  有出料感器 信号消失 
                                         if (!IOMgr.GetInstace().ReadIoInBit(LeaveCheckIo) )
                                         {
-                                            sb?.Info($"{LineName}：{feedMode.ToString()}, 信号消失 状态：{LineSegState}-->{ LineSegementState.OutFinish}");
+                                           Info(sb,$"{LineName}：{feedMode.ToString()}, 信号消失 状态：{LineSegState}-->{ LineSegementState.OutFinish}");
                                             LineSegState = LineSegementState.OutFinish;
                                             MotionStop();
                                             return;
@@ -376,7 +382,7 @@ namespace StationDemo
                      OprateOutFinishDeal(bmaual);
                     if (! IsOutFinishDealOK(bmaual))
                         return;
-                    sb?.Info($"{LineName}：{feedMode.ToString()},  状态：{LineSegState}-->{ LineSegementState.None}");
+                   Info(sb,$"{LineName}：{feedMode.ToString()},  状态：{LineSegState}-->{ LineSegementState.None}");
                     LineSegState = LineSegementState.None;
                     break;
             }
@@ -405,7 +411,7 @@ namespace StationDemo
                             
                             if(FrontLineState == LineSegementState.Outing)
                             {
-                                sb?.Info($"{LineName} ,{feedMode.ToString()}, 无前端检测IO 无中端检测IO :状态{LineSegState} --> { LineSegementState.Entrying}");
+                               Info(sb,$"{LineName} ,{feedMode.ToString()}, 无前端检测IO 无中端检测IO :状态{LineSegState} --> { LineSegementState.Entrying}");
                                 LineSegState = LineSegementState.Entrying;
                             }
                               
@@ -414,7 +420,7 @@ namespace StationDemo
                         {
                             if (FrontLineState == LineSegementState.Outing)
                             {
-                                sb?.Info($"{LineName} ,{feedMode.ToString()}, 无前端检测IO 有中端检测IO:{InPosCheckIo} :状态{LineSegState} --> { LineSegementState.Entrying}");
+                               Info(sb,$"{LineName} ,{feedMode.ToString()}, 无前端检测IO 有中端检测IO:{InPosCheckIo} :状态{LineSegState} --> { LineSegementState.Entrying}");
                                 LineSegState = LineSegementState.Entrying;
                             }
                                
@@ -423,7 +429,7 @@ namespace StationDemo
                         {
                             if (FrontLineState == LineSegementState.Outing)
                             {
-                                sb?.Info($"{LineName} ,{feedMode.ToString()}, 无前端检测IO 有中端检测IO:{InPosCheckIo}并检测到 {InPosCheckIo}:状态{LineSegState} --> { LineSegementState.Entrying}");
+                               Info(sb,$"{LineName} ,{feedMode.ToString()}, 无前端检测IO 有中端检测IO:{InPosCheckIo}并检测到 {InPosCheckIo}:状态{LineSegState} --> { LineSegementState.Entrying}");
                                 LineSegState = LineSegementState.Entrying;
                             }
                         }
@@ -434,7 +440,7 @@ namespace StationDemo
                         {
                              if (FrontLineState == LineSegementState.Outing)
                             {
-                                sb?.Info($"{LineName} ,{feedMode.ToString()}, 无中端检测IO 有前端检测IO:{EnteryCheckIo} :状态 {LineSegState}--> { LineSegementState.Entrying}");
+                               Info(sb,$"{LineName} ,{feedMode.ToString()}, 无中端检测IO 有前端检测IO:{EnteryCheckIo} :状态 {LineSegState}--> { LineSegementState.Entrying}");
                                 LineSegState = LineSegementState.Entrying;
                             }    
                         }
@@ -442,7 +448,7 @@ namespace StationDemo
                         {
                             if (FrontLineState == LineSegementState.Outing)
                             {
-                                sb?.Info($"{LineName} ,{feedMode.ToString()}, 无中端检测IO 有前端检测IO:{EnteryCheckIo}  :状态 {LineSegState}--> { LineSegementState.Entrying}");
+                               Info(sb,$"{LineName} ,{feedMode.ToString()}, 无中端检测IO 有前端检测IO:{EnteryCheckIo}  :状态 {LineSegState}--> { LineSegementState.Entrying}");
                                 LineSegState = LineSegementState.Entrying;
                             }
                         }
@@ -452,7 +458,7 @@ namespace StationDemo
                     {
                         if (FrontLineState == LineSegementState.Outing)
                         {
-                            sb?.Info($"{LineName} ,{feedMode.ToString()}, 有中端检测IO:{InPosCheckIo} ,有前端检测IO:{EnteryCheckIo}   :状态 {LineSegState}--> { LineSegementState.Entrying}");
+                           Info(sb,$"{LineName} ,{feedMode.ToString()}, 有中端检测IO:{InPosCheckIo} ,有前端检测IO:{EnteryCheckIo}   :状态 {LineSegState}--> { LineSegementState.Entrying}");
                             LineSegState = LineSegementState.Entrying;
                         }
                     }
@@ -460,7 +466,7 @@ namespace StationDemo
                     {
                         if (FrontLineState == LineSegementState.Outing)
                         {
-                            sb?.Info($"{LineName} ,{feedMode.ToString()}, 有中端检测IO:{InPosCheckIo} , 有前端检测IO:{EnteryCheckIo}  有到位信号 :状态 {LineSegState}--> { LineSegementState.Entrying}");
+                           Info(sb,$"{LineName} ,{feedMode.ToString()}, 有中端检测IO:{InPosCheckIo} , 有前端检测IO:{EnteryCheckIo}  有到位信号 :状态 {LineSegState}--> { LineSegementState.Entrying}");
                             LineSegState = LineSegementState.Entrying;
                         }
                     }
@@ -468,7 +474,7 @@ namespace StationDemo
                     {
                         if (FrontLineState == LineSegementState.Outing)
                         {
-                            sb?.Info($"{LineName} ,{feedMode.ToString()}, 有中端检测IO:{InPosCheckIo} , 有前端检测IO:{EnteryCheckIo}  :状态 {LineSegState}--> { LineSegementState.Entrying}");
+                           Info(sb,$"{LineName} ,{feedMode.ToString()}, 有中端检测IO:{InPosCheckIo} , 有前端检测IO:{EnteryCheckIo}  :状态 {LineSegState}--> { LineSegementState.Entrying}");
                             LineSegState = LineSegementState.Entrying;
                         }
                     }
@@ -502,19 +508,19 @@ namespace StationDemo
                             EnterTimer.Stop();
                             EnterDelayTimer.Stop();
                             MotionStop();
-                            sb?.Info($"{LineName}  :,{feedMode.ToString()}, 流水线运动{EnterDelayTimer.SetedTime} ms后 状态 {LineSegState}--> { LineSegementState.BeforeHave}");
-                            LineSegState = LineSegementState.BeforeHave;
+                           Info(sb,$"{LineName}  :,{feedMode.ToString()}, 流水线运动{EnterDelayTimer.SetedTime} ms后 状态 {LineSegState}--> { LineSegementState.ReadyIng}");
+                            LineSegState = LineSegementState.ReadyIng;
                         }
                         else if (EnterDelayTimer.IsRuning)
                         {
                             MotionForwardRun();
-                            sb?.Info($" {LineName}  :,{feedMode.ToString()}, 流水线将运动{EnterDelayTimer.SetedTime} ms  ");
+                           Info(sb,$" {LineName}  :,{feedMode.ToString()}, 流水线将运动{EnterDelayTimer.SetedTime} ms  ");
                         }
                         else if ((InPosCheckIo == null || InPosCheckIo == "") && !EnterDelayTimer.IsRuning)
                         {
                             MotionForwardRun();
                             EnterDelayTimer.resumeTimer();
-                            sb?.Info($"{LineName} ,{feedMode.ToString()}, 无阻挡到位IO, : 启动 进入延时定时器， 流水线将运动{EnterDelayTimer.SetedTime} ms  ");
+                           Info(sb,$"{LineName} ,{feedMode.ToString()}, 无阻挡到位IO, : 启动 进入延时定时器， 流水线将运动{EnterDelayTimer.SetedTime} ms  ");
                         }
                         else if (!(InPosCheckIo == null || InPosCheckIo == "") && !IOMgr.GetInstace().ReadIoInBit(InPosCheckIo))
                             MotionForwardRun();
@@ -523,15 +529,15 @@ namespace StationDemo
                         {
                             EnterDelayTimer.ResetStartTimer();
                             MotionForwardRun();
-                            sb?.Info($" {LineName} ,{feedMode.ToString()}, 有阻挡到位IO, :启动 进入延时定时器， 流水线将运动{EnterDelayTimer.SetedTime} ms ");
+                           Info(sb,$" {LineName} ,{feedMode.ToString()}, 有阻挡到位IO, :启动 进入延时定时器， 流水线将运动{EnterDelayTimer.SetedTime} ms ");
                         }
                     }
                     break;
-                case LineSegementState.BeforeHave:
-                     OperateLineBeforeHave(bmaual);
+                case LineSegementState.ReadyIng:
+                     OperateLineReadyIng(bmaual);
                     if ( IsbeReady(bmaual))
                     {
-                        sb?.Info($"{LineName}  :,{feedMode.ToString()}, 状态 {LineSegState}--> { LineSegementState.Have}");
+                       Info(sb,$"{LineName}  :,{feedMode.ToString()}, 状态 {LineSegState}--> { LineSegementState.Have}");
                         LineSegState = LineSegementState.Have;
                     }
                     else
@@ -558,8 +564,8 @@ namespace StationDemo
             switch (LineSegState)
             {
                 case LineSegementState.None:
-                     OpearteLineBeforeEntry(bmaual);
-                    if (! IsCanEntry(bmaual))
+                    OpearteLineBeforeBackEntry(bmaual);
+                    if (! IsCanBackEntry(bmaual))
                         return;
                     if ((LeaveCheckIo == null || LeaveCheckIo == ""))
                     {
@@ -567,7 +573,7 @@ namespace StationDemo
                         {
                             if (FrontLineState == LineSegementState.Outing)
                             {
-                                sb?.Info($"{LineName} ,{feedMode.ToString()}, 无后端检测IO 无中端检测IO :状态{LineSegState} --> { LineSegementState.Entrying}");
+                               Info(sb,$"{LineName} ,{feedMode.ToString()}, 无后端检测IO 无中端检测IO :状态{LineSegState} --> { LineSegementState.Entrying}");
                                 LineSegState = LineSegementState.Entrying;
                             }
                         }
@@ -575,7 +581,7 @@ namespace StationDemo
                         {
                             if (FrontLineState == LineSegementState.Outing)
                             {
-                                sb?.Info($"{LineName} ,{feedMode.ToString()}, 无后端检测IO 有中端检测IO:状态{LineSegState} --> { LineSegementState.Entrying}");
+                               Info(sb,$"{LineName} ,{feedMode.ToString()}, 无后端检测IO 有中端检测IO:状态{LineSegState} --> { LineSegementState.Entrying}");
                                 LineSegState = LineSegementState.Entrying;
                             }
                         }
@@ -586,7 +592,7 @@ namespace StationDemo
                         {
                             if (FrontLineState == LineSegementState.Outing)
                             {
-                                sb?.Info($"{LineName} ,{feedMode.ToString()}, 无中端检测IO 无后端检测IO :状态 {LineSegState}--> { LineSegementState.Entrying}");
+                               Info(sb,$"{LineName} ,{feedMode.ToString()}, 无中端检测IO 无后端检测IO :状态 {LineSegState}--> { LineSegementState.Entrying}");
                                 LineSegState = LineSegementState.Entrying;
                             }
                         }
@@ -594,19 +600,19 @@ namespace StationDemo
                         {
                             if (FrontLineState == LineSegementState.Outing)
                             {
-                                sb?.Info($"{LineName} ,{feedMode.ToString()}, 无中端检测IO 有后端检测IO  :状态 {LineSegState}--> { LineSegementState.Entrying}");
+                               Info(sb,$"{LineName} ,{feedMode.ToString()}, 无中端检测IO 有后端检测IO  :状态 {LineSegState}--> { LineSegementState.Entrying}");
                                 LineSegState = LineSegementState.Entrying;
                             }
                         }
                     }
                     else if (LeaveCheckIo == InPosCheckIo && IOMgr.GetInstace().ReadIoInBit(InPosCheckIo))
                     {
-                        sb?.Info($"{LineName} ,{feedMode.ToString()}, 有中端检测IO 有后端检测IO   :状态 {LineSegState}--> { LineSegementState.Entrying}");
+                       Info(sb,$"{LineName} ,{feedMode.ToString()}, 有中端检测IO 有后端检测IO   :状态 {LineSegState}--> { LineSegementState.Entrying}");
                         LineSegState = LineSegementState.Entrying;
                     }
                     else if (IOMgr.GetInstace().ReadIoInBit(LeaveCheckIo) && !IOMgr.GetInstace().ReadIoInBit(InPosCheckIo))
                     {
-                        sb?.Info($"{LineName} ,{feedMode.ToString()}, 有中端检测IO 有后端检测IO  :状态 {LineSegState}--> { LineSegementState.Entrying}");
+                       Info(sb,$"{LineName} ,{feedMode.ToString()}, 有中端检测IO 有后端检测IO  :状态 {LineSegState}--> { LineSegementState.Entrying}");
                         LineSegState = LineSegementState.Entrying;
                     }
                     else if (IOMgr.GetInstace().ReadIoInBit(InPosCheckIo))
@@ -633,22 +639,22 @@ namespace StationDemo
                         if (EnterDelayTimer.IsTimerOver)
                         {
                             // 6
-                            sb?.Info($"{LineName}:{feedMode.ToString()}, 进料延时到达，流水线状态{LineSegState}-->{LineSegementState.BeforeHave}");
+                             Info(sb,$"{LineName}:{feedMode.ToString()}, 进料延时到达，流水线状态{LineSegState}-->{LineSegementState.ReadyIng}");
                             MotionStop();
                             EnterDelayTimer.Stop();
                             EnterTimer.Stop();
-                            LineSegState = LineSegementState.BeforeHave;
+                            LineSegState = LineSegementState.ReadyIng;
                         }
                         else if (EnterDelayTimer.IsRuning)
                         {
                             // 5
-                            sb?.Info($"{LineName}:{feedMode.ToString()}, 进料延时中，流水线状态：{LineSegState}");
+                            Info(sb,$"{LineName}:{feedMode.ToString()}, 进料延时中，流水线状态：{LineSegState}");
                             MotionForwardRun();
                         }
                         else if ((InPosCheckIo == null || InPosCheckIo == "")
                             && !BackEnterDelayTimer.IsRuning)
                         {
-                            sb?.Info($"{LineName}:{feedMode.ToString()}, 流水线状态{LineSegState} 无中段检测信号 退料定时器开启 反向进料");
+                           Info(sb,$"{LineName}:{feedMode.ToString()}, 流水线状态{LineSegState} 无中段检测信号 退料定时器开启 反向进料");
                             if (!BackEnterDelayTimer.IsRuning)
                                 BackEnterDelayTimer.ResetStartTimer();
                             MotionBackRun();
@@ -656,7 +662,7 @@ namespace StationDemo
                         else if ((InPosCheckIo == null || InPosCheckIo == "")
                             && (BackEnterDelayTimer.IsRuning))
                         {
-                            sb?.Info($"{LineName}:{feedMode.ToString()}, 流水线状态{LineSegState} 无中段检测信号 退料定时器开启 反向进料");
+                           Info(sb,$"{LineName}:{feedMode.ToString()}, 流水线状态{LineSegState} 无中段检测信号 退料定时器开启 反向进料");
                             if (!BackEnterDelayTimer.IsRuning)
                                 BackEnterDelayTimer.ResetStartTimer();
                             MotionBackRun();
@@ -664,26 +670,29 @@ namespace StationDemo
                         else if ((InPosCheckIo == null || InPosCheckIo == "")
                            && BackEnterDelayTimer.IsTimerOver)
                         {
-                            sb?.Info($"{LineName}:{feedMode.ToString()}, 流水线状态{LineSegState} 无中段检测信号 进料定时器到达 退料结束  正向进料");
+                           Info(sb,$"{LineName}:{feedMode.ToString()}, 流水线状态{LineSegState} 无中段检测信号 进料定时器到达 退料结束  正向进料");
                             MotionStop();
                             StopClinderUp(true);
                             if (!CheckStopCliyderStateInPos(true))
                                 return;
                             MotionForwardRun();
                             EnterDelayTimer.ResetStartTimer();
+                            Info(sb, $"{LineName}:{feedMode.ToString()}, 流水线状态{LineSegState}->{LineSegementState.BackEntryReady} 无中段检测信号 进料定时器到达 退料结束  正向进料");
+                            LineSegState = LineSegementState.BackEntryReady;
+
                         }
                         else if (!(InPosCheckIo == null || InPosCheckIo == "") &&
                             BackEnterDelayTimer.IsRuning && IOMgr.GetInstace().ReadIoInBit(InPosCheckIo))
                         {
                             // 3
-                            sb?.Info($"{LineName}: {feedMode.ToString()}, 流水线状态{LineSegState} 有中段检测信号 并检测到 退料定时中， 继续退料");
+                           Info(sb,$"{LineName}: {feedMode.ToString()}, 流水线状态{LineSegState} 有中段检测信号 并检测到 退料定时中， 继续退料");
                             MotionBackRun();
                         }
                         else if (!(InPosCheckIo == null || InPosCheckIo == "") &&
                             BackEnterDelayTimer.IsRuning && !IOMgr.GetInstace().ReadIoInBit(InPosCheckIo))
                         {
                             // 4
-                            sb?.Info($"{LineName}:{feedMode.ToString()},  流水线状态{LineSegState} 无中段检测信号 并检测到下降沿 进料定时器开启  继续进料");
+                           Info(sb,$"{LineName}:{feedMode.ToString()},  流水线状态{LineSegState} 无中段检测信号 并检测到下降沿 进料定时器开启  继续进料");
                             MotionStop();
                             StopClinderUp(true);
                             if (!CheckStopCliyderStateInPos(true))
@@ -694,7 +703,7 @@ namespace StationDemo
                         else if (IOMgr.GetInstace().ReadIoInBit(InPosCheckIo))
                         {
                             // 2
-                            sb?.Info($"{LineName}: {feedMode.ToString()}, 流水线状态{LineSegState} 有中段检测信号 并检测到 退料定时器开启");
+                           Info(sb,$"{LineName}: {feedMode.ToString()}, 流水线状态{LineSegState} 有中段检测信号 并检测到 退料定时器开启");
                             if (!BackEnterDelayTimer.IsRuning)
                                 BackEnterDelayTimer.ResetStartTimer();
                             MotionBackRun();
@@ -702,14 +711,48 @@ namespace StationDemo
                         else
                         {
                             // 1
-                            sb?.Info($"{LineName}: ,{feedMode.ToString()}, 流水线状态{LineSegState} 中段检测信号无");
+                           Info(sb,$"{LineName}: ,{feedMode.ToString()}, 流水线状态{LineSegState} 中段检测信号无");
                             MotionBackRun();
                             BackEnterDelayTimer.Stop();
                         }
                     }
                     break;
-                case LineSegementState.BeforeHave:
-                     OperateLineBeforeHave(bmaual);
+                case LineSegementState.BackEntryReady:
+                    if (!EnterTimer.IsRuning)
+                        EnterTimer.ResetStartTimer();
+                    if (EnterTimer.IsTimerOver)
+                    {
+                        MotionStop();
+                        waranResult = AlarmMgr.GetIntance().WarnWithDlg($"{LineName} ,{feedMode.ToString()}, :进入段超时,可能料被拿走 或者卡住", null, new string[] { "重试" }, CommonDlg.DlgWaranType.Waran_Custom1, null, bmaual);
+                        if (waranResult == WaranResult.Custom1)
+                        {
+                            EnterTimer.ResetStartTimer();
+                            EnterDelayTimer.Stop();
+                        }
+                    }
+                    else
+                    {
+                        if (EnterDelayTimer.IsTimerOver)
+                        {
+                            // 6
+                            Info(sb, $"{LineName}:{feedMode.ToString()}, 进料延时到达，流水线状态{LineSegState}-->{LineSegementState.ReadyIng}");
+                            MotionStop();
+                            EnterDelayTimer.Stop();
+                            EnterTimer.Stop();
+                            LineSegState = LineSegementState.ReadyIng;
+                        }
+                        else if (EnterDelayTimer.IsRuning)
+                        {
+                            // 5
+                            Info(sb, $"{LineName}:{feedMode.ToString()}, 进料延时中，流水线状态：{LineSegState}");
+                            MotionForwardRun();
+                        }
+                       
+                    }
+
+                    break;
+                case LineSegementState.ReadyIng:
+                     OperateLineReadyIng(bmaual);
                     if ( IsbeReady(bmaual))
                     {
                         LineSegState = LineSegementState.Have;
@@ -732,14 +775,23 @@ namespace StationDemo
         {
             StopClinderUp(true);
             JackUpCliyderUp(false);
-
         }
         public virtual bool IsCanEntry(bool bmanual)
         {
             return CheckJackUpCliyderStateInPos(false) &&
                 CheckStopCliyderStateInPos(true);
         }
-        public virtual void OperateLineBeforeHave(bool bmanual)
+        public virtual void OpearteLineBeforeBackEntry(bool bmanual)
+        {
+            StopClinderUp(false);
+            JackUpCliyderUp(false);
+        }
+        public virtual bool IsCanBackEntry(bool bmanual)
+        {
+            return CheckJackUpCliyderStateInPos(false) &&
+                CheckStopCliyderStateInPos(false);
+        }
+        public virtual void OperateLineReadyIng(bool bmanual)
         {
             JackUpCliyderUp(true);
         }
@@ -818,7 +870,7 @@ namespace StationDemo
             return CheckJackUpCliyderStateInPos(false) && bIsAxisStop;
 
         }
-        public override void OperateLineBeforeHave(bool bmanual)
+        public override void OperateLineReadyIng(bool bmanual)
         {
             JackUpCliyderUp(true);
         }
@@ -906,7 +958,7 @@ namespace StationDemo
             return lb.CheckJackUpCliyderStateInPos(false) && bIsAxisStop;
 
         }
-        public  void OperateLineBeforeHave(bool bmanual)
+        public  void OperateLineReadyIng(bool bmanual)
         {
             lb.JackUpCliyderUp(true);
         }
@@ -992,7 +1044,7 @@ namespace StationDemo
         {
             return !IOMgr.GetInstace().ReadIoInBit(EnteryCheckIo) && !IOMgr.GetInstace().ReadIoInBit(FullMaterialCheckIO);
         }
-        public override void OperateLineBeforeHave(bool bmanual)
+        public override void OperateLineReadyIng(bool bmanual)
         {
             
         }
