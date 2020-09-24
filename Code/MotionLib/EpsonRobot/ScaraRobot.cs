@@ -171,6 +171,27 @@ namespace EpsonRobot
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+        public Coordinate GetCurrentImmediately()
+        {
+            Coordinate coordinate = new Coordinate();
+            if (_cmdClient.bExit || !_cmdClient.bIsConnected)
+                return coordinate;
+
+
+            string strRobotAgl = _cmdClient.SendCommand($"007x@0");
+            var arrayagl = strRobotAgl.Split(',');
+            if (arrayagl.Length < 4)
+                return coordinate;
+            int index = 0;
+            coordinate.X = arrayagl[index++].ToDouble();
+            coordinate.Y = arrayagl[index++].ToDouble();
+            coordinate.Z = arrayagl[index++].ToDouble();
+            string strUpos = arrayagl[index++];
+            int indexpos = strUpos.IndexOf("~");
+
+            coordinate.U = strUpos.Substring(0,indexpos).ToDouble();
+            return coordinate;
+        }
 
         bool bCmdClinetOpen = false;
         bool bStateClientOpen = false;
@@ -209,6 +230,7 @@ namespace EpsonRobot
                     if (arrayagl.Length < 4)
                         return false;
 
+                    GetCurrentImmediately();
                     double a1 = arrayagl[0].ToDouble();
                     double a2 = arrayagl[1].ToDouble();
                     double x = arraypos[0].ToDouble();
@@ -221,11 +243,14 @@ namespace EpsonRobot
                         double xx = 0, yy = 0;
                         int failedCount = 0;
                         int index = 0;
-                        while (_statesClient?.Client?.Connected == true)
+                        while (!_statesClient.bExit)
                         {
+                       
                             try
                             {
-                                var response = _statesClient.SendCommand("GetStates");
+                                if (!(bool)(_statesClient?.Client?.Connected))
+                                    return;
+                                    var response = _statesClient.SendCommand("GetStates");
                                 var array = response.Split(',');
                                 if (array.Length >= 6)
                                 {
@@ -269,7 +294,7 @@ namespace EpsonRobot
                             }
                             finally
                             {
-                                System.Threading.Thread.Sleep(10);
+                                System.Threading.Thread.Sleep(3);
                             }
                         }
                         if (_statesClient?.Client?.Connected == false)
@@ -327,8 +352,13 @@ namespace EpsonRobot
         }
         public void Exit()
         {
+            if(_statesClient!=null)
+             _statesClient.bExit = true;
+            if (_cmdClient != null)
+                _cmdClient.bExit = true;
             _statesClient?.SendCommand("Exit");
             _cmdClient?.SendCommand($"100Exit");
+          
         }
 
        

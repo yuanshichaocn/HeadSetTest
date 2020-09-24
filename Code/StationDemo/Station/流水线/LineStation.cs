@@ -70,6 +70,7 @@ namespace StationDemo
         /// sensor段皮带
         /// </summary>
         sensor段皮带启动,
+        sensor段皮带方向,
         sensor段皮带阻挡气缸上升,
         sensor段皮带阻挡气缸下降,
         sensor段皮带顶升气缸上升,
@@ -79,6 +80,7 @@ namespace StationDemo
         /// 锁付段皮带
         /// </summary>
         sensor锁付段皮带启动,
+        sensor锁付段皮带方向,
         sensor锁付段皮带阻挡气缸上升,
         sensor锁付段皮带阻挡气缸下降,
         sensor锁付段皮带顶升气缸上升,
@@ -173,7 +175,7 @@ namespace StationDemo
         enum StationStep
         {
             StepInit = 100,
-
+            LineRun,
         }
 
         LineSegmentAction lineFront = new LineSegmentAction("前壳流水线");
@@ -216,7 +218,8 @@ namespace StationDemo
             lineSenor.LineName = "sensor";
             lineSenor.ForwardMotorIo = LineIoOut.sensor段皮带启动.ToString();
             lineSenor.StopCylinderUpIo = LineIoOut.sensor段皮带阻挡气缸上升.ToString();
-           // lineSenor.StopCylinderDownIo = LineIoOut.sensor段皮带阻挡气缸下降.ToString();
+            lineSenor.IOMotionDir = LineIoOut.sensor段皮带方向.ToString();
+            // lineSenor.StopCylinderDownIo = LineIoOut.sensor段皮带阻挡气缸下降.ToString();
             lineSenor.JackUpCylinderUpIo = LineIoOut.sensor段皮带顶升气缸上升.ToString();
            // lineSenor.JackUpCylinderDownIo = LineIoOut.sensor段皮带顶升气缸下降.ToString();
 
@@ -228,6 +231,7 @@ namespace StationDemo
 
             lineLock.LineName = "sensor锁付";
             lineLock.ForwardMotorIo = LineIoOut.sensor锁付段皮带启动.ToString();
+            lineLock.IOMotionDir = LineIoOut.sensor锁付段皮带方向.ToString();
             lineLock.StopCylinderUpIo = LineIoOut.sensor锁付段皮带阻挡气缸上升.ToString();
             // lineLock.StopCylinderDownIo = LineIoOut.sensor锁付段皮带阻挡气缸下降.ToString();
             lineLock.JackUpCylinderUpIo = LineIoOut.sensor锁付段皮带顶升气缸上升.ToString();
@@ -286,7 +290,10 @@ namespace StationDemo
         }
         protected override bool InitStation()
         {
-            Config();
+            MotionMgr.GetInstace().ServoOn(11);
+            ResetAllLineState();
+            //Config();
+            PushMultStep((int)StationStep.StepInit, (int)StationStep.LineRun);
             return true;
         }
 
@@ -383,7 +390,18 @@ namespace StationDemo
         protected override void StationWork(int step)
         {
             bool bmaual = false;
-            
+            switch ((StationStep)step)
+            {
+                case StationStep.StepInit:
+                    ResetAllLineState();
+                    Init(false);
+                    DelCurrentStep();
+                    break;
+                case StationStep.LineRun:
+                    LineRun(bmaual);
+                    break;
+
+            }
 
 
         }

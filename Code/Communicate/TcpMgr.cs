@@ -28,9 +28,7 @@ namespace Communicate
             bool brtn = true;
             foreach( var tem in m_dicTcpLink)
             {
-               ;
                 brtn &= tem.Value.Open();
-
             }
             return brtn;
         }

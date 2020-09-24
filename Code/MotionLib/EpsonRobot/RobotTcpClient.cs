@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.InteropServices;
 using System.Text;
 using log4net;
 
@@ -36,6 +37,7 @@ namespace EpsonRobot
         }
         object lockSendObj = new object();
         byte[] ReciveData = new byte[1024];
+        public bool bExit = false;
 
         public string SendCommand(string cmd, bool bIgnorRtn = false)
         {
@@ -53,7 +55,7 @@ namespace EpsonRobot
                     byte[] readBuffer = new byte[1024];
                     Stopwatch stopwatch = new Stopwatch();
                     stopwatch.Start();
-                    while (true)
+                    while (!bExit)
                     {
                         if (stopwatch.ElapsedMilliseconds >= Parameter.Timeout)
                         {
@@ -73,14 +75,20 @@ namespace EpsonRobot
                             var bytesRead = client.Receive(ReciveData, offset,readBuffer.Length, SocketFlags.None);
                             offset += bytesRead;
                             if (offset >= 2 && ReciveData[offset - 2] == 0x0D && ReciveData[offset - 1] == 0x0A)
-                                return Encoding.ASCII.GetString(ReciveData, 0, offset - 2);
+                            {
+                                string str = Encoding.ASCII.GetString(ReciveData, 0, offset - 2);     
+                                return str;
+                            }
+                            
                         }
 
                     }
+                    return "";
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception("指令发送失败," + ex.Message, ex);
+                    // throw new Exception("指令发送失败," + ex.Message, ex);
+                    return "";
                 }
             }
          

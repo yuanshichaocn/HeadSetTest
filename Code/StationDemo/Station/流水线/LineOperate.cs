@@ -111,7 +111,7 @@ namespace StationDemo
         public delegate bool DoSomeThingHandler(Stationbase sb, bool bmaual);
 
         public event DoSomeThingHandler SomeThingsOnlineRun = null;
-        public delegate void ShowLastSegInfo();
+        public delegate bool ShowLastSegInfo();
         public event ShowLastSegInfo eventShowLastLineSegInfo = null;
 
         public virtual bool doSomingThingWhenLineRun(Stationbase sb, bool bmaual)
@@ -300,11 +300,10 @@ namespace StationDemo
                             MotionStop();
                             if (IsLastSegLine && (LeaveCheckIo == null || LeaveCheckIo == ""))
                             {
-                               Info(sb,$"{LineName}:{feedMode.ToString()}, 无后端检测IO, 本段是流水线最后一段 ，延时时间到 状态：{LineSegState}-->{ LineSegementState.None}");
+                               Info(sb,$"{LineName}:{feedMode.ToString()}, 无后端检测IO, 本段是流水线最后一段 ，延时时间到 状态：{LineSegState}-->{ LineSegementState.OutFinish}");
                                 LineSegState = LineSegementState.OutFinish;
                                 OutTimer.Stop();
-                                if (eventShowLastLineSegInfo != null)
-                                    eventShowLastLineSegInfo();
+                               
                                 return;
                             }
                             waranResult = AlarmMgr.GetIntance().WarnWithDlg($"{LineName} :离开段超时,可能料被拿走 或者卡住", null, new string[] { "重试" }, CommonDlg.DlgWaranType.Waran_Custom1, null, bmaual);
@@ -338,8 +337,7 @@ namespace StationDemo
                                        Info(sb,$"{LineName}：{feedMode.ToString()}, 信号消失 状态：{LineSegState}-->{ LineSegementState.OutFinish}");
                                         LineSegState = LineSegementState.OutFinish;
                                         MotionStop();
-                                        if (eventShowLastLineSegInfo != null)
-                                            eventShowLastLineSegInfo();
+                                      
                                         return;
                                     }
                                 }
@@ -382,7 +380,13 @@ namespace StationDemo
                      OprateOutFinishDeal(bmaual);
                     if (! IsOutFinishDealOK(bmaual))
                         return;
-                   Info(sb,$"{LineName}：{feedMode.ToString()},  状态：{LineSegState}-->{ LineSegementState.None}");
+                    if (IsLastSegLine)
+                    {
+                        if (eventShowLastLineSegInfo != null)
+                            if (!eventShowLastLineSegInfo())
+                                return;
+                    }
+                    Info(sb,$"{LineName}：{feedMode.ToString()},  状态：{LineSegState}-->{ LineSegementState.None}");
                     LineSegState = LineSegementState.None;
                     break;
             }
