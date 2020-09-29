@@ -382,7 +382,7 @@ namespace MotionIoLib
             //io 写入IO卡 研华的前8位为板卡的轴号，后为Io的索引
             if (ioDefine._CardIndex >= m_listCard.Count)
             {
-                MessageBox.Show("Io配置中，卡索引不对", "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ioname} Io配置中，卡索引不对", "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
             return m_listCard[ioDefine._CardIndex].InStopEnable(index);
@@ -401,7 +401,7 @@ namespace MotionIoLib
             //io 写入IO卡 研华的前8位为板卡的轴号，后为Io的索引
             if (ioDefine._CardIndex >= m_listCard.Count)
             {
-                MessageBox.Show("Io配置中，卡索引不对", "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ioname} Io配置中，卡索引不对", "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
             return m_listCard[ioDefine._CardIndex].InStopState(index, bState);
@@ -420,7 +420,7 @@ namespace MotionIoLib
             //io 写入IO卡 研华的前8位为板卡的轴号，后为Io的索引
             if (ioDefine._CardIndex >= m_listCard.Count)
             {
-                MessageBox.Show("Io配置中，卡索引不对", "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ioname} Io配置中，卡索引不对", "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
             return m_listCard[ioDefine._CardIndex].InStopDisenable(index);
@@ -450,7 +450,7 @@ namespace MotionIoLib
             //io 写入IO卡 研华的前8位为板卡的轴号，后为Io的索引
             if (ioDefine._CardIndex >= m_listCard.Count)
             {
-                MessageBox.Show("Io配置中，卡索引不对", "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ioname} Io配置中，卡索引不对", "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
             bool bval = m_listCard[ioDefine._CardIndex].ReadIoOutBit(index);
@@ -470,7 +470,7 @@ namespace MotionIoLib
             //io 写入IO卡 研华的前8位为板卡的轴号，后为Io的索引
             if (ioDefine._CardIndex >= m_listCard.Count)
             {
-                MessageBox.Show("Io配置中，卡索引不对", "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ioname} Io配置中，卡索引不对", "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
             bool bval = m_listCard[ioDefine._CardIndex].ReadIoInBit(index);

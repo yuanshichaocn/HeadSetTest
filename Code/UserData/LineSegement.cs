@@ -329,6 +329,11 @@ namespace UserData
 
         public void MotionForwardRun(bool bRunDir=true)
         {
+            if (nAxisOnLine != -1)
+            {
+                MotionMgr.GetInstace().JogMove(nAxisOnLine, bOutMotorRunDirOnLine, 0, (double)SpeedType.High);
+                return;
+            }
             if (IOMotionDir == null || IOMotionDir == "")
             {
                 if (ForwardMotorIo != null && ForwardMotorIo != "")
@@ -347,6 +352,11 @@ namespace UserData
 
         public void MotionBackRun( bool bRunDir = false)
         {
+            if (nAxisOnLine != -1)
+            {
+                MotionMgr.GetInstace().JogMove(nAxisOnLine, !bOutMotorRunDirOnLine, 0, (double)SpeedType.High);
+                return;
+            }
             if (IOMotionDir == null || IOMotionDir == "")
             {
                 if (BackMotorIo != null && BackMotorIo != "")
@@ -366,6 +376,11 @@ namespace UserData
         }
         public void MotionStop()
         {
+            if (nAxisOnLine != -1)
+            {
+                MotionMgr.GetInstace().StopAxis(nAxisOnLine);
+                return;
+            }
             if (IOMotionDir == null || IOMotionDir == "")
             {
 
@@ -468,6 +483,8 @@ namespace UserData
         /// </summary>
         public string InPosCheckIo = "";
 
+        public int nAxisOnLine { get; set; } = -1;
+        public bool bOutMotorRunDirOnLine { get; set; }
         public void ClearData()
         {
             Index = 0;

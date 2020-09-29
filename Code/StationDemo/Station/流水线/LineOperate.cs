@@ -859,6 +859,7 @@ namespace StationDemo
         {
 
             JackUpCliyderUp(false);
+            if (MotionMgr.GetInstace().IsAxisNormalStop(nAxisNo) == AxisState.NormalStop)
             MotionMgr.GetInstace().AbsMove(nAxisNo, dFeedPos, (double)SpeedType.High);
 
         }
@@ -895,6 +896,7 @@ namespace StationDemo
         public override void OperateLineBeforeLevave(bool bmanual)
         {
             JackUpCliyderUp(false);
+            if (MotionMgr.GetInstace().IsAxisNormalStop(nAxisNo) == AxisState.NormalStop)
             MotionMgr.GetInstace().AbsMove(nAxisNo, dDischargePos, (double)SpeedType.High);
         }
         public override void OprateOutFinishDeal(bool bmaual)

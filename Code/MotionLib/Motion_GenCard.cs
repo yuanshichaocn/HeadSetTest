@@ -1872,7 +1872,7 @@ namespace MotionIoLib
 
         }
         Dictionary<int, GroupData> GroupDic = new Dictionary<int, GroupData>();
-        public override bool CloseAxisGroup(ref object group)
+        public override bool CloseAxisGroup(int[] nAxisArr, ref object group)
         {
             return true;
 

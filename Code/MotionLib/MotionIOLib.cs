@@ -659,7 +659,7 @@ namespace MotionIoLib
         }
      
        public abstract bool AddAxisToGroup(int[] nAxisarr, ref object groupId);
-       public virtual bool CloseAxisGroup(ref object group)
+       public virtual bool CloseAxisGroup(int[] nAxisArr, ref object group)
         {
             return true;
         }
@@ -2037,13 +2037,18 @@ namespace MotionIoLib
             return false;
         }
         
-        public void CloseAxisToGroup(string GroupName)
+        public void CloseAxisToGroup(int[] nAxisArr, string GroupName)
         {
            if( m_dicGroup.ContainsKey(GroupName))
             {
+                int[] _nAxisArr = new int[nAxisArr.Length];
+                for (int i = 0; i < nAxisArr.Length; i++)
+                {
+                    _nAxisArr[i] = GetCardByIndexAxis(nAxisArr[i]).GetAxisNo(nAxisArr[i]);
+                }
                 MotionCardBase tempCardBase = m_dicGroup[GroupName]._pCard;
                 object obj =(object)m_dicGroup[GroupName]._pGroup;
-                tempCardBase.CloseAxisGroup(ref obj);
+                tempCardBase.CloseAxisGroup(_nAxisArr, ref obj);
             }
         }
         ///群组 添加运动

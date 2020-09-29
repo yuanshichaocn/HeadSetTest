@@ -22,7 +22,7 @@ namespace MotionIoLib
     {
         IntPtr[] m_Axishand = null;
         IntPtr m_devPtr = new IntPtr();
-        
+
         public Motion_Advantech(ulong indexCard, string strName, int nMinAxisNo, int nMaxAxisNo)
             : base(indexCard, strName, nMinAxisNo, nMaxAxisNo)
         {
@@ -513,10 +513,14 @@ namespace MotionIoLib
             else
                 return false;
         }
-        public override bool CloseAxisGroup(ref object group)
+        public override bool CloseAxisGroup(int[] nAxisArr, ref object group)
         {
             uint reslut = 0;
             IntPtr intPtr = (IntPtr)group;
+            if (nAxisArr == null || group == null || nAxisArr.Length <= 0)
+                return false;
+            for (int i = 0; i < nAxisArr.Length; i++)
+                Motion.mAcm_GpRemAxis(intPtr, m_Axishand[nAxisArr[i]]);
             reslut |= Motion.mAcm_GpClose(ref intPtr);
             return reslut == (uint)ErrorCode.SUCCESS;
 
