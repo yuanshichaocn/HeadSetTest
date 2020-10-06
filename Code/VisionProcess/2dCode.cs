@@ -14,6 +14,7 @@ using System.IO;
 using System.Windows.Forms;
 using HalconLib;
 using System.ComponentModel;
+using Newtonsoft.Json;
 
 namespace VisionProcess
 {
@@ -54,6 +55,7 @@ namespace VisionProcess
             //  ExposureTime = visionShapParam.m_dExposureTime;
             visionCtr = ctr;
         }
+        [JsonIgnore]
         static Vision2dCodeSetCtr ctr = new Vision2dCodeSetCtr();
         public override void Disopose()
         {
@@ -62,7 +64,9 @@ namespace VisionProcess
             if (Mode2dCodeSearch != null && Mode2dCodeSearch.IsInitialized())
                 Mode2dCodeSearch.Dispose();
         }
+        [JsonIgnore]
         HObject Mode2dCodeSearch = null;
+        [JsonIgnore]
         HTuple Mode2dCode = null;
         public VisionCode2dParam vision2dCodeParam = new VisionCode2dParam();
         public override void Save()
@@ -240,6 +244,7 @@ namespace VisionProcess
                         if (Mode2dCodeSearch != null && Mode2dCodeSearch.IsInitialized())
                             HOperatorSet.DispObj(Mode2dCodeSearch, visionControl.GetHalconWindow());
                         HalconExternFunExport.disp_message(visionControl.GetHalconWindow(), "读码失败", "window", 100, 200, "red", "false");
+                        return false;
                     }
                 }
             }
@@ -257,6 +262,7 @@ namespace VisionProcess
         
             return true;
         }
+
         public override bool GenObj(HObject image, VisionControl visionControl)
         {
             try

@@ -15,6 +15,7 @@ using System.Windows.Forms;
 using HalconLib;
 using log4net;
 using System.ComponentModel;
+using Newtonsoft.Json;
 
 namespace VisionProcess
 {
@@ -58,6 +59,7 @@ namespace VisionProcess
            
             visionCtr = ctr;
         }
+        [JsonIgnore]
         static Vision1BarCodeSetCtr ctr = new Vision1BarCodeSetCtr();
         public override void Disopose()
         {
@@ -66,7 +68,9 @@ namespace VisionProcess
             if (Mode1dCodeSearch != null && Mode1dCodeSearch.IsInitialized())
                 Mode1dCodeSearch.Dispose();
         }
+        [JsonIgnore]
         HObject Mode1dCodeSearch = null;
+        [JsonIgnore]
         HTuple Mode1dCode = null;
         public Code1dParam vision1dCodeParam = new Code1dParam();
         public override void Save()

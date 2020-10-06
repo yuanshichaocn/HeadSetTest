@@ -326,7 +326,7 @@ namespace StationDemo
         }
 
         bool bFirist = false;
-        LineSegementState FiristLineState = LineSegementState.None;
+        
         public void LineRun(bool bmanual)
         {
             if (bFirist)

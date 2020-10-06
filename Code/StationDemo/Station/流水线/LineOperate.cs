@@ -107,12 +107,39 @@ namespace StationDemo
             return LineSegState;
         }
 
-        public ILineOprater lineOprater = new OprateNormalLine();
+        public Stationbase sb = null;
+
         public delegate bool DoSomeThingHandler(Stationbase sb, bool bmaual);
 
         public event DoSomeThingHandler SomeThingsOnlineRun = null;
         public delegate bool ShowLastSegInfo();
         public event ShowLastSegInfo eventShowLastLineSegInfo = null;
+
+        public delegate bool IsOKAwaysOnLineRunUser(LineSegmentAction lineobj, Stationbase sb, bool bmanual);
+        public event IsOKAwaysOnLineRunUser eventIsOKAwaysOnLineRunUser = null;
+
+        public delegate void OpearteLineBeforeEntryUser(LineSegmentAction lineobj, Stationbase sb, bool bmanual);
+        public event OpearteLineBeforeEntryUser eventOpearteLineBeforeEntryUser = null;
+        public delegate bool IsCanEntryUser(LineSegmentAction lineobj, Stationbase sb, bool bmanual);
+        public event IsCanEntryUser eventIsCanEntryUser = null;
+        public delegate void OpearteLineBeforeBackEntryUser(LineSegmentAction lineobj, Stationbase sb, bool bmanual) ;
+        public event OpearteLineBeforeBackEntryUser eventOpearteLineBeforeBackEntryUser = null;
+        public delegate bool IsCanBackEntryUser(LineSegmentAction lineobj, Stationbase sb, bool bmanual);
+        public event IsCanBackEntryUser eventIsCanBackEntryUser = null;
+        public delegate void OperateLineReadyIngUser(LineSegmentAction lineobj, Stationbase sb, bool bmanual);
+        public event OperateLineReadyIngUser eventOperateLineReadyIngUser = null;
+        public delegate bool IsbeReadyUser(LineSegmentAction lineobj, Stationbase sb, bool bmanual);
+        public event IsbeReadyUser eventIsbeReadyUser = null;
+        public delegate bool IsCanLeaveUser(LineSegmentAction lineobj, Stationbase sb, bool bmanual);
+        public event IsCanLeaveUser eventIsCanLeaveUser = null;
+        public delegate void OperateLineBeforeLevaveUser(LineSegmentAction lineobj, Stationbase sb, bool bmanual);
+        public event OperateLineBeforeLevaveUser eventOperateLineBeforeLevaveUser = null;
+        public delegate void OprateOutFinishDealUser(LineSegmentAction lineobj, Stationbase sb, bool bmaual);
+        public event OprateOutFinishDealUser eventOprateOutFinishDealUser = null;
+        public delegate bool IsOutFinishDealOKUser(LineSegmentAction lineobj, Stationbase sb, bool bmaual);
+        public event IsOutFinishDealOKUser eventIsOutFinishDealOKUser = null;
+        public delegate bool IsCanPutUser(LineSegmentAction lineobj, Stationbase sb, bool bmanual);
+        public event IsCanPutUser eventIsCanPutUser = null;
 
         public virtual bool doSomingThingWhenLineRun(Stationbase sb, bool bmaual)
         {
@@ -150,6 +177,14 @@ namespace StationDemo
                 strMsg = strmsg;
                 sb?.Info(strmsg);
             }
+        }
+        public void Info( string strmsg)
+        {
+            if (strmsg != strMsg)
+            {
+                strMsg = strmsg;
+                sb?.Info(strmsg);
+            }
 
         }
         void LeaveOperate(Stationbase sb, LineSegementState backLineState, bool bmaual)
@@ -168,6 +203,9 @@ namespace StationDemo
                 case LineSegementState.Finish:
                      OperateLineBeforeLevave(bmaual);
                     if (! IsCanLeave(bmaual))
+                        return;
+                    eventOperateLineBeforeLevaveUser?.Invoke(this, sb, bmaual);
+                    if (eventIsCanLeaveUser != null && !eventIsCanLeaveUser(this, sb, bmaual))
                         return;
                     LeaveDelayTimer.Stop();
                     LeaveTimer.Stop();
@@ -380,6 +418,9 @@ namespace StationDemo
                      OprateOutFinishDeal(bmaual);
                     if (! IsOutFinishDealOK(bmaual))
                         return;
+                    eventOprateOutFinishDealUser(this,sb,bmaual);
+                    if (!eventIsOutFinishDealOKUser(this, sb, bmaual))
+                        return;
                     if (IsLastSegLine)
                     {
                         if (eventShowLastLineSegInfo != null)
@@ -407,7 +448,9 @@ namespace StationDemo
                     OpearteLineBeforeEntry(bmaual);
                     if (!IsCanEntry(bmaual))
                         return;
-
+                    eventOpearteLineBeforeEntryUser?.Invoke(this, sb, bmaual);
+                    if (eventIsCanEntryUser!=null &&!eventIsCanEntryUser(this, sb, bmaual))
+                        return;
                     if ((EnteryCheckIo == null || EnteryCheckIo == ""))
                     {
                         if ((InPosCheckIo == null || InPosCheckIo == ""))
@@ -484,7 +527,11 @@ namespace StationDemo
                     }
                     else if (IOMgr.GetInstace().ReadIoInBit(InPosCheckIo))
                     {
+                        if (FrontLineState == LineSegementState.Outing)
+                        {
+                            Info(sb, $"{LineName} ,{feedMode.ToString()}, 有中端检测IO:{InPosCheckIo}并检测到 请取走 , 有前端检测IO:{EnteryCheckIo} ");
                         return;
+                        }
                     }
                     break;
                 case LineSegementState.Entrying:
@@ -538,6 +585,9 @@ namespace StationDemo
                     }
                     break;
                 case LineSegementState.ReadyIng:
+                    eventOperateLineReadyIngUser?.Invoke(this, sb, bmaual);
+                    if (eventIsbeReadyUser != null && !eventIsbeReadyUser(this, sb, bmaual))
+                        return;
                      OperateLineReadyIng(bmaual);
                     if ( IsbeReady(bmaual))
                     {
@@ -570,6 +620,9 @@ namespace StationDemo
                 case LineSegementState.None:
                     OpearteLineBeforeBackEntry(bmaual);
                     if (! IsCanBackEntry(bmaual))
+                        return;
+                    eventOpearteLineBeforeBackEntryUser?.Invoke(this, sb, bmaual);
+                    if (eventIsCanBackEntryUser != null && !eventIsCanBackEntryUser(this, sb, bmaual))
                         return;
                     if ((LeaveCheckIo == null || LeaveCheckIo == ""))
                     {
@@ -756,6 +809,9 @@ namespace StationDemo
 
                     break;
                 case LineSegementState.ReadyIng:
+                    eventOperateLineReadyIngUser?.Invoke(this, sb, bmaual);
+                    if (eventIsbeReadyUser != null && !eventIsbeReadyUser(this, sb, bmaual))
+                        return;
                      OperateLineReadyIng(bmaual);
                     if ( IsbeReady(bmaual))
                     {
@@ -823,193 +879,9 @@ namespace StationDemo
         }
         public virtual bool IsCanPut(bool bmanual)
         {
-            return true;
+            return  LineSegState ==  LineSegementState.None ;
         }
     }
-
-
-    public class LineSegmentUpDownUseMotor : LineSegmentAction
-    {
-
-        public LineSegmentUpDownUseMotor(string Name)
-            : base(Name)
-        {
-            LineName = Name;
-        }
-        /// <summary>
-        /// 升降轴
-        /// </summary>
-        public int nAxisNo = -1;
-        /// <summary>
-        /// 进料位置（高度）
-        /// </summary>
-
-        public double dFeedPos = 0;
-        /// <summary>
-        /// 出料高度
-        /// </summary>
-        public double dDischargePos = 0;
-
-        public ILineOprater lineOprater = new LineOpreateWithMotor();
-        public override bool IsOKAwaysOnLineRun(bool bmanual)
-        {
-            return true;
-        }
-        public override void OpearteLineBeforeEntry(bool bmanual)
-        {
-
-            JackUpCliyderUp(false);
-            if (MotionMgr.GetInstace().IsAxisNormalStop(nAxisNo) == AxisState.NormalStop)
-            MotionMgr.GetInstace().AbsMove(nAxisNo, dFeedPos, (double)SpeedType.High);
-
-        }
-        public override bool IsCanEntry(bool bmanual)
-        {
-            if (MotionMgr.GetInstace().IsAxisNormalStop(nAxisNo) > AxisState.NormalStop)
-            {
-                AlarmMgr.GetIntance().WarnWithDlg($"流水线{LineName}  在进料前，轴{MotionMgr.GetInstace().GetAxisName(nAxisNo)} ,报警{MotionMgr.GetInstace().IsAxisNormalStop(nAxisNo).ToString()},程序停止", null, CommonDlg.DlgWaranType.WaranOK, null, bmanual);
-                StationMgr.GetInstance().Stop();
-            }
-            bool bIsAxisStop = MotionMgr.GetInstace().IsAxisNormalStop(nAxisNo) == AxisState.NormalStop;
-            bool bIsAxisInPosOnFeedPos = Math.Abs(MotionMgr.GetInstace().GetAxisActPos(nAxisNo) - dFeedPos) < 0.3;
-            return CheckJackUpCliyderStateInPos(false) && bIsAxisStop;
-
-        }
-        public override void OperateLineReadyIng(bool bmanual)
-        {
-            JackUpCliyderUp(true);
-        }
-        public override bool IsbeReady(bool bmanual)
-        {
-            return CheckJackUpCliyderStateInPos(false);
-        }
-        public override bool IsCanLeave(bool bmanual)
-        {
-            if (MotionMgr.GetInstace().IsAxisNormalStop(nAxisNo) > AxisState.NormalStop)
-            {
-                AlarmMgr.GetIntance().WarnWithDlg($"流水线{LineName}  在出料前，轴{MotionMgr.GetInstace().GetAxisName(nAxisNo)} ,报警{MotionMgr.GetInstace().IsAxisNormalStop(nAxisNo).ToString()},程序停止", null, CommonDlg.DlgWaranType.WaranOK, null, bmanual);
-                StationMgr.GetInstance().Stop();
-            }
-            bool bIsAxisStop = MotionMgr.GetInstace().IsAxisNormalStop(nAxisNo) == AxisState.NormalStop;
-            return CheckJackUpCliyderStateInPos(false) && bIsAxisStop;
-        }
-        public override void OperateLineBeforeLevave(bool bmanual)
-        {
-            JackUpCliyderUp(false);
-            if (MotionMgr.GetInstace().IsAxisNormalStop(nAxisNo) == AxisState.NormalStop)
-            MotionMgr.GetInstace().AbsMove(nAxisNo, dDischargePos, (double)SpeedType.High);
-        }
-        public override void OprateOutFinishDeal(bool bmaual)
-        {
-            MotionMgr.GetInstace().AbsMove(nAxisNo, dFeedPos, (double)SpeedType.High);
-        }
-        public override bool IsOutFinishDealOK(bool bmaual)
-        {
-            if (MotionMgr.GetInstace().IsAxisNormalStop(nAxisNo) > AxisState.NormalStop)
-            {
-                AlarmMgr.GetIntance().WarnWithDlg($"流水线{LineName}  在出料前，轴{MotionMgr.GetInstace().GetAxisName(nAxisNo)} ,报警{MotionMgr.GetInstace().IsAxisNormalStop(nAxisNo).ToString()},程序停止", null, CommonDlg.DlgWaranType.WaranOK, null, bmaual);
-                StationMgr.GetInstance().Stop();
-            }
-            bool bIsAxisStop = MotionMgr.GetInstace().IsAxisNormalStop(nAxisNo) == AxisState.NormalStop;
-            double pos = MotionMgr.GetInstace().GetAxisActPos(nAxisNo);
-            bool bIsAxisInPosOnFeedPos = Math.Abs(MotionMgr.GetInstace().GetAxisActPos(nAxisNo) - dFeedPos) < 0.3;
-            return bIsAxisStop & bIsAxisInPosOnFeedPos;
-        }
-    }
-
-    public class LineOpreateWithMotor : ILineOprater
-    {
-
-        public LineSegmentDataBase lb
-        {
-            set;
-            get;
-
-        }
-        /// <summary>
-        /// 升降轴
-        /// </summary>
-        public int nAxisNo = -1;
-        /// <summary>
-        /// 进料位置（高度）
-        /// </summary>
-
-        public double dFeedPos = 0;
-        /// <summary>
-        /// 出料高度
-        /// </summary>
-        public double dDischargePos = 0;
-
-
-        public  bool IsOKAwaysOnLineRun(bool bmanual)
-        {
-            return true;
-        }
-        public   void OpearteLineBeforeEntry(bool bmanual)
-        {
-
-            lb.JackUpCliyderUp(false);
-            MotionMgr.GetInstace().AbsMove(nAxisNo, dFeedPos, (double)SpeedType.High);
-
-        }
-        public  bool IsCanEntry(bool bmanual)
-        {
-            if (MotionMgr.GetInstace().IsAxisNormalStop(nAxisNo) > AxisState.NormalStop)
-            {
-                AlarmMgr.GetIntance().WarnWithDlg($"流水线{lb.LineName}  在进料前，轴{MotionMgr.GetInstace().GetAxisName(nAxisNo)} ,报警{MotionMgr.GetInstace().IsAxisNormalStop(nAxisNo).ToString()},程序停止", null, CommonDlg.DlgWaranType.WaranOK, null, bmanual);
-                StationMgr.GetInstance().Stop();
-            }
-            bool bIsAxisStop = MotionMgr.GetInstace().IsAxisNormalStop(nAxisNo) == AxisState.NormalStop;
-            bool bIsAxisInPosOnFeedPos = Math.Abs(MotionMgr.GetInstace().GetAxisActPos(nAxisNo) - dFeedPos) < 0.3;
-            return lb.CheckJackUpCliyderStateInPos(false) && bIsAxisStop;
-
-        }
-        public  void OperateLineReadyIng(bool bmanual)
-        {
-            lb.JackUpCliyderUp(true);
-        }
-        public  bool IsbeReady(bool bmanual)
-        {
-            return lb.CheckJackUpCliyderStateInPos(false);
-        }
-        public  bool IsCanLeave(bool bmanual)
-        {
-            if (MotionMgr.GetInstace().IsAxisNormalStop(nAxisNo) > AxisState.NormalStop)
-            {
-                AlarmMgr.GetIntance().WarnWithDlg($"流水线{lb.LineName}  在出料前，轴{MotionMgr.GetInstace().GetAxisName(nAxisNo)} ,报警{MotionMgr.GetInstace().IsAxisNormalStop(nAxisNo).ToString()},程序停止", null, CommonDlg.DlgWaranType.WaranOK, null, bmanual);
-                StationMgr.GetInstance().Stop();
-            }
-            bool bIsAxisStop = MotionMgr.GetInstace().IsAxisNormalStop(nAxisNo) == AxisState.NormalStop;
-            return lb.CheckJackUpCliyderStateInPos(false) && bIsAxisStop;
-        }
-        public  void OperateLineBeforeLevave(bool bmanual)
-        {
-            lb.JackUpCliyderUp(false);
-            MotionMgr.GetInstace().AbsMove(nAxisNo, dDischargePos, (double)SpeedType.High);
-        }
-        public  void OprateOutFinishDeal(bool bmaual)
-        {
-            MotionMgr.GetInstace().AbsMove(nAxisNo,dFeedPos, (double)SpeedType.High);
-        }
-        public  bool IsOutFinishDealOK(bool bmaual)
-        {
-            if (MotionMgr.GetInstace().IsAxisNormalStop(nAxisNo) > AxisState.NormalStop)
-            {
-                AlarmMgr.GetIntance().WarnWithDlg($"流水线{lb.LineName}  在出料前，轴{MotionMgr.GetInstace().GetAxisName(nAxisNo)} ,报警{MotionMgr.GetInstace().IsAxisNormalStop(nAxisNo).ToString()},程序停止", null, CommonDlg.DlgWaranType.WaranOK, null, bmaual);
-                StationMgr.GetInstance().Stop();
-            }
-            bool bIsAxisStop = MotionMgr.GetInstace().IsAxisNormalStop(nAxisNo) == AxisState.NormalStop;
-            double pos = MotionMgr.GetInstace().GetAxisActPos(nAxisNo);
-            bool bIsAxisInPosOnFeedPos = Math.Abs(MotionMgr.GetInstace().GetAxisActPos(nAxisNo) - dFeedPos) < 0.3;
-            return bIsAxisStop & bIsAxisInPosOnFeedPos;
-        }
-        public bool IsCanPut(bool bmanual)
-        {
-            return true;
-        }
-    }
-
-   
 
     public class LineNg : LineSegmentAction
     {

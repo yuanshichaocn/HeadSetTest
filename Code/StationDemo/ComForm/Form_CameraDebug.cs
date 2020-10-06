@@ -279,6 +279,9 @@ namespace StationDemo
             int nlight=   dataGridViewProcessItem.Rows[indexSelVisionSel].Cells[3].Value.ToString().ToInt();
             VisionMgr.GetInstance().SetLightVal(strItem, nlight);
             VisionSetpBase visionSetpBase = VisionMgr.GetInstance().GetItem(strItem);
+
+            visionSetpBase.m_camparam.m_dGain = dGain;
+            visionSetpBase.m_camparam.m_dExposureTime = dExposure;
             visionSetpBase.SaveParm();
             visionSetpBase.Save();
             VisionMgr.GetInstance().Save();

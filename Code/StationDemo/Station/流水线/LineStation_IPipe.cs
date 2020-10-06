@@ -13,6 +13,8 @@ namespace StationDemo
 {
     public partial class LineStation : IPipeline
     {
+        public LineSegementState LastLineState { get; set; } = LineSegementState.UnKnow;
+        public LineSegementState FiristLineState { get; set; }=LineSegementState.UnKnow;
         public bool CanThrow(string name)
         {
 
