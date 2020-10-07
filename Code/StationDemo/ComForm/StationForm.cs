@@ -355,7 +355,7 @@ namespace StationDemo
         }
         void UpdataPointDataGridView()
         {
-            if(m_Stationbase.AxisX== -1 && m_Stationbase.AxisY==-1 && m_Stationbase.AxisZ==-1  && m_Stationbase.AxisU==-1 && m_Stationbase.AxisTx==-1 && m_Stationbase.AxisTy==-1)
+            if(m_Stationbase!=null &&m_Stationbase.AxisX== -1 && m_Stationbase.AxisY==-1 && m_Stationbase.AxisZ==-1  && m_Stationbase.AxisU==-1 && m_Stationbase.AxisTx==-1 && m_Stationbase.AxisTy==-1)
             {
                 button_Xnegtive.Visible = false;
                 button_Ynegtive.Visible = false;
@@ -409,7 +409,7 @@ namespace StationDemo
 
             }
             HeaderText = MotionMgr.GetInstace().GetAxisName(m_Stationbase.AxisY);
-            if (HeaderText != "" && m_Stationbase.AxisY != -1)
+            if (m_Stationbase != null && HeaderText != "" && m_Stationbase.AxisY != -1)
             {
                 dataGridView_PointInfo.Columns[2].HeaderText = HeaderText;
                 button_homeY.Location = new Point(button_homeY.Location.X, points[nCount].Y);
@@ -448,7 +448,7 @@ namespace StationDemo
 
             }
             HeaderText = MotionMgr.GetInstace().GetAxisName(m_Stationbase.AxisZ);
-            if (HeaderText != "" && m_Stationbase.AxisZ != -1)
+            if (m_Stationbase != null && HeaderText != "" && m_Stationbase.AxisZ != -1)
             {
                 dataGridView_PointInfo.Columns[3].HeaderText = HeaderText;
 
@@ -487,7 +487,7 @@ namespace StationDemo
                 button_Zpositive.Visible = false;
             }
             HeaderText = MotionMgr.GetInstace().GetAxisName(m_Stationbase.AxisU);
-            if (HeaderText != "" && m_Stationbase.AxisU != -1)
+            if (m_Stationbase != null && HeaderText != "" && m_Stationbase.AxisU != -1)
             {
                 dataGridView_PointInfo.Columns[4].HeaderText = HeaderText;
 
@@ -526,7 +526,7 @@ namespace StationDemo
                 button_Upositive.Visible = false;
             }
             HeaderText = MotionMgr.GetInstace().GetAxisName(m_Stationbase.AxisTx);
-            if (HeaderText != "" && m_Stationbase.AxisTx != -1)
+            if (m_Stationbase != null && HeaderText != "" && m_Stationbase.AxisTx != -1)
             {
                 dataGridView_PointInfo.Columns[5].HeaderText = HeaderText;
                 //调整位置
@@ -565,7 +565,7 @@ namespace StationDemo
                 button_Txpositive.Visible = false;
             }
             HeaderText = MotionMgr.GetInstace().GetAxisName(m_Stationbase.AxisTy);
-            if (HeaderText != "" && m_Stationbase.AxisTy != -1)
+            if (m_Stationbase != null && HeaderText != "" && m_Stationbase.AxisTy != -1)
             {
                 dataGridView_PointInfo.Columns[6].HeaderText = HeaderText;
 

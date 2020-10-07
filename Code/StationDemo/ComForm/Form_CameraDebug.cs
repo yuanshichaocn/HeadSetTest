@@ -282,6 +282,7 @@ namespace StationDemo
 
             visionSetpBase.m_camparam.m_dGain = dGain;
             visionSetpBase.m_camparam.m_dExposureTime = dExposure;
+            visionSetpBase.m_camparam.m_strCamName = strCamName;
             visionSetpBase.SaveParm();
             visionSetpBase.Save();
             VisionMgr.GetInstance().Save();
