@@ -25,17 +25,10 @@ namespace StationDemo
         public ClientManager Client;
       
     }
- 
-
-
-  
-
- 
-
-
     public class SmallMes
     {
-        public static readonly SmallMes smallMes = new SmallMes();
+
+        private static readonly SmallMes smallMes = new SmallMes();
         public static SmallMes Ins { get=>   smallMes;}
         /// <summary>
         /// 机台命和对应的链接
