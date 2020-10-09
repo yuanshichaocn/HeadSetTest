@@ -105,10 +105,6 @@ namespace StationDemo
                     });
                     strVisionTypeName = AssemblyOperate.GetDescription(type);
                 }
-                  
-                    
-                    
-
                visionSetpBase = VisionMgr.GetInstance().GetItem(tem.Key);
                 dataGridViewProcessItem.Rows.Add("False", tem.Key, strVisionTypeName, visionSetpBase.m_camparam.m_strCamName, visionSetpBase.m_camparam.m_dExposureTime.ToString(), visionSetpBase.m_camparam.m_dGain.ToString());
             }
