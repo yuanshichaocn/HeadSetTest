@@ -268,6 +268,7 @@ namespace StationDemo
             string strItem = dataGridViewProcessItem.Rows[indexSelVisionSel].Cells[1].Value.ToString();
 
             //判断视觉Item是否填写完整
+
             if (!IsItemOK(indexSelVisionSel))
             {
                 return;
