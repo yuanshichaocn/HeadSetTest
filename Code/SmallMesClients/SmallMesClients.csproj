@@ -34,9 +34,6 @@
     <Reference Include="BaseDll">
       <HintPath>..\..\Machine\BaseDll.dll</HintPath>
     </Reference>
-    <Reference Include="Communicate">
-      <HintPath>..\..\Machine\Communicate.dll</HintPath>
-    </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\Machine\log4net.dll</HintPath>
     </Reference>
@@ -55,6 +52,12 @@
   <ItemGroup>
     <Compile Include="SmallMesClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Communicate\Communicate.csproj">
+      <Project>{056fd569-fa3c-4d6a-ab7a-645ff43888bd}</Project>
+      <Name>Communicate</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

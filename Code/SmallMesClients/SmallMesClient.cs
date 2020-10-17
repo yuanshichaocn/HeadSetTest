@@ -18,6 +18,7 @@ namespace SmallMesClients
         待料,
         上料完成,
         忙碌,
+        等待出料,
 
     }
     public enum CmdResult
