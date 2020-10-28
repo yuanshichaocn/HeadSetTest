@@ -455,7 +455,7 @@
             超时时间 
              </summary>
         </member>
-        <member name="F:Communicate.TcpLink.m_strLineFlag">
+        <member name="F:Communicate.TcpLink.m_count">
              <summary>
             命令分隔 
              </summary>
@@ -708,6 +708,11 @@
             保存内存参数到xml文件
             </summary>
             <param name="doc">已打开的xml文档</param>
+        </member>
+        <member name="F:Communicate.SocketSever.m_strLine">
+             <summary>
+            命令分隔符 
+             </summary>
         </member>
     </members>
 </doc>

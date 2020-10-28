@@ -77,13 +77,5 @@ namespace StationDemo
             return false;
         }
     }
-    public enum LineName
-    {
-        前壳流水线,
-        Sensor流水线,
-        锁付流水线,
-        前壳NG流水线,
-        SensorNG流水线,
-        锁付NG流水线,
-    }
+  
 }
