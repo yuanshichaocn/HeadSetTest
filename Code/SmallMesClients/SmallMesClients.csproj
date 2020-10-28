@@ -50,6 +50,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Mes命令集合.cs" />
+    <Compile Include="SmallMesClientCmd.cs" />
     <Compile Include="SmallMesClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
