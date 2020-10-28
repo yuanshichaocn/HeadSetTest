@@ -55,7 +55,7 @@ namespace StationDemo
             }
             bool bIsAxisStop = MotionMgr.GetInstace().IsAxisNormalStop(nAxisNo) == AxisState.NormalStop;
             bool bIsAxisInPosOnFeedPos = Math.Abs(MotionMgr.GetInstace().GetAxisActPos(nAxisNo) - dFeedPos) < 0.3;
-            return CheckJackUpCliyderStateInPos(false) && bIsAxisStop;
+            return CheckJackUpCliyderStateInPos(false) && bIsAxisStop && bIsAxisInPosOnFeedPos;
 
         }
         public override void OperateLineReadyIng(bool bmanual)
@@ -74,7 +74,9 @@ namespace StationDemo
                 StationMgr.GetInstance().Stop();
             }
             bool bIsAxisStop = MotionMgr.GetInstace().IsAxisNormalStop(nAxisNo) == AxisState.NormalStop;
-            return CheckJackUpCliyderStateInPos(false) && bIsAxisStop;
+            bool bIsAxisInPosOnOutPos = Math.Abs(MotionMgr.GetInstace().GetAxisActPos(nAxisNo) -dDischargePos) < 0.3;
+
+            return CheckJackUpCliyderStateInPos(false) && bIsAxisStop && bIsAxisInPosOnOutPos;
         }
         public override void OperateLineBeforeLevave(bool bmanual)
         {

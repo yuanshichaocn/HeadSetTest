@@ -12,6 +12,7 @@ namespace StationDemo.DemoByWHJ
     /// </summary>
     public interface IPipeline
     {
+    
         /// <summary>
         /// 获得当前状态，建议使用枚举类型
         /// </summary>
@@ -30,5 +31,6 @@ namespace StationDemo.DemoByWHJ
         /// <param name="name"></param>
         /// <returns></returns>
         bool CanThrow(string name);
+       
     }
 }

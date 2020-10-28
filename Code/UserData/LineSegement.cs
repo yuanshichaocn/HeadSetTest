@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using MotionIoLib;
 using System.IO.Ports;
+using System.Collections.Concurrent;
 
 namespace UserData
 {
@@ -105,12 +106,25 @@ namespace UserData
         前,
         后
     }
+
+    /// <summary>
+    /// 出料完成判断
+    /// </summary>
     public enum OutFinishJudeType
     { 
         信号,
-        下一段流水线
-    
-    
+        下一段流水线,
+        下一段流水线或信号,
+    }
+
+    /// <summary>
+    /// 可以进料判断
+    /// </summary>
+    public enum EntryingJudeType
+    {
+        信号,
+        上一段流水线,
+        上一段流水线或信号,
     }
 
 
@@ -120,8 +134,10 @@ namespace UserData
         public FeedMode feedMode = FeedMode.前进料;
         public LinePassMode linePassMode = LinePassMode.自动处理;
         public OutFinishJudeType outFinishJudeType = OutFinishJudeType.下一段流水线;
+        public EntryingJudeType entryingJude = EntryingJudeType.上一段流水线;
         public object objLock = new object();
         private bool bIsPause = false;
+      
         public bool IsPause
         {
             set
@@ -183,6 +199,7 @@ namespace UserData
         public string strBarCode2d;
         public string strBarCode1d;
         private LineSegementState lineSegementState = LineSegementState.UnKnow;
+        private LineSegementState oldlineSegementState = LineSegementState.UnKnow;
         public string LineName = "";
         public void StopAllTimer()
         {
@@ -192,6 +209,7 @@ namespace UserData
             LeaveTimer.Stop();
             LeaveDelayTimer.Stop();
             OutTimer.Stop();
+            OutDelayTimer.Stop();
         }
         public LineSegementState LineSegState
         {
@@ -215,17 +233,26 @@ namespace UserData
                         EnterDelayTimer.Stop();
                         EnterTimer.Stop();
                         OutTimer.Stop();
+                        OutDelayTimer.Stop();
                         break;
                     case LineSegementState.WaitOut:
                         EnterDelayTimer.Stop();
                         EnterTimer.Stop();
                         LeaveDelayTimer.Stop();
                         LeaveTimer.Stop();
+                        OutDelayTimer.Stop();
                         break;
                     case LineSegementState.Entrying:
                         LeaveDelayTimer.Stop();
                         LeaveTimer.Stop();
                         OutTimer.Stop();
+                        OutDelayTimer.Stop();
+                        break;
+                    case LineSegementState.OutFinish:
+                        EnterDelayTimer.Stop();
+                        EnterTimer.Stop();
+                        LeaveDelayTimer.Stop();
+                        LeaveTimer.Stop();
                         break;
                 }
                 lineSegementState = value;
@@ -426,6 +453,12 @@ namespace UserData
             set => BackEnterDelayTimer.SetTimeDelay(value);
             get =>  BackEnterDelayTimer.SetedTime;
         }
+
+        public long nOutDelay
+        {
+            set => OutDelayTimer.SetTimeDelay(value);
+            get => OutDelayTimer.SetedTime;
+        }
         /// <summary>
         /// 阻挡气缸上升
         /// </summary>
@@ -501,13 +534,14 @@ namespace UserData
         {
 
         }
-        protected cUserTimer EnterTimer = new cUserTimer(10000);
-        protected cUserTimer EnterDelayTimer = new cUserTimer(100);
+        public cUserTimer EnterTimer = new cUserTimer(10000);
+        public cUserTimer EnterDelayTimer = new cUserTimer(500);
 
-        protected cUserTimer BackEnterDelayTimer = new cUserTimer(10000);
-        protected cUserTimer LeaveTimer = new cUserTimer(10000);
-        protected cUserTimer LeaveDelayTimer = new cUserTimer(100);
-        protected cUserTimer OutTimer = new cUserTimer(10000);
+        public cUserTimer BackEnterDelayTimer = new cUserTimer(10000);
+        public cUserTimer LeaveTimer = new cUserTimer(10000);
+        public cUserTimer LeaveDelayTimer = new cUserTimer(100);
+        public cUserTimer OutTimer = new cUserTimer(10000);
+        public cUserTimer OutDelayTimer = new cUserTimer(100);
         /// <summary>
         /// 阻挡气缸上升 true 上升 false 下降
         /// </summary>
@@ -594,6 +628,7 @@ namespace UserData
             EnterDelayTimer.Stop();
             LeaveDelayTimer.Stop(); ;
             MotionStop();
+            OutDelayTimer.Stop();
             lineSegementState = LineSegementState.None;
 
         }

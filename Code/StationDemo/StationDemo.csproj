@@ -159,6 +159,7 @@
       <DependentUpon>ItemAdd.cs</DependentUpon>
     </Compile>
     <Compile Include="Station\流水线\IPipeline.cs" />
+    <Compile Include="Station\流水线\LineExction.cs" />
     <Compile Include="Station\流水线\LineOperateNG.cs" />
     <Compile Include="Station\流水线\LineOperateMotor.cs" />
     <Compile Include="Station\流水线\LineOperate.cs" />
