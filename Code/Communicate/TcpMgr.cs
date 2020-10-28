@@ -164,7 +164,7 @@ namespace Communicate
                     grid.Rows[i].Cells[j++].Value = t.m_strIP;
                     grid.Rows[i].Cells[j++].Value = t.m_nPort;
                     grid.Rows[i].Cells[j++].Value = t.m_nTime;
-                    grid.Rows[i].Cells[j++].Value = t.m_strLineFlag;
+                    grid.Rows[i].Cells[j++].Value = t.m_strLine;
                     i++;
                 }
             }
@@ -218,7 +218,7 @@ namespace Communicate
                 xe.SetAttribute(m_strDescribe[j++], t.m_strIP);
                 xe.SetAttribute(m_strDescribe[j++], t.m_nPort.ToString());
                 xe.SetAttribute(m_strDescribe[j++], t.m_nTime.ToString());
-                xe.SetAttribute(m_strDescribe[j++], t.m_strLineFlag);
+                xe.SetAttribute(m_strDescribe[j++], t.m_strLine);
 
                 root.AppendChild(xe);
             }

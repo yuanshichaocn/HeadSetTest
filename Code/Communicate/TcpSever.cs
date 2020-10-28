@@ -29,6 +29,11 @@ namespace Communicate
         public int Port;
         public string ReceiveStr;
 
+        /// <summary>
+        ///命令分隔符 
+        /// </summary>
+        public string m_strLine;
+
         //回调委托
 
         public delegate void DeleagteProcessData(string data);
@@ -48,6 +53,7 @@ namespace Communicate
             _background.WorkerSupportsCancellation = true;
             _background.DoWork += StartToListen;
             _background.RunWorkerAsync();
+            dicClientMgr.Clear();
         }
 
         private void StartToListen(object sender, DoWorkEventArgs e)
@@ -58,24 +64,36 @@ namespace Communicate
                 IPAddress serverIP = IPAddress.Any;//IPAddress.Parse(IP);
                 _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 _socket.Bind(new IPEndPoint(serverIP, Port));
-                _socket.Listen(200);
+                _socket.Listen(500);
                 while (true)
                 {
-                    Socket sockTmp = _socket.Accept();
-                    _clientManager = new ClientManager(sockTmp);
-                    _clientManager.CommandReceived += CommandReceived;
-                    _clientManager.Disconnected    += ClientManagerOnDisconnected;
-                    _clientManager.CommandFailed   += (obj1, obj2) =>
+                    try
                     {
-                        _logger.Info(_clientManager.IP.ToString() + "-" + DateTime.Now.ToString("yyyy-MM-dd-hh-mm-ss") + ":" + "发送失败");
-                        MessageBox.Show(_clientManager.IP.ToString()+"发送失败", "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    };
-                    dicClientMgr.TryAdd(_clientManager.IP.ToString()+"#"+_clientManager.Port.ToString(), _clientManager);
-                    ConnectEvent?.Invoke(true);
-                    if (ClientConnected != null)
-                    {
-                        ClientConnected(_clientManager);
+
+                        Socket sockTmp = _socket.Accept();
+                        _clientManager = new ClientManager(sockTmp);
+                        _clientManager.m_strLine = this.m_strLine;
+                        _clientManager.CommandReceived += CommandReceived;
+                        _clientManager.Disconnected += ClientManagerOnDisconnected;
+                        _clientManager.CommandFailed += (obj1, obj2) =>
+                        {
+                            _logger.Info(_clientManager.IP.ToString() + "-" + DateTime.Now.ToString("yyyy-MM-dd-hh-mm-ss") + ":" + "发送失败");
+                         //   MessageBox.Show(_clientManager.IP.ToString() + "发送失败", "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        };
+                        dicClientMgr.TryAdd(_clientManager.IP.ToString(), _clientManager);
+                        ConnectEvent?.Invoke(true);
+                        if (ClientConnected != null)
+                        {
+                            ClientConnected(_clientManager);
+                        }
+
                     }
+                    catch (Exception exs)
+                    {
+
+
+                    }
+                   
                 }
             }
             catch (Exception ex)
@@ -88,17 +106,18 @@ namespace Communicate
         {
             string stripport = clientEventArgs.IP.ToString() + "#" + clientEventArgs.Port.ToString();
             ClientManager clientManager = null;
-            if (dicClientMgr.ContainsKey(stripport))
+            if (dicClientMgr.ContainsKey(clientEventArgs.IP.ToString()))
             {
-                dicClientMgr.TryRemove(stripport,out   clientManager);
+                dicClientMgr.TryRemove(clientEventArgs.IP.ToString(), out   clientManager);
+                ConnectEvent?.Invoke(false);
+                if (ClientDisConnected != null)
+                {
+                    ClientDisConnected(clientManager);
+                }
                 clientManager.Disconnect();
             }
           
-            ConnectEvent?.Invoke(false);
-            if (ClientDisConnected != null)
-            {
-                ClientDisConnected(clientManager);
-            }
+            
           
         }
 
@@ -123,9 +142,9 @@ namespace Communicate
         {
             ReceiveStr = "";
             Event.Reset();
-            if(dicClientMgr.ContainsKey(ip+"#"+port))
+            if(dicClientMgr.ContainsKey(ip))
             {
-                _clientManager = dicClientMgr[ip + "#" + port];
+                _clientManager = dicClientMgr[ip];
                 _clientManager.SendCommand(info);
             }
           //  

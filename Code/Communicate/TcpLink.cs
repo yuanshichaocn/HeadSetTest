@@ -138,7 +138,7 @@ namespace Communicate
         /// <summary>
         ///命令分隔 
         /// </summary>
-        public string m_strLineFlag;
+       // public string m_strLineFlag;
         int m_count = 0;
         const int m_MaxCountConnet = 10;
 
@@ -176,7 +176,7 @@ namespace Communicate
         /// <summary>
         ///命令分隔符 
         /// </summary>
-        private string m_strLine;
+        public string m_strLine;
 
         private TcpClient m_client = null;
         private bool m_bTimeOut = false;
@@ -277,7 +277,7 @@ namespace Communicate
             m_nPort = nPort;
             m_nTime = nTime;
             SynchronizationCom = false;
-            m_strLineFlag = strLine;
+              m_strLine = strLine;
             if (strLine == "CRLF")
             {
                 m_strLine = "\r\n";
@@ -361,6 +361,8 @@ namespace Communicate
                 }
             }
         }
+        byte[] rbuf = new byte[2048];
+        int nOffset = 0;
         /// <summary>
         ///  获取网口缓存数据    直到有结束符
         ///  /// </summary>
@@ -368,44 +370,84 @@ namespace Communicate
         private void ReceiveProess(int count)
         {
             string receiveString = Encoding.Default.GetString(m_recvBuffer, 0, count);
-            _logger.Info(DateTime.Now.ToString() + $"IP:{m_strIP} Port:{m_nPort} 结束符:{m_strLine} 接收字串:" + receiveString);
+          //  _logger.Info(DateTime.Now.ToString() + $"IP:{m_strIP} Port:{m_nPort} 结束符:{m_strLine} 接收字串:" + receiveString);
             int tsLength = m_strLine.Length;
-            
-            //遍历字符串 直到结束符
-            for (int i = 0; i < receiveString.Length;)
+            int indexofarr = -1;
+           
+            try
             {
-                if (i <= receiveString.Length - tsLength)
+                string cmdTarget = "";
+                int indexofArr = 0;
+                Array.Copy(m_recvBuffer, nOffset, rbuf, nOffset, count);
+                nOffset += count;
+                if (!CommunicateFun.CheckEndChar(rbuf, System.Text.Encoding.Default.GetBytes(m_strLine), out indexofArr))
                 {
-                    if (receiveString.Substring(i, tsLength) != m_strLine)
-                    {
-                        sbReceiveDataBuffer.Append(receiveString[i]);
-                        i++;
-                    }
-                    else
-                    {
-                        try
-                        {
-                            _logger.Info(DateTime.Now.ToString() + $"IP:{m_strIP} Port:{m_nPort} 找到结束符{m_strLine} 字串:" + Encoding.Default.GetBytes(sbReceiveDataBuffer.ToString()));
-                            this.RaiseDataReceived(Encoding.Default.GetBytes(sbReceiveDataBuffer.ToString().ToCharArray()));
-                        }
-                        catch(Exception EX)
-                        {
+                 
 
-                        }
-                        finally
-                        {
-                            sbReceiveDataBuffer.Clear();
-                            i += tsLength;
-                        }
-
-                    }
                 }
                 else
                 {
-                    sbReceiveDataBuffer.Append(receiveString[i]);
-                    i++;
+                    try
+                    {
+                        byte[] bytearr = new byte[indexofArr];
+                        Array.Copy(rbuf, bytearr, indexofArr);
+                        this.RaiseDataReceived(bytearr);
+                    }
+
+                    catch( Exception ex)
+                    {
+
+                    }
+                  
+                    nOffset = 0;
+                    Array.Clear(rbuf, 0, rbuf.Length);
+                    Array.Clear(m_recvBuffer, 0, m_recvBuffer.Length);
                 }
+               
             }
+            catch (Exception es)
+            {
+                //连接断开
+                nOffset = 0;
+                Array.Clear(rbuf, 0, rbuf.Length);
+               
+            }
+
+            //遍历字符串 直到结束符
+            //for (int i = 0; i < receiveString.Length;)
+            //{
+            //    if (i <= receiveString.Length - tsLength)
+            //    {
+            //        if (receiveString.Substring(i, tsLength) != m_strLine)
+            //        {
+            //            sbReceiveDataBuffer.Append(receiveString[i]);
+            //            i++;
+            //        }
+            //        else
+            //        {
+            //            try
+            //            {
+            //                _logger.Info(DateTime.Now.ToString() + $"IP:{m_strIP} Port:{m_nPort} 找到结束符{m_strLine} 字串:" + Encoding.Default.GetBytes(sbReceiveDataBuffer.ToString()));
+            //                this.RaiseDataReceived(Encoding.Default.GetBytes(sbReceiveDataBuffer.ToString().ToCharArray()));
+            //            }
+            //            catch(Exception EX)
+            //            {
+
+            //            }
+            //            finally
+            //            {
+            //                sbReceiveDataBuffer.Clear();
+            //                i += tsLength;
+            //            }
+
+            //        }
+            //    }
+            //    else
+            //    {
+            //        sbReceiveDataBuffer.Append(receiveString[i]);
+            //        i++;
+            //    }
+            //}
         }
         /// <summary> 
         /// 接收数据操作回调函数 
@@ -422,22 +464,21 @@ namespace Communicate
                 //获取异步SOCKET从网络上接收到的数据的数量 
                 int bytesRead = asyTcpSocket.m_client.Client.EndReceive(ar);
 
-                _logger.Warn($"{DateTime.Now.ToString()}:{m_strIP},{m_nPort}:Receive bytes:" + bytesRead);
+                //_logger.Warn($"{DateTime.Now.ToString()}:{m_strIP},{m_nPort}:Receive bytes:" + bytesRead);
 
-                if (bytesRead == 0)
-                {
-                    if (!asyTcpSocket.m_client.Client.Connected)
-                        asyTcpSocket.Disconnect();//20180616
-                    m_recvString = "";
-                    m_recvLength = 0;
-                    _logger.Warn($"{m_strIP},{m_nPort}:接收数据过程中出现错误，关闭连接!11");
-                    if (SocketErrorEvent != null)
-                    {
-                        SocketErrorEvent(this, new AsyTcpSocketEventArgs($"{m_strIP},{m_nPort}:接收数据过程中出现错误，关闭连接!"));
-                    }
-                 
-                }
+                //if (bytesRead == 0)
+                //{
+                //    if (!asyTcpSocket.m_client.Client.Connected)
+                //        asyTcpSocket.Disconnect();//20180616
+                //    m_recvString = "";
+                //    m_recvLength = 0;
+                //    _logger.Warn($"{m_strIP},{m_nPort}:接收数据过程中出现错误，关闭连接!11");
+                //    if (SocketErrorEvent != null)
+                //    {
+                //        SocketErrorEvent(this, new AsyTcpSocketEventArgs($"{m_strIP},{m_nPort}:接收数据过程中出现错误，关闭连接!"));
+                //    }
 
+                //}
                 if (bytesRead > 0)
                 {
                     m_nDelayTimeWhenErr = 30;
@@ -493,6 +534,10 @@ namespace Communicate
                         _logger.Warn($"{m_strIP},{m_nPort}:准备接收数据过程中出现错误!33");
                         SocketErrorEvent(this, new AsyTcpSocketEventArgs($"{m_strIP},{m_nPort}:准备接收数据过程中出现错误!"));
                     }
+                    if (m_client.Client.Connected)
+                        m_client.Client.Disconnect(true);
+                    m_client.Client.BeginConnect(m_strIP, m_nPort, new AsyncCallback(CallBackConnect), this);
+
                 }
             }
         }
@@ -562,7 +607,7 @@ namespace Communicate
                 //TimeoutObject.Set();
             }
         }
-        private int  nIsReconnecting = 1;//是否重连中;
+        private int  nIsReconnecting = 0;//是否重连中;
        
         //连接服务器
         public void ConnectServer()
@@ -580,14 +625,12 @@ namespace Communicate
                         m_client.Dispose();
                         m_client = new TcpClient();
                         m_client.Connect(IPAddress.Parse(m_strIP), m_nPort);
-
                         if (m_client.Connected)
                         {
                             m_client.Close();
                             m_client = new TcpClient();
                             m_client.BeginConnect(m_strIP, m_nPort, new AsyncCallback(CallBackConnect), this);
                         }
-
                     }
                     catch (Exception ex2)
                     {
@@ -733,10 +776,38 @@ namespace Communicate
             }
             else
             {
+                File.AppendAllLines("D:\\SmallMes_CToS_ConnentError.txt", new string[] {  DateTime.Now.ToString("yyyy-MM-dd-hh-mm-ss")+ ":ConnentError" });
+                
                 ConnectServer();
             }
           
             return false;
+        }
+        public void WriteData2(byte[] sendBytes, int nLen)
+        {
+            string cmd = "";
+             int nRetryCount = 0;
+            retrySend:
+            try
+            {
+                
+                m_client.Client.Send(sendBytes);
+            }
+            catch (Exception ex)
+            {
+                nRetryCount++;
+                if (nRetryCount > 3)
+                {
+                    cmd = Encoding.Default.GetString(sendBytes);
+                    File.AppendAllLines("D:\\SmallMes_CToS_SendError.txt", new string[] {  DateTime.Now.ToString("yyyy-MM-dd-hh-mm-ss")+":"+
+                    cmd+","+ex.Message });
+                    return;
+                }
+                else
+                {
+                    goto retrySend;
+                }
+            }
         }
 
         /// <summary>
@@ -860,8 +931,8 @@ namespace Communicate
             {
                 if (m_client.Connected)
                 {
-                    NetworkStream netStream = m_client.GetStream();
-                    netStream.Close();
+                   // NetworkStream netStream = m_client.GetStream();
+                   // netStream.Close();
                 }
                 m_client.Close();
 

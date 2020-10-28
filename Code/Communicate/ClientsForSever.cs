@@ -37,6 +37,46 @@ namespace Communicate
             this.command = cmd;
         }
     }
+    public static  class CommunicateFun
+      {
+        public static bool CheckEndChar(byte[] rbuf,  byte[] endchars, out int indexofArr)
+        {
+            indexofArr = -1;
+            bool bIsHaveEndFlag = true;
+            if (endchars == null || rbuf==null)
+                return false;
+            for (int i = 0; i < rbuf.Length; i++)
+            {
+                bIsHaveEndFlag = true;
+                if(rbuf == null || endchars==null)
+                     return false;
+                if (rbuf.Length - i < endchars.Length)
+                    return false;
+                for (int j = 0; j < endchars.Length; j++)
+                {
+                    if (rbuf[i + j] == endchars[j])
+                        bIsHaveEndFlag &= true;
+                    else
+                    {
+                        bIsHaveEndFlag &= false;
+                        break;
+                    }
+
+                }
+                if (bIsHaveEndFlag)
+                {
+                    indexofArr = i;
+                    return true;
+                }
+
+
+            }
+            return bIsHaveEndFlag;
+        }
+
+
+
+    }
 
 
     /// <summary>
@@ -79,7 +119,16 @@ namespace Communicate
             get
             {
                 if (this.socket != null)
-                    return ((IPEndPoint)this.socket.RemoteEndPoint).Address;
+                   
+                        try
+                     {
+                        return ((IPEndPoint)this.socket.RemoteEndPoint).Address;
+                   }
+                    catch( Exception e)
+                    {
+                        return IPAddress.None;
+                    }
+                       
                 else
                     return IPAddress.None;
             }
@@ -175,7 +224,7 @@ namespace Communicate
                 CommandReceived(this, e);
         }
 
-        /// <summary>
+       /// <summary>
         /// Occurs when a command had been sent to the remote client successfully.
         /// </summary>
         /// <param name="sender">Sender.</param>
@@ -190,7 +239,7 @@ namespace Communicate
         /// <param name="e">EventArgs.</param>
         public delegate void CommandSendingFailedEventHandler(object sender, EventArgs e);
 
-
+        public string m_strLine = "\r\n";
         #endregion
 
         #region Constructor
@@ -210,6 +259,8 @@ namespace Communicate
             this.bwReceiver.RunWorkerAsync();
         }
         #endregion
+        byte[] rbuf = new byte[2048];
+        int nOffset = 0;
         #region serverReceive
         private void StartReceive(object sender, DoWorkEventArgs e)
         {
@@ -229,20 +280,53 @@ namespace Communicate
                             if (readBytes == 0)
                             {
                                 //连接断开
+                                nOffset = 0;
+                                Array.Clear(rbuf, 0, rbuf.Length);
                                 break;
                             }
                             else
                             {
-                                byte[] rbuf = new byte[readBytes];
-                                Array.Copy(buffer, rbuf, readBytes);
-                                string cmdTarget =IP.ToString()+"#"+Port.ToString()+"#"+ System.Text.Encoding.Default.GetString(rbuf);
-                                this.OnCommandReceived(new CommandEventArgs(cmdTarget));
+                                string cmdTarget = "";
+                                int indexofArr = 0;
+                                Array.Copy(buffer, nOffset, rbuf, nOffset, readBytes);
+                                nOffset += readBytes;
+                                if (!CommunicateFun.CheckEndChar(rbuf,System.Text.Encoding.Default.GetBytes(m_strLine), out indexofArr))
+                                {
+                                    
+                                }
+                                else
+                                {
+                                    byte[] buffer2 = new byte[indexofArr];
+                                    Array.Copy(rbuf, buffer2, indexofArr);
+                                    cmdTarget = IP.ToString() + "#" + Port.ToString() + "#" + System.Text.Encoding.Default.GetString(buffer2);
+                                    nOffset = 0;
+                                    //调用服务器内注册函数
+                                    Array.Clear(rbuf, 0, rbuf.Length);
+                                    try
+                                    {
+                                        this.OnCommandReceived(new CommandEventArgs(cmdTarget));
+
+                                    }
+                                    catch (Exception esd)
+                                    {
+
+                                    }
+                                    cmdTarget = "";
+                                    nOffset = 0;
+                                }
+                               
+                                    
+                                    
+                                
+                                  
                             }
                         }
-                        catch
+                        catch(Exception es)
                         {
                             //连接断开
-                            break;
+                            nOffset = 0;
+                            Array.Clear(rbuf, 0, rbuf.Length);
+                            continue;
                         }
                     }
                 }//end if socket is OK and data is OK
@@ -306,6 +390,31 @@ namespace Communicate
             else
                 this.OnCommandFailed(new EventArgs());
         }
+        public void  WriteData(string cmd)
+        {
+            byte[] metaBuffer = Encoding.UTF8.GetBytes(cmd);
+            int nRetryCount = 0;
+            retrySend:
+            try
+            {
+                socket.Send(metaBuffer);
+            }
+            catch( Exception ex)
+            {
+                nRetryCount++;
+                if (nRetryCount > 3)
+                {
+                    File.AppendAllLines("D:\\SmallMes_SToC_SendError.txt", new string[] {  DateTime.Now.ToString("yyyy-MM-dd-hh-mm-ss")+":"
+                    + this.IP.ToString()+","+this.Port.ToString()+":"+cmd+","+ex.Message });
+                    return;
+                }
+                else
+                {
+             
+                    goto retrySend;
+                }
+            }
+        }
         private void bwSender_DoWork(object sender, DoWorkEventArgs e)
         {
             string cmd = (string)e.Argument;
@@ -342,6 +451,7 @@ namespace Communicate
                 return false;
             }
         }
+        
         private void bwSender_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             if (!e.Cancelled && e.Error == null && ((bool)e.Result))
