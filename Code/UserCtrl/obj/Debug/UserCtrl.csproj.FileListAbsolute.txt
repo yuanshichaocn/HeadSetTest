@@ -816,3 +816,4 @@ G:\StationDemoX64V2.0\Code\UserCtrl\obj\Debug\UserCtrl.csproj.CoreCompileInputs.
 G:\StationDemoX64V2.0\Code\UserCtrl\obj\Debug\UserCtrl.csproj.CopyComplete
 G:\StationDemoX64V2.0\Code\UserCtrl\obj\Debug\UserCtrl.dll
 G:\StationDemoX64V2.0\Code\UserCtrl\obj\Debug\UserCtrl.pdb
+G:\StationDemoX64V2.0\Code\UserCtrl\obj\Debug\UserCtrl.TrayTable.resources

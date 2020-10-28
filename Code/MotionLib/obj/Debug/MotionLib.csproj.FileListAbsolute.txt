@@ -677,3 +677,4 @@ G:\StationDemoX64V2.0\Machine\MotionLib.pdb
 G:\StationDemoX64V2.0\Code\MotionLib\obj\Debug\MotionLib.csproj.CopyComplete
 G:\StationDemoX64V2.0\Code\MotionLib\obj\Debug\MotionLib.dll
 G:\StationDemoX64V2.0\Code\MotionLib\obj\Debug\MotionLib.pdb
+G:\StationDemoX64V2.0\Code\MotionLib\obj\Debug\MotionLib.csprojAssemblyReference.cache
