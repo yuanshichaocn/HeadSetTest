@@ -33,6 +33,8 @@ namespace StationDemo
         public static void InitCam(Form_Auto formauto)
         {
             List<CameraBase> cameraBases = new List<CameraBase>();
+            //默认添加的是海康相机 如果换相机 填上对应的类
+            CameraMgr.GetInstance().EnumDevices(new HikVisionCamera(""), out cameraBases);
             foreach (var temp in cameraBases)
             {
 
