@@ -895,7 +895,7 @@ namespace MotionIoLib
                 {
                     for ( int i=0; i< delegates.Length;i++)
                     {
-                        delegates[i] = isSafeWhenAxisMoveHandler;
+                       if( delegates[i] == isSafeWhenAxisMoveHandler.GetInvocationList()[0])
                         return true;
                     }
                 }
