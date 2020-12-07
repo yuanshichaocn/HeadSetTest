@@ -137,6 +137,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="APP.cs" />
     <Compile Include="Config\IO配置.cs" />
     <Compile Include="Config\EpsonRobot初始化.cs" />
     <Compile Include="Config\SmallMes.cs" />
