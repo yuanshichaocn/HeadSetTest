@@ -72,6 +72,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\LS_IOC0640.cs" />
+    <Compile Include="Common\LTSMC.cs" />
     <Compile Include="Common\PCI_M314.cs" />
     <Compile Include="Common\DASK.cs" />
     <Compile Include="EpsonRobot\Coordinate.cs" />
@@ -86,6 +87,7 @@
     <Compile Include="IO_LeiSai.cs" />
     <Compile Include="IO_Delta314.cs" />
     <Compile Include="IO_Adlink_7230.cs" />
+    <Compile Include="IO_LTSMC.cs" />
     <Compile Include="IO__Glink.cs" />
     <Compile Include="IO__Gen_6AxisModle.cs" />
     <Compile Include="IO_Anicet.cs" />
@@ -98,6 +100,7 @@
     <Compile Include="Motion_GtsCard.cs" />
     <Compile Include="IOCtrl.cs" />
     <Compile Include="MotionIOLib.cs" />
+    <Compile Include="Motion_LTSMC.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Robot.cs" />
     <Compile Include="RobotDataType.cs" />
