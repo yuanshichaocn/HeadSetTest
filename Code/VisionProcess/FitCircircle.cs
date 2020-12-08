@@ -1,54 +1,50 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using BaseDll;
+﻿using BaseDll;
 using HalconDotNet;
 using HalconLib;
+using System;
+using System.ComponentModel;
+using System.Windows.Forms;
 using UserCtrl;
 
-namespace VisionProcess 
+namespace VisionProcess
 {
     public enum TestPos
     {
-       前端,
-       后端,
-       最强,
+        前端,
+        后端,
+        最强,
     }
+
     public enum TestPolarity
     {
         从明到暗,
         从暗到明,
         双向,
     }
+
     public enum TestDir
     {
-      从内到外,
-      从外到内,
-
+        从内到外,
+        从外到内,
     }
 
     public class VisionFitCircleParam : IOperateParam
     {
-
-     
         public TestPos testPos = TestPos.前端;
         public TestPolarity testPolarity = TestPolarity.从明到暗;
         public TestDir testDir = TestDir.从外到内;
         public double thresoldVal = 20;
         public double startAngledeg = 0;
         public double endAngleDeg = 360;
-        public int    nTestNum = 100;
+        public int nTestNum = 100;
         public int nLen1 = 20;
         public int nLen2 = 4;
         public Point2d Resultpoint2D = new Point2d(0, 0);
         public double ResultRadius = 0;
         public Point2d point2DRoixy = new Point2d(0, 0);
-        public double  RadiusRoi = 0;
+        public double RadiusRoi = 0;
         public double Sigma = 1;
+
         public void ClearResult()
         {
             ResultRadius = 0;
@@ -62,28 +58,32 @@ namespace VisionProcess
             else
                 return 0;
         }
+
         public object Clone()
         {
             return this.MemberwiseClone();
         }
     }
+
     [Description("找圆")]
     public class VisionFitCircircle : VisionSetpBase
     {
-        
-        public VisionFitCircircle(string strItemName):  base(strItemName)
+        public VisionFitCircircle(string strItemName) : base(strItemName)
         {
             visionCtr = ctr;
         }
 
-        static VisionFindCircleCtr ctr = new VisionFindCircleCtr();
+        private static VisionFindCircleCtr ctr = new VisionFindCircleCtr();
+
         public override VisionSetpBase Clone()
         {
             VisionFitCircircle visionFitCircircle = new VisionFitCircircle(m_strStepName);
             visionFitCircircle.Read();
             return visionFitCircircle;
         }
+
         public VisionFitCircleParam visionFitCircleParam = new VisionFitCircleParam();
+
         public override object Read()
         {
             try
@@ -92,9 +92,9 @@ namespace VisionProcess
                 string strPath = VisionMgr.GetInstance().CurrentVisionProcessDir + "\\" + m_strStepName + "\\" + m_strStepName + ".xml";
                 //tempvisionFitCircleParam = (VisionFitCircleParam)AccessXmlSerializer.XmlToObject(strPath, visionFitCircleParam.GetType());
                 strPath = VisionMgr.GetInstance().CurrentVisionProcessDir + "\\" + m_strStepName + "\\" + m_strStepName + ".json";
-                VisionFitCircircle  fitCircircle = (VisionFitCircircle)AccessJosnSerializer.JsonToObject(strPath, this.GetType());
-                if(fitCircircle!=null  && fitCircircle.visionFitCircleParam!=null)
-                    visionFitCircleParam = tempvisionFitCircleParam= fitCircircle.visionFitCircleParam;
+                VisionFitCircircle fitCircircle = (VisionFitCircircle)AccessJosnSerializer.JsonToObject(strPath, this.GetType());
+                if (fitCircircle != null && fitCircircle.visionFitCircleParam != null)
+                    visionFitCircleParam = tempvisionFitCircleParam = fitCircircle.visionFitCircleParam;
                 else
                 {
                     _logger.Warn(m_strStepName + ": 视觉处理项目加载失败，请检查");
@@ -107,17 +107,18 @@ namespace VisionProcess
                 //string strPath = VisionMgr.GetInstance().CurrentVisionProcessDir + "\\" + m_strStepName + "\\" + m_strStepName + ".json";
                 //AccessJosnSerializer.ObjectToJson(strPath,obj);
             }
-            catch(Exception e )
+            catch (Exception e)
             {
-                _logger.Warn(m_strStepName + "读取失败:"+ e.Message);
+                _logger.Warn(m_strStepName + "读取失败:" + e.Message);
             }
             return null;
         }
+
         public override object Read(string strPath)
         {
             try
             {
-              //  string strPath = VisionMgr.GetInstance().CurrentVisionProcessDir + "\\" + m_strStepName + "\\" + m_strStepName + ".xml";
+                //  string strPath = VisionMgr.GetInstance().CurrentVisionProcessDir + "\\" + m_strStepName + "\\" + m_strStepName + ".xml";
                 VisionFitCircleParam tempvisionFitCircleParam = (VisionFitCircleParam)AccessXmlSerializer.XmlToObject(strPath, visionFitCircleParam.GetType());
                 if (tempvisionFitCircleParam != null)
                     visionFitCircleParam = tempvisionFitCircleParam;
@@ -128,7 +129,6 @@ namespace VisionProcess
                     return null;
                 }
                 return visionFitCircleParam;
-
             }
             catch (Exception e)
             {
@@ -136,6 +136,7 @@ namespace VisionProcess
             }
             return null;
         }
+
         public override void Save()
         {
             try
@@ -143,21 +144,19 @@ namespace VisionProcess
                 //string strPath = VisionMgr.GetInstance().CurrentVisionProcessDir + "\\" + m_strStepName + "\\" + m_strStepName + ".xml";
                 //if (visionFitCircleParam != null)
                 //    AccessXmlSerializer.ObjectToXml(strPath, visionFitCircleParam);
-                string strPath = VisionMgr.GetInstance().CurrentVisionProcessDir  + m_strStepName + "\\" + m_strStepName + ".json";
+                string strPath = VisionMgr.GetInstance().CurrentVisionProcessDir + m_strStepName + "\\" + m_strStepName + ".json";
                 AccessJosnSerializer.ObjectToJson(strPath, this);
             }
             catch (Exception e)
             {
                 _logger.Warn(m_strStepName + "保存失败:" + e.Message);
             }
-           
-
         }
+
         public override void Save(string strPath)
         {
             try
             {
-
                 //if (visionFitCircleParam != null)
                 //    AccessXmlSerializer.ObjectToXml(strPath, visionFitCircleParam);
 
@@ -167,11 +166,9 @@ namespace VisionProcess
             {
                 _logger.Warn(m_strStepName + "保存失败:" + e.Message);
             }
-
-
         }
 
-        // Local procedures 
+        // Local procedures
         //public void FitCirCle(HObject ho_image, HTuple hv_startangle, HTuple hv_endangle,
         //    HTuple hv_bw, HTuple hv_num, HTuple hv_Radius, HTuple hv_colcenter, HTuple hv_rowcenter,
         //    HTuple hv_len1, HTuple hv_len2, HTuple hv_sigma, HTuple hv_thresholdval, HTuple hv_transition,
@@ -180,16 +177,12 @@ namespace VisionProcess
         //    out HTuple hv_StartPhiCircleCenterFit, out HTuple hv_EndPhiCircleCenterFit,
         //    out HTuple hv_PointOrderCircleCenterFit)
         //{
-
-
-
-
-        //    // Local iconic variables 
+        //    // Local iconic variables
 
         //    HObject ho_Rectangle = null, ho_RectangleSM = null;
         //    HObject ho_ImageReduced = null, ho_Contour = null;
 
-        //    // Local control variables 
+        //    // Local control variables
 
         //    HTuple hv_t1 = null, hv_rowedgearr = null;
         //    HTuple hv_coledgearr = null, hv_step = null, hv_angle = null;
@@ -202,7 +195,7 @@ namespace VisionProcess
         //    HTuple hv_ColumnEdge = new HTuple(), hv_Amplitude = new HTuple();
         //    HTuple hv_Distance = new HTuple(), hv_t2 = new HTuple();
         //    HTuple hv_t = new HTuple(), hv_msg = new HTuple();
-        //    // Initialize local and output iconic variables 
+        //    // Initialize local and output iconic variables
         //    HOperatorSet.GenEmptyObj(out ho_Rectangle);
         //    HOperatorSet.GenEmptyObj(out ho_RectangleSM);
         //    HOperatorSet.GenEmptyObj(out ho_ImageReduced);
@@ -310,12 +303,11 @@ namespace VisionProcess
       out HTuple hv_StartPhiCircleCenterFit, out HTuple hv_EndPhiCircleCenterFit,
       out HTuple hv_PointOrderCircleCenterFit)
         {
-            
-            // Local iconic variables 
+            // Local iconic variables
             HObject ho_Rectangle = null, ho_RectangleSM = null;
             HObject ho_ImageReduced = null, ho_Contour = null;
 
-            // Local control variables 
+            // Local control variables
 
             HTuple hv_t1 = null, hv_rowedgearr = null;
             HTuple hv_coledgearr = null, hv_step = null, hv_angle = null;
@@ -328,7 +320,7 @@ namespace VisionProcess
             HTuple hv_ColumnEdge = new HTuple(), hv_Amplitude = new HTuple();
             HTuple hv_Distance = new HTuple(), hv_t2 = new HTuple();
             HTuple hv_t = new HTuple(), hv_msg = new HTuple();
-            // Initialize local and output iconic variables 
+            // Initialize local and output iconic variables
             HOperatorSet.GenEmptyObj(out ho_Rectangle);
             HOperatorSet.GenEmptyObj(out ho_RectangleSM);
             HOperatorSet.GenEmptyObj(out ho_ImageReduced);
@@ -400,14 +392,12 @@ namespace VisionProcess
                     {
                         continue;
                     }
-                    
-
                 }
                 bool brtn = true;
                 if ((int)(new HTuple((new HTuple(hv_rowedgearr.TupleLength())).TupleGreater(
                     3))) != 0)
                 {
-                    if(hv_rowedgearr.Length*0.7> 3)
+                    if (hv_rowedgearr.Length * 0.7 > 3)
                     {
                         ho_Contour.Dispose();
 
@@ -432,7 +422,6 @@ namespace VisionProcess
                     {
                         brtn = false;
                     }
-
                 }
                 else
                 {
@@ -456,11 +445,12 @@ namespace VisionProcess
                 return false;
             }
         }
+
         public override bool Process_image(HObject obj, VisionControl visionControl)
         {
-            if(visionFitCircleParam!=null)
+            if (visionFitCircleParam != null)
             {
-                int  bw;
+                int bw;
                 if (visionFitCircleParam.testDir == TestDir.从外到内) bw = 1;
                 else bw = 0;
                 string strTrans = "";
@@ -500,14 +490,13 @@ namespace VisionProcess
                         visionFitCircleParam.ResultRadius = 0;
                         return false;
                     }
-                    
                 }
-                catch( Exception e)
+                catch (Exception e)
                 {
                     visionFitCircleParam.Resultpoint2D.x = 0;
                     visionFitCircleParam.Resultpoint2D.y = 0;
                     visionFitCircleParam.ResultRadius = 0;
-                    _logger.Warn(m_strStepName + "参数为空,找园失败"+ e.Message);
+                    _logger.Warn(m_strStepName + "参数为空,找园失败" + e.Message);
                     return false;
                 }
             }
@@ -516,15 +505,13 @@ namespace VisionProcess
                 _logger.Warn(m_strStepName + "参数为空,找园失败");
                 return false;
             }
-               
-
-            
-           
         }
+
         public override object GetResult()
         {
             return visionFitCircleParam;
         }
+
         public override void ClearResult()
         {
             visionFitCircleParam?.ClearResult();

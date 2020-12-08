@@ -1,41 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using CommonTools;
+﻿using BaseDll;
 using MotionIoLib;
-using Communicate;
+using System;
 using System.Windows.Forms;
-using System.Diagnostics;
-using System.Threading;
-using UserCtrl;
-using EpsonRobot;
-using BaseDll;
-using UserData;
-using VisionProcess;
-using HalconDotNet;
-using System.IO;
-
-using CameraLib;
-using OtherDevice;
-using XYZDispensVision;
-using MachineSafe;
-
 
 namespace StationDemo
 {
-
-    public static  class ExternIO
+    public static class ExternIO
     {
-        public static bool  Set(this IOOut s,bool bval)
+        public static bool Set(this IOOut s, bool bval)
         {
-          
             return IOMgr.GetInstace().WriteIoBit(s.ToString(), bval);
         }
+
         public static bool SetOn(this IOOut s)
         {
             return IOMgr.GetInstace().WriteIoBit(s.ToString(), true);
         }
+
         public static bool SetOff(this IOOut s)
         {
             return IOMgr.GetInstace().WriteIoBit(s.ToString(), false);
@@ -45,18 +26,16 @@ namespace StationDemo
         {
             return IOMgr.GetInstace().ReadIoInBit(s.ToString());
         }
+
         public static bool OutVal(this IOOut s)
         {
             return IOMgr.GetInstace().ReadIoOutBit(s.ToString());
         }
-
-
     }
 
     public static class ExternParam
     {
-
-        public static T GetPrm<T>(  string name, bool isShowAlarm = true)
+        public static T GetPrm<T>(string name, bool isShowAlarm = true)
         {
             try
             {
@@ -86,9 +65,5 @@ namespace StationDemo
             }
             return default(T);
         }
-
-
     }
-
-
 }

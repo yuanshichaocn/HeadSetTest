@@ -1,44 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using MotionIoLib;
-using System.Threading.Tasks;
-using System.Threading;
-using HalconDotNet;
+﻿using BaseDll;
 using CameraLib;
-
 using CommonTools;
-using System.Diagnostics;
-using MotionIoLib;
 using EpsonRobot;
-using BaseDll;
+using HalconDotNet;
+using MotionIoLib;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 using VisionProcess;
+
 //using HalconLib;
 namespace StationDemo
 {
-
     public delegate bool ChangeStatusLabelTextDelegate(ref Button InvokeButton, ref System.Windows.Forms.ToolStripStatusLabel TargetControl, string TargetText);
+
     public delegate bool ChangeStatusLabelBackColorDelegate(ref Button InvokeButton, ref System.Windows.Forms.ToolStripStatusLabel TargetControl, System.Drawing.Color TargetColor);
+
     public partial class StationFormRobot : Form, IUserRightSwitch
     {
-        Stationbase m_Stationbase = null;
+        private Stationbase m_Stationbase = null;
+
         //整个IO列表
-        Dictionary<string, IOMgr.IoDefine> m_dicInput;
-        Dictionary<string, IOMgr.IoDefine> m_dicOutput;
+        private Dictionary<string, IOMgr.IoDefine> m_dicInput;
+
+        private Dictionary<string, IOMgr.IoDefine> m_dicOutput;
+
         //工站IO-->datagridview 第一列名
-        Dictionary<string, int> m_dicNameIndexInput = new Dictionary<string, int>();
-        Dictionary<string, int> m_dicNameIndexOutput = new Dictionary<string, int>();
+        private Dictionary<string, int> m_dicNameIndexInput = new Dictionary<string, int>();
+
+        private Dictionary<string, int> m_dicNameIndexOutput = new Dictionary<string, int>();
 
         public UserRight userRight { get; set; }
         protected PictureBox[] InputSignalPictureBoxArray, OutputSignalPictureBoxArray;
-        PictureBox TempPictureBox;
-        int TempOutputBit = 0;
+        private PictureBox TempPictureBox;
+        private int TempOutputBit = 0;
         private bool[] OutputBitStatus = new bool[16];
+
         public StationFormRobot()
         {
             InitializeComponent();
@@ -48,21 +49,25 @@ namespace StationDemo
         {
             button_start.Visible = bEnable;
         }
-        void ChangeState(Label labelControl, bool bval)
+
+        private void ChangeState(Label labelControl, bool bval)
         {
             labelControl.Text = bval ? "ON" : "OFF";
             labelControl.BackColor = bval ? Color.LightGreen : Color.LightBlue;
         }
-        void ChangeStateSeverOnBtn(Button button, bool bval)
+
+        private void ChangeStateSeverOnBtn(Button button, bool bval)
         {
             button.Text = bval ? "伺服ON" : "伺服OFF";
             button.BackColor = bval ? Color.LightGreen : Color.LightBlue;
         }
-        void ChangeAxisPos(Label label, long pos)
+
+        private void ChangeAxisPos(Label label, long pos)
         {
             label.Text = pos.ToString();
         }
-      void UpdatadataGridView_PointInfo()
+
+        private void UpdatadataGridView_PointInfo()
         {
             dataGridView_PointInfo.Rows.Clear();
             Dictionary<string, PointInfo> tempdic = StationMgr.GetInstance().GetStation(this.Name).GetStationPointDic();
@@ -74,23 +79,23 @@ namespace StationDemo
                     );
             }
         }
+
         public void OutIoWhenClickBtn(string str)
         {
             bool bState = IOMgr.GetInstace().ReadIoOutBit(str);
             IOMgr.GetInstace().WriteIoBit(str, !bState);
         }
+
         public void OutIoWhenClickDownBtn(string str)
         {
-        
         }
+
         public void OutIoWhenClickUpBtn(string str)
         {
-            
         }
+
         private void StationForm_Load(object sender, EventArgs e)
         {
-           
-
             UpdataGridViewHeader();
             int width = 0; int height = 0;
             m_Stationbase = StationMgr.GetInstance().GetStation(this);
@@ -101,7 +106,8 @@ namespace StationDemo
             m_dicInput = IOMgr.GetInstace().GetInputDic();
             m_dicOutput = IOMgr.GetInstace().GetOutputDic();
 
-    #region IO 配置
+            #region IO 配置
+
             int indexInput = 0;
             foreach (var tem in m_Stationbase.m_listIoInput)
             {
@@ -125,10 +131,8 @@ namespace StationDemo
             int indexOutput = 0;
             foreach (var tem in m_Stationbase.m_listIoOutput)
             {
-
                 if (m_dicOutput.ContainsKey(tem))
                 {
- 
                     indexOutput++;
                     userBtnPanel_Output.AddFlag(tem);
                     userBtnPanel_Output.SetBtnClickEvent(tem, OutIoWhenClickBtn);
@@ -136,7 +140,6 @@ namespace StationDemo
                     userBtnPanel_Output.SetBtnClickUpEvent(tem, OutIoWhenClickUpBtn);
                     userBtnPanel_Output.SetBtnState(tem, IOMgr.GetInstace().ReadIoOutBit(tem));
                 }
-
                 else
                 {
                     MessageBox.Show(tem + "不在IO 表中，请检查工站IO配置", "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -145,12 +148,13 @@ namespace StationDemo
 
             if (userBtnPanel_Output.Count == 0)
             {
-
                 userBtnPanel_Output.Visible = false;
             }
             userBtnPanel_Output.m_nNumPerRow = 2;
             userBtnPanel_Output.Update();
-#endregion
+
+            #endregion IO 配置
+
             sys.g_eventRightChanged += ChangedUserRight;
             sys.g_User = sys.g_User;
             visionControl1.InitWindow();
@@ -173,9 +177,10 @@ namespace StationDemo
             ChagedPrItem("");
             HOperatorSet.SetDraw(visionControl1.GetHalconWindow(), "margin");
         }
+
         public void ChagedPrItem(string name)
         {
-            if( InvokeRequired )
+            if (InvokeRequired)
             {
                 this.BeginInvoke(new Action(() => { ChagedPrItem(name); }));
             }
@@ -188,12 +193,13 @@ namespace StationDemo
                 }
             }
         }
+
         public void UpdataGridViewHeader()
         {
             int RobotAxisNum = 4;//RobotMgr.GetInstance().GetRobotAxisMax("抓放料机械手") - RobotMgr.GetInstance().GetRobotAxisMin("抓放料机械手")+1;
-          if (RobotAxisNum != 4 && RobotAxisNum != 6)
+            if (RobotAxisNum != 4 && RobotAxisNum != 6)
                 return;
-          if(RobotAxisNum==4)
+            if (RobotAxisNum == 4)
             {
                 dataGridView_PointInfo.Columns[5].Width = 0;
                 dataGridView_PointInfo.Columns[5].Visible = false;
@@ -206,15 +212,11 @@ namespace StationDemo
                 dataGridView_PointInfo.Columns[7].Width = 0;
                 dataGridView_PointInfo.Columns[7].Visible = false;
             }
-
         }
+
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-
-
         }
-
-
 
         private void button_homeX_Click(object sender, EventArgs e)
         {
@@ -239,7 +241,6 @@ namespace StationDemo
                         MessageBox.Show("机械人90秒超时" + "回原点失败", "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         break;
                     }
-
                 }
                 button_homeX.Invoke(
                       new Action(() =>
@@ -249,14 +250,13 @@ namespace StationDemo
                           button_homeX.BackColor = Color.LightGreen;
                       })
                      );
-
             });
-
         }
+
         #region 机器人点动
+
         private void JogStart(object sender, MouseEventArgs e)
         {
-
             if (comboBox_SelMotionType.SelectedItem != null && comboBox_SelMotionType.SelectedItem.ToString() != "Jog")
                 return;
             int nAxisNo = 1;
@@ -268,75 +268,86 @@ namespace StationDemo
                     MotionMgr.GetInstace().ServoOn((short)nAxisNo);
                     MotionMgr.GetInstace().JogMove(nAxisNo, true, 0, 2);
                     break;
+
                 case "button_Xnegtive":
                     nAxisNo = StationMgr.GetInstance().GetStation(this).AxisX;
                     if (nAxisNo < 0) return;
                     MotionMgr.GetInstace().ServoOn((short)nAxisNo);
                     MotionMgr.GetInstace().JogMove(nAxisNo, false, 0, 2);
                     break;
+
                 case "button_Ypositive":
                     nAxisNo = StationMgr.GetInstance().GetStation(this).AxisY;
                     if (nAxisNo < 0) return;
                     MotionMgr.GetInstace().ServoOn((short)nAxisNo);
                     MotionMgr.GetInstace().JogMove(nAxisNo, true, 0, 2);
                     break;
+
                 case "button_Ynegtive":
                     nAxisNo = StationMgr.GetInstance().GetStation(this).AxisY;
                     if (nAxisNo < 0) return;
                     MotionMgr.GetInstace().ServoOn((short)nAxisNo);
                     MotionMgr.GetInstace().JogMove(nAxisNo, false, 0, 2);
                     break;
+
                 case "button_Zpositive":
                     nAxisNo = StationMgr.GetInstance().GetStation(this).AxisZ;
                     if (nAxisNo < 0) return;
                     MotionMgr.GetInstace().ServoOn((short)nAxisNo);
                     MotionMgr.GetInstace().JogMove(nAxisNo, true, 0, 2);
                     break;
+
                 case "button_Znegtive":
                     nAxisNo = StationMgr.GetInstance().GetStation(this).AxisZ;
                     if (nAxisNo < 0) return;
                     MotionMgr.GetInstace().ServoOn((short)nAxisNo);
                     MotionMgr.GetInstace().JogMove(nAxisNo, false, 0, 2);
                     break;
+
                 case "button_Upositive":
                     nAxisNo = StationMgr.GetInstance().GetStation(this).AxisU;
                     if (nAxisNo < 0) return;
                     MotionMgr.GetInstace().ServoOn((short)nAxisNo);
                     MotionMgr.GetInstace().JogMove(nAxisNo, true, 0, 2);
                     break;
+
                 case "button_Unegtive":
                     nAxisNo = StationMgr.GetInstance().GetStation(this).AxisU;
                     if (nAxisNo < 0) return;
                     MotionMgr.GetInstace().ServoOn((short)nAxisNo);
                     MotionMgr.GetInstace().JogMove(nAxisNo, false, 0, 2);
                     break;
+
                 case "button_Txpositive":
                     nAxisNo = StationMgr.GetInstance().GetStation(this).AxisTx;
                     if (nAxisNo < 0) return;
                     MotionMgr.GetInstace().ServoOn((short)nAxisNo);
                     MotionMgr.GetInstace().JogMove(nAxisNo, true, 0, 2);
                     break;
+
                 case "button_Txnegtive":
                     nAxisNo = StationMgr.GetInstance().GetStation(this).AxisTx;
                     if (nAxisNo < 0) return;
                     MotionMgr.GetInstace().ServoOn((short)nAxisNo);
                     MotionMgr.GetInstace().JogMove(nAxisNo, false, 0, 2);
                     break;
+
                 case "button_Typositive":
                     nAxisNo = StationMgr.GetInstance().GetStation(this).AxisTy;
                     if (nAxisNo < 0) return;
                     MotionMgr.GetInstace().ServoOn((short)nAxisNo);
                     MotionMgr.GetInstace().JogMove(nAxisNo, true, 0, 2);
                     break;
+
                 case "button_Tynegtive":
                     nAxisNo = StationMgr.GetInstance().GetStation(this).AxisTy;
                     if (nAxisNo < 0) return;
                     MotionMgr.GetInstace().ServoOn((short)nAxisNo);
                     MotionMgr.GetInstace().JogMove(nAxisNo, false, 0, 2);
                     break;
-
             }
         }
+
         private void JogEnd(object sender, MouseEventArgs e)
         {
             if (comboBox_SelMotionType.SelectedItem != null && comboBox_SelMotionType.SelectedItem.ToString() != "Jog")
@@ -350,99 +361,114 @@ namespace StationDemo
                     if (nAxisNo < 0) return;
                     MotionMgr.GetInstace().StopAxis(nAxisNo);
                     break;
+
                 case "button_Xnegtive":
                     nAxisNo = StationMgr.GetInstance().GetStation(this).AxisX;
                     if (nAxisNo < 0) return;
                     MotionMgr.GetInstace().StopAxis(nAxisNo);
                     break;
+
                 case "button_Ypositive":
                     nAxisNo = StationMgr.GetInstance().GetStation(this).AxisY;
                     if (nAxisNo < 0) return;
                     MotionMgr.GetInstace().StopAxis(nAxisNo);
                     break;
+
                 case "button_Ynegtive":
                     nAxisNo = StationMgr.GetInstance().GetStation(this).AxisY;
                     if (nAxisNo < 0) return;
                     MotionMgr.GetInstace().StopAxis(nAxisNo);
                     break;
+
                 case "button_Zpositive":
                     nAxisNo = StationMgr.GetInstance().GetStation(this).AxisZ;
                     if (nAxisNo < 0) return;
                     MotionMgr.GetInstace().StopAxis(nAxisNo);
                     break;
+
                 case "button_Znegtive":
                     nAxisNo = StationMgr.GetInstance().GetStation(this).AxisZ;
                     if (nAxisNo < 0) return;
                     MotionMgr.GetInstace().StopAxis(nAxisNo);
                     break;
+
                 case "button_Upositive":
                     nAxisNo = StationMgr.GetInstance().GetStation(this).AxisU;
                     if (nAxisNo < 0) return;
                     MotionMgr.GetInstace().StopAxis(nAxisNo);
                     break;
+
                 case "button_Unegtive":
                     nAxisNo = StationMgr.GetInstance().GetStation(this).AxisU;
                     if (nAxisNo < 0) return;
                     MotionMgr.GetInstace().StopAxis(nAxisNo);
                     break;
+
                 case "button_Txpositive":
                     nAxisNo = StationMgr.GetInstance().GetStation(this).AxisTx;
                     if (nAxisNo < 0) return;
                     MotionMgr.GetInstace().StopAxis(nAxisNo);
                     break;
+
                 case "button_Txnegtive":
                     nAxisNo = StationMgr.GetInstance().GetStation(this).AxisTx;
                     if (nAxisNo < 0) return;
                     MotionMgr.GetInstace().StopAxis(nAxisNo);
                     break;
+
                 case "button_Typositive":
                     nAxisNo = StationMgr.GetInstance().GetStation(this).AxisTy;
                     if (nAxisNo < 0) return;
                     MotionMgr.GetInstace().StopAxis(nAxisNo);
                     break;
+
                 case "button_Tynegtive":
                     nAxisNo = StationMgr.GetInstance().GetStation(this).AxisTy;
                     if (nAxisNo < 0) return;
                     MotionMgr.GetInstace().StopAxis(nAxisNo);
                     break;
-
             }
         }
+
         private void SelMoveType(string strRobotName, string strDistance, int nAxisNo, bool bpostive, int speed)
         {
-
             int k = bpostive ? 1 : -1;
             switch (strDistance)
             {
                 case "0.1":
                     RobotMgr.GetInstance().RelativeMove(strRobotName, nAxisNo, k * 0.1, speed);
                     break;
+
                 case "0.5":
                     RobotMgr.GetInstance().RelativeMove(strRobotName, nAxisNo, k * 0.5, speed);
                     break;
+
                 case "1":
                     RobotMgr.GetInstance().RelativeMove(strRobotName, nAxisNo, k * 1, speed);
                     break;
+
                 case "5":
                     RobotMgr.GetInstance().RelativeMove(strRobotName, nAxisNo, k * 5, speed);
                     break;
+
                 case "10":
                     RobotMgr.GetInstance().RelativeMove(strRobotName, nAxisNo, k * 10, speed);
                     break;
+
                 case "50":
                     RobotMgr.GetInstance().RelativeMove(strRobotName, nAxisNo, k * 50, speed);
                     break;
+
                 case "100":
                     RobotMgr.GetInstance().RelativeMove(strRobotName, nAxisNo, k * 100, speed);
                     break;
+
                 case "1000":
                     RobotMgr.GetInstance().RelativeMove(strRobotName, nAxisNo, k * 1000, speed);
                     break;
-
-
             }
-
         }
+
         private void button_Xpositive_Click(object sender, EventArgs e)
         {
             if (comboBox_SelMotionType.SelectedItem == null)
@@ -484,7 +510,6 @@ namespace StationDemo
                         MessageBox.Show("机械人90秒超时" + "运动失败", "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         break;
                     }
-
                 }
                 button_Xpositive.Invoke(
                       new Action(() =>
@@ -495,9 +520,9 @@ namespace StationDemo
                           EnableBtns(true);
                       })
                      );
-
             });
         }
+
         private void button_Xnegtive_Click(object sender, EventArgs e)
         {
             if (comboBox_SelMotionType.SelectedItem == null)
@@ -539,7 +564,6 @@ namespace StationDemo
                         MessageBox.Show("机械人90秒超时" + "运动失败", "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         break;
                     }
-
                 }
                 button_Xnegtive.Invoke(
                       new Action(() =>
@@ -550,9 +574,9 @@ namespace StationDemo
                           EnableBtns(true);
                       })
                      );
-
             });
         }
+
         private void button_Ypostive_Click(object sender, EventArgs e)
         {
             if (comboBox_SelMotionType.SelectedItem == null)
@@ -595,7 +619,6 @@ namespace StationDemo
                         MessageBox.Show("机械人90秒超时" + "运动失败", "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         break;
                     }
-
                 }
                 button_Ypositive.Invoke(
                       new Action(() =>
@@ -606,9 +629,9 @@ namespace StationDemo
                           EnableBtns(true);
                       })
                      );
-
             });
         }
+
         private void button_Ynegtive_Click(object sender, EventArgs e)
         {
             if (comboBox_SelMotionType.SelectedItem == null)
@@ -624,7 +647,7 @@ namespace StationDemo
             CameraMgr.GetInstance().SetAcquisitionMode(comboBox_SelCamera.Text);
 
             string strSelDistance = comboBox_SelMotionType.SelectedItem.ToString();
-           
+
             button_Ynegtive.Text = "Y-Moving";
             button_Ynegtive.BackColor = Color.LightBlue;
             button_Ynegtive.Enabled = false;
@@ -652,7 +675,6 @@ namespace StationDemo
                         MessageBox.Show("机械人90秒超时" + "运动失败", "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         break;
                     }
-
                 }
                 button_Ynegtive.Invoke(
                       new Action(() =>
@@ -663,9 +685,9 @@ namespace StationDemo
                           EnableBtns(true);
                       })
                      );
-
             });
         }
+
         private void button_Zpostive_Click(object sender, EventArgs e)
         {
             if (comboBox_SelMotionType.SelectedItem == null)
@@ -699,15 +721,14 @@ namespace StationDemo
             {
                 Stopwatch stopwatch = new Stopwatch();
                 stopwatch.Restart();
-               // while (!ts.IsCompleted)
-               while(!ScaraRobot.GetInstance().InPos)
+                // while (!ts.IsCompleted)
+                while (!ScaraRobot.GetInstance().InPos)
                 {
                     if (stopwatch.ElapsedMilliseconds > 90 * 1000)
                     {
                         MessageBox.Show("机械人90秒超时" + "运动失败", "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         break;
                     }
-
                 }
                 button_Zpositive.Invoke(
                       new Action(() =>
@@ -718,11 +739,9 @@ namespace StationDemo
                           EnableBtns(true);
                       })
                      );
-
             });
-
-
         }
+
         private void button_Znegtive_Click(object sender, EventArgs e)
         {
             if (comboBox_SelMotionType.SelectedItem == null)
@@ -749,7 +768,7 @@ namespace StationDemo
                 coordinate.Z = coordinate.Z - strSelDistance.ToDouble();
                 HandDirection handDirection = ScaraRobot.GetInstance().CurrentHandDirection;
                 ScaraRobot.GetInstance().Go(coordinate, handDirection);
-               
+
                 Thread.Sleep(100);
             });
             ts.Start();
@@ -758,14 +777,13 @@ namespace StationDemo
                 Stopwatch stopwatch = new Stopwatch();
                 stopwatch.Restart();
                 //while (!ts.IsCompleted)
-               while (!ScaraRobot.GetInstance().InPos)
+                while (!ScaraRobot.GetInstance().InPos)
                 {
                     if (stopwatch.ElapsedMilliseconds > 90 * 1000)
                     {
                         MessageBox.Show("机械人90秒超时" + "运动失败", "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         break;
                     }
-
                 }
                 button_Znegtive.Invoke(
                       new Action(() =>
@@ -776,10 +794,9 @@ namespace StationDemo
                           EnableBtns(true);
                       })
                      );
-
             });
-
         }
+
         private void button_Upostive_Click(object sender, EventArgs e)
         {
             if (comboBox_SelMotionType.SelectedItem == null)
@@ -814,15 +831,14 @@ namespace StationDemo
             {
                 Stopwatch stopwatch = new Stopwatch();
                 stopwatch.Restart();
-               // while (!ts.IsCompleted)
-               while(!ScaraRobot.GetInstance().InPos)
+                // while (!ts.IsCompleted)
+                while (!ScaraRobot.GetInstance().InPos)
                 {
                     if (stopwatch.ElapsedMilliseconds > 90 * 1000)
                     {
                         MessageBox.Show("机械人90秒超时" + "运动失败", "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         break;
                     }
-
                 }
                 button_Upositive.Invoke(
                       new Action(() =>
@@ -833,9 +849,9 @@ namespace StationDemo
                           EnableBtns(true);
                       })
                      );
-
             });
         }
+
         private void buttonU_negtive_Click(object sender, EventArgs e)
         {
             if (comboBox_SelMotionType.SelectedItem == null)
@@ -851,7 +867,7 @@ namespace StationDemo
             CameraMgr.GetInstance().SetAcquisitionMode(comboBox_SelCamera.Text);
 
             string strSelDistance = comboBox_SelMotionType.SelectedItem.ToString();
-          //  SelMoveType("抓放料机械手", strSelDistance, 3, false, 10);
+            //  SelMoveType("抓放料机械手", strSelDistance, 3, false, 10);
             button_Unegtive.Text = "U-Moving";
             button_Unegtive.BackColor = Color.LightBlue;
             button_Unegtive.Enabled = false;
@@ -879,7 +895,6 @@ namespace StationDemo
                         MessageBox.Show("机械人90秒超时" + "运动失败", "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         break;
                     }
-
                 }
                 button_Unegtive.Invoke(
                       new Action(() =>
@@ -890,18 +905,18 @@ namespace StationDemo
                           EnableBtns(true);
                       })
                      );
-
             });
-
         }
+
         private void button_stop_Click(object sender, EventArgs e)
         {
-
         }
-        #endregion 
-        private void CloseForm(object sender, FormClosedEventArgs e)
-        {
 
+        #endregion 机器人点动
+
+        private void CloseForm(object sender, FormClosedEventArgs e)
+
+        {
         }
 
         private void button_AllAxisMove_Click(object sender, EventArgs e)
@@ -928,17 +943,20 @@ namespace StationDemo
             HandDirection handDirection = dataGridView_PointInfo.Rows[indexRow].Cells[7].Value.ToString() == "左手系" ? HandDirection.Lefty : HandDirection.Right;
             button_AllAxisMove.Enabled = false;
             EnableBtns(false);
-            Action action = new Action(() => {
+            Action action = new Action(() =>
+            {
                 // RobotMgr.GetInstance().Jump("抓放料机械手", posID);
 
                 double limtZ = coordinate.Z > -50 ? coordinate.Z + 0.2 : -50;
                 limtZ = limtZ >= ScaraRobot.GetInstance().CurrentPosition.Z ? limtZ : ScaraRobot.GetInstance().CurrentPosition.Z + 0.2;
                 ScaraRobot.GetInstance().Jump(coordinate, handDirection, limtZ);
             });
-            action.BeginInvoke((ar) => 
+            action.BeginInvoke((ar) =>
             {
                 button_AllAxisMove.Invoke(
-                    (MethodInvoker)(() => { button_AllAxisMove.Enabled = true;
+                    (MethodInvoker)(() =>
+                    {
+                        button_AllAxisMove.Enabled = true;
                         EnableBtns(true);
                     }), null
                     );
@@ -968,15 +986,19 @@ namespace StationDemo
                 case 1:
                     nAxis = StationMgr.GetInstance().GetStation(this).AxisX;
                     break;
+
                 case 2:
                     nAxis = StationMgr.GetInstance().GetStation(this).AxisY;
                     break;
+
                 case 3:
                     nAxis = StationMgr.GetInstance().GetStation(this).AxisZ;
                     break;
+
                 case 4:
                     nAxis = StationMgr.GetInstance().GetStation(this).AxisU;
                     break;
+
                 default:
                     tempInfoForm.m_OperateInfoText = "轴号选择错误";
                     tempInfoForm.ShowDialog();
@@ -986,6 +1008,7 @@ namespace StationDemo
             if (nAxis != -1)
                 MotionMgr.GetInstace().AbsMove(nAxis, pos, 2);
         }
+
         private bool CheckReName(string[] staPointName)
         {
             if (staPointName == null)
@@ -1002,6 +1025,7 @@ namespace StationDemo
             }
             return false;
         }
+
         private void button_Save_Click(object sender, EventArgs e)
         {
             From_OKCancel tempInfoForm = new From_OKCancel();
@@ -1058,17 +1082,16 @@ namespace StationDemo
                         staPoint.Add(strPonitName, temp);
                     }
                     PointArrIndataGridView_PointInfo.Add(strPonitName);
-       
                 }
             }
             List<string> DeletePointName = new List<string>();
             DeletePointName.Clear();
-            foreach ( var tem in staPoint)
+            foreach (var tem in staPoint)
             {
                 if (!PointArrIndataGridView_PointInfo.Contains(tem.Key))
                     DeletePointName.Add(tem.Key);
             }
-            foreach(var tem in DeletePointName)
+            foreach (var tem in DeletePointName)
             {
                 staPoint.Remove(tem);
             }
@@ -1110,16 +1133,15 @@ namespace StationDemo
                 PointInfo tempPoint;
 
                 PositionInfo robotPoint = new PositionInfo();
-         
-                
-               
 
-                 indexRow = dataGridView_PointInfo.CurrentCell.RowIndex;
-                 indexCol = dataGridView_PointInfo.CurrentCell.ColumnIndex;
+                indexRow = dataGridView_PointInfo.CurrentCell.RowIndex;
+                indexCol = dataGridView_PointInfo.CurrentCell.ColumnIndex;
                 string posID = "P" + indexRow;
                 Thread.Sleep(200);
-                Action GetAndSaveRobotPos = new Action(() => {
+                Action GetAndSaveRobotPos = new Action(() =>
+                {
                     #region 远程控制
+
 #if false
                     if (!RobotMgr.GetInstance().GetAxisActPos("抓放料机械手", ref robotPoint))
                     {
@@ -1129,36 +1151,36 @@ namespace StationDemo
                     if (!RobotMgr.GetInstance().SetPointPos("抓放料机械手", posID, strPointName, robotPoint)) { MessageBox.Show("示教设置点位失败"); return; }
                     if (!RobotMgr.GetInstance().SavePointPos("抓放料机械手")) { MessageBox.Show("示教保存到点位到robit.pts文件失败"); return; }
 #endif
-                    #endregion
-                    robotPoint.X= tempPoint.pointX = ScaraRobot.GetInstance().CurrentPosition.X;
-                    robotPoint.Y= tempPoint.pointY = ScaraRobot.GetInstance().CurrentPosition.Y;
-                    robotPoint.Z= tempPoint.pointZ = ScaraRobot.GetInstance().CurrentPosition.Z;
-                    robotPoint.U= tempPoint.pointU = ScaraRobot.GetInstance().CurrentPosition.U;
-                    robotPoint.V= tempPoint.pointTx = 0;
-                    robotPoint.W= tempPoint.pointTy = 0;
+
+                    #endregion 远程控制
+
+                    robotPoint.X = tempPoint.pointX = ScaraRobot.GetInstance().CurrentPosition.X;
+                    robotPoint.Y = tempPoint.pointY = ScaraRobot.GetInstance().CurrentPosition.Y;
+                    robotPoint.Z = tempPoint.pointZ = ScaraRobot.GetInstance().CurrentPosition.Z;
+                    robotPoint.U = tempPoint.pointU = ScaraRobot.GetInstance().CurrentPosition.U;
+                    robotPoint.V = tempPoint.pointTx = 0;
+                    robotPoint.W = tempPoint.pointTy = 0;
                     robotPoint.Hand = ScaraRobot.GetInstance().CurrentHandDirection == HandDirection.Right;
                 });
-              GetAndSaveRobotPos.BeginInvoke((ar) =>
-                {
-                    button_AllAxisMove.Invoke(
-                        (MethodInvoker)(() => {
-                            dataGridView_PointInfo.Rows[indexRow].Cells[1].Value = tempPoint.pointX = robotPoint.X;
-                            dataGridView_PointInfo.Rows[indexRow].Cells[2].Value = tempPoint.pointY = robotPoint.Y;
-                            dataGridView_PointInfo.Rows[indexRow].Cells[3].Value = tempPoint.pointZ = robotPoint.Z;
-                            dataGridView_PointInfo.Rows[indexRow].Cells[4].Value = tempPoint.pointU = robotPoint.U;
+                GetAndSaveRobotPos.BeginInvoke((ar) =>
+                  {
+                      button_AllAxisMove.Invoke(
+                          (MethodInvoker)(() =>
+                          {
+                              dataGridView_PointInfo.Rows[indexRow].Cells[1].Value = tempPoint.pointX = robotPoint.X;
+                              dataGridView_PointInfo.Rows[indexRow].Cells[2].Value = tempPoint.pointY = robotPoint.Y;
+                              dataGridView_PointInfo.Rows[indexRow].Cells[3].Value = tempPoint.pointZ = robotPoint.Z;
+                              dataGridView_PointInfo.Rows[indexRow].Cells[4].Value = tempPoint.pointU = robotPoint.U;
 
-                            dataGridView_PointInfo.Rows[indexRow].Cells[5].Value = tempPoint.pointTx = robotPoint.V;
-                            dataGridView_PointInfo.Rows[indexRow].Cells[6].Value = tempPoint.pointTy = robotPoint.W;
-                            tempPoint.handedSystem = robotPoint.Hand;
-                            dataGridView_PointInfo.Rows[indexRow].Cells[7].Value = robotPoint.Hand ? "右手系" : "左手系";
-                            tempPoint.pointTx = 0; tempPoint.pointTy = 0;
-                            StationMgr.GetInstance().GetStation(this.Name).AddPoint(strPointName, tempPoint);
-
-                        }), null
-                        );
-                }, null);
-               
-
+                              dataGridView_PointInfo.Rows[indexRow].Cells[5].Value = tempPoint.pointTx = robotPoint.V;
+                              dataGridView_PointInfo.Rows[indexRow].Cells[6].Value = tempPoint.pointTy = robotPoint.W;
+                              tempPoint.handedSystem = robotPoint.Hand;
+                              dataGridView_PointInfo.Rows[indexRow].Cells[7].Value = robotPoint.Hand ? "右手系" : "左手系";
+                              tempPoint.pointTx = 0; tempPoint.pointTy = 0;
+                              StationMgr.GetInstance().GetStation(this.Name).AddPoint(strPointName, tempPoint);
+                          }), null
+                          );
+                  }, null);
             }
         }
 
@@ -1171,7 +1193,7 @@ namespace StationDemo
             pCamer.SetTriggerMode(CameraModeType.Software);
             Thread.Sleep(100);
             CameraMgr.GetInstance().GetCamera(comboBox_SelCamera.SelectedItem.ToString()).SetAcquisitionMode();
-           // CameraMgr.GetInstance().GetCamera(comboBox_SelCamera.SelectedItem.ToString()).wnd = hWindowControl1.HalconID;
+            // CameraMgr.GetInstance().GetCamera(comboBox_SelCamera.SelectedItem.ToString()).wnd = hWindowControl1.HalconID;
             CameraMgr.GetInstance().GetCamera(comboBox_SelCamera.SelectedItem.ToString()).StartGrab();
         }
 
@@ -1194,32 +1216,31 @@ namespace StationDemo
 
         private void button_start_Click(object sender, EventArgs e)
         {
-            
             string strName = this.Name;
             Stationbase sta = StationMgr.GetInstance().GetStation(strName);
             for (int i = 0; i < comboBox_SelCamera.Items.Count; i++)
             {
-               // if (comboBox_SelCamera.Items[i].ToString() == comboBox_SelCamera.Text) continue;
+                // if (comboBox_SelCamera.Items[i].ToString() == comboBox_SelCamera.Text) continue;
                 CameraMgr.GetInstance().ClaerPr(comboBox_SelCamera.Items[i].ToString());
                 CameraMgr.GetInstance().SetTriggerSoftMode(comboBox_SelCamera.Items[i].ToString());
             }
-            Action action = new Action( ()=>
-            {
-                sta.VisionControl = visionControl1;
-                sta.ManualProcessWork();
-            });
+            Action action = new Action(() =>
+           {
+               sta.VisionControl = visionControl1;
+               sta.ManualProcessWork();
+           });
             button_start.Enabled = false;
             action.BeginInvoke((ar) =>
             {
                 button_start.Invoke(
                     (MethodInvoker)(
-                    () => {
-                            button_start.Enabled = true;
-                          }
-                    ),null
+                    () =>
+                    {
+                        button_start.Enabled = true;
+                    }
+                    ), null
                     );
             }, null);
-
         }
 
         private void ShowFirist(object sender, EventArgs e)
@@ -1233,12 +1254,8 @@ namespace StationDemo
                     //  CameraMgr.GetInstance().GetCamera(CameraNameArr[i]).wnd = hWindowControl1.HalconID;
                 }
                 comboBox_SelCamera.SelectedIndex = 0;
-
-
             }
-
         }
-
 
         private void PointDel(object sender, DataGridViewRowsRemovedEventArgs e)
         {
@@ -1248,9 +1265,10 @@ namespace StationDemo
             //    string strPointName = dataGridView_PointInfo.Rows[indexRow].Cells[0].ToString();
             //    ConfigToolMgr.GetInstance().DelPoint(this.Name, strPointName);
         }
-        void UpdataRobotPos(Coordinate coordinate)
+
+        private void UpdataRobotPos(Coordinate coordinate)
         {
-            if(InvokeRequired)
+            if (InvokeRequired)
             {
                 BeginInvoke(new Action(() => { UpdataRobotPos(coordinate); }));
             }
@@ -1261,20 +1279,20 @@ namespace StationDemo
                 label_PosZ.Text = coordinate.Z.ToString("F3");
                 label_PosU.Text = coordinate.U.ToString("F3");
             }
-
         }
-        public  void  UpdataHandle(HandDirection handDirection)
+
+        public void UpdataHandle(HandDirection handDirection)
         {
-            if(InvokeRequired)
+            if (InvokeRequired)
             {
-                BeginInvoke(new Action(() => { UpdataHandle(handDirection) ; }));
-            
+                BeginInvoke(new Action(() => { UpdataHandle(handDirection); }));
             }
             else
             {
                 labelHandSystem.Text = handDirection == HandDirection.Lefty ? "左手系" : "右手系";
             }
         }
+
         private void OnVisibleChanged(object sender, EventArgs e)
         {
             if (Visible)
@@ -1285,7 +1303,6 @@ namespace StationDemo
                 ScaraRobot.GetInstance().ChangedHandStateEvent += UpdataHandle;
                 IOMgr.GetInstace().m_eventIoInputChanageByName += ChangedIoInState;
                 IOMgr.GetInstace().m_eventIoOutputChanageByName += ChangedIoOutState;
-
             }
             else
             {
@@ -1295,10 +1312,8 @@ namespace StationDemo
                 ScaraRobot.GetInstance().ChangedHandStateEvent -= UpdataHandle;
                 IOMgr.GetInstace().m_eventIoInputChanageByName -= ChangedIoInState;
                 IOMgr.GetInstace().m_eventIoOutputChanageByName -= ChangedIoOutState;
-
             }
         }
-
 
         private void EnableBtns(bool bEnable)
         {
@@ -1312,6 +1327,7 @@ namespace StationDemo
             button_Xpositive.Enabled = bEnable;
             button_AllAxisMove.Enabled = bEnable;
         }
+
         private void button_ServoOnX_Click(object sender, EventArgs e)
         {
             if (button_ServoOnX.Text == "伺服OFF")
@@ -1323,15 +1339,12 @@ namespace StationDemo
             }
             else
             {
-               // RobotMgr.GetInstance().ServoOff("抓放料机械手");
+                // RobotMgr.GetInstance().ServoOff("抓放料机械手");
                 button_ServoOnX.Text = "伺服OFF";
                 ScaraRobot.GetInstance().SeverOn(false);
                 EnableBtns(false);
             }
-
         }
-
-
 
         public void ChangedIoInState(string IoName, bool bStateCurrent)
         {
@@ -1343,9 +1356,9 @@ namespace StationDemo
             else
             {
                 userPanel_Input.SetLebalState(IoName, bStateCurrent);
-
             }
         }
+
         public void ChangedIoOutState(string IoName, bool bStateCurrent)
         {
             int nRow = 0;
@@ -1357,9 +1370,7 @@ namespace StationDemo
             {
                 userBtnPanel_Output.SetBtnState(IoName, bStateCurrent);
             }
-
         }
-
 
         private void OnSelectionDataGridView(object sender, EventArgs e)
         {
@@ -1367,15 +1378,12 @@ namespace StationDemo
             dgv.ClearSelection();
         }
 
-     
-
         public void ChangedUserRight(User CurrentUser)
         {
             if (InvokeRequired)
                 this.BeginInvoke(new Action(() => ChangedUserRight(CurrentUser)));
             else
             {
-
                 switch ((int)CurrentUser._userRight)
                 {
                     case (int)UserRight.客户操作员:
@@ -1388,6 +1396,7 @@ namespace StationDemo
                         dataGridView_PointInfo.ReadOnly = true;
 
                         break;
+
                     case (int)UserRight.调试工程师:
                         button_RecordPoint.Enabled = true;
                         button_Save.Enabled = true;
@@ -1398,6 +1407,7 @@ namespace StationDemo
                         dataGridView_PointInfo.ReadOnly = true;
                         dataGridView_PointInfo.Columns[0].ReadOnly = true;
                         break;
+
                     case (int)UserRight.软件工程师:
                         button_RecordPoint.Enabled = true;
                         button_Save.Enabled = true;
@@ -1408,6 +1418,7 @@ namespace StationDemo
 
                         dataGridView_PointInfo.ReadOnly = false;
                         break;
+
                     case (int)UserRight.超级管理员:
                         button_RecordPoint.Enabled = true;
                         button_Save.Enabled = true;
@@ -1424,7 +1435,6 @@ namespace StationDemo
                     bEnable = true;
                     button_homeX.Enabled = bEnable;
                     button_ServoOnX.Enabled = bEnable;
-
 
                     button_Xpositive.Enabled = bEnable;
                     button_Ypositive.Enabled = bEnable;
@@ -1443,7 +1453,6 @@ namespace StationDemo
                     button_homeX.Enabled = bEnable;
                     button_ServoOnX.Enabled = bEnable;
 
-
                     button_Xpositive.Enabled = bEnable;
                     button_Ypositive.Enabled = bEnable;
                     button_Zpositive.Enabled = bEnable;
@@ -1454,11 +1463,8 @@ namespace StationDemo
                     {
                         ((Control)temp).Enabled = bEnable;
                     }
-
                 }
-
             }
-
         }
 
         private void OnSizeChanged(object sender, EventArgs e)
@@ -1470,8 +1476,8 @@ namespace StationDemo
             btn_Del.Location = new Point(dataGridView_PointInfo.Location.X + dataGridView_PointInfo.Width + 5, btn_Del.Location.Y);
             userPanel_Input.Location = new Point(button_Save.Location.X + button_Save.Width + 5, dataGridView_PointInfo.Location.Y);
             userBtnPanel_Output.Location = new Point(button_Save.Location.X + button_Save.Width + userPanel_Input.Width + 5, dataGridView_PointInfo.Location.Y);
-
         }
+
         private void btn_Del_Click(object sender, EventArgs e)
         {
             Dictionary<string, PointInfo> tempdic = StationMgr.GetInstance().GetStation(this.Name).GetStationPointDic();
@@ -1498,14 +1504,10 @@ namespace StationDemo
             ScaraRobot.GetInstance().ResetRobot();
         }
 
-
-
         public void UpdateRobotStatus(ControlInfo controlInfo)
         {
-
             try
             {
-
                 //   RCStatusBits = RobotMgr.GetInstance().NewProcessStatusCode("抓放料机械手", RobotStatusCode);
                 //0 - Test            在TEST模式下打开
                 if (controlInfo.Test == true)
@@ -1619,12 +1621,10 @@ namespace StationDemo
             }
             catch (Exception ex)
             {
-
                 MessageBox.Show("获取机械人状态异常" + ex.ToString());
             }
-
-
         }
+
         public void UpdateRobotPos(PositionInfo posInfo)
         {
             //if (RobotMgr.GetInstance().GetCurrentPos("抓放料机械手", ref RCPoint) == true)
@@ -1643,13 +1643,13 @@ namespace StationDemo
             //    MessageBox.Show("获取机械人位置失败");
             //}
         }
+
         public bool ChangeStatusLabelBackColor(ref Button InvokeButton,
             ref System.Windows.Forms.ToolStripStatusLabel TargetControl,
             System.Drawing.Color TargetColor)
         {
             try
             {
-
                 if (InvokeButton == null)
                 {
                     return false;
@@ -1666,15 +1666,12 @@ namespace StationDemo
                     TargetControl.BackColor = TargetColor;
                     return true;
                 }
-
             }
             catch (Exception)
             {
                 return false;
             }
         }
-
-     
 
         /// <summary>
         /// 跨线程安全修改目标窗体中状态条的文字
@@ -1689,7 +1686,6 @@ namespace StationDemo
         {
             try
             {
-
                 if (InvokeButton == null)
                 {
                     return false;
@@ -1711,57 +1707,54 @@ namespace StationDemo
             {
                 return false;
             }
-
         }
 
         private void roundButton_VisionPrTest_Click(object sender, EventArgs e)
         {
             if (comboBox_SelVisionPR.SelectedIndex == -1)
                 return;
-            string strVisionPrName =comboBox_SelVisionPR.Items[comboBox_SelVisionPR.SelectedIndex].ToString();
-           
-            Action action = new Action(() => {
-                string camname= VisionMgr.GetInstance().GetCamName(strVisionPrName);
-                double?  Expouse = VisionMgr.GetInstance().GetExpourseTime(strVisionPrName);
+            string strVisionPrName = comboBox_SelVisionPR.Items[comboBox_SelVisionPR.SelectedIndex].ToString();
+
+            Action action = new Action(() =>
+            {
+                string camname = VisionMgr.GetInstance().GetCamName(strVisionPrName);
+                double? Expouse = VisionMgr.GetInstance().GetExpourseTime(strVisionPrName);
                 double? Gain = VisionMgr.GetInstance().GetGain(strVisionPrName);
 
-                CameraMgr.GetInstance().SetCamExposure(camname,(double) Expouse);
-                CameraMgr.GetInstance().SetCamGain(camname,(double)Gain);
+                CameraMgr.GetInstance().SetCamExposure(camname, (double)Expouse);
+                CameraMgr.GetInstance().SetCamGain(camname, (double)Gain);
                 CameraMgr.GetInstance().BindWindow(camname, visionControl1);
                 CameraMgr.GetInstance().ClaerPr(camname);
                 CameraMgr.GetInstance().GetCamera(camname).SetTriggerMode(CameraModeType.Software);
-
 
                 // CameraMgr.GetInstance().GetCamera(camname).StartGrab();
 
                 //CameraMgr.GetInstance().AddPr(camname, strVisionPrName);
                 //CameraMgr.GetInstance().GetCamera(camname).GarbBySoftTrigger();
                 //VisionSetpBase visionSetpBase = VisionMgr.GetInstance().GetItem(strVisionPrName);
-              //  Action action2 = new Action(() => { visionSetpBase.Process_image(visionControl1.Img, visionControl1); });
-                  HObject Img=  CameraMgr.GetInstance().GetImg(camname);
-                 VisionMgr.GetInstance().ProcessImage(strVisionPrName, Img, visionControl1);
-                 if (Img != null && Img.IsInitialized())
-                      Img.Dispose();
+                //  Action action2 = new Action(() => { visionSetpBase.Process_image(visionControl1.Img, visionControl1); });
+                HObject Img = CameraMgr.GetInstance().GetImg(camname);
+                VisionMgr.GetInstance().ProcessImage(strVisionPrName, Img, visionControl1);
+                if (Img != null && Img.IsInitialized())
+                    Img.Dispose();
             }
             );
 
             action.BeginInvoke((ar) => { }, null);
-            
         }
 
         private void comboBox_SelCamera_SelectedIndexChanged(object sender, EventArgs e)
         {
             for (int i = 0; i < comboBox_SelCamera.Items.Count; i++)
                 CameraMgr.GetInstance().SetTriggerSoftMode(comboBox_SelCamera.Items[i].ToString());
-           // comboBox_SelCamera.Text = CameraMgr.GetInstance().GetCamExposure(comboBox_SelCam.Text).ToString();
-          //  textBox_GainVal.Text = CameraMgr.GetInstance().GetCamGain(comboBox_SelCam.Text).ToString();
+            // comboBox_SelCamera.Text = CameraMgr.GetInstance().GetCamExposure(comboBox_SelCam.Text).ToString();
+            //  textBox_GainVal.Text = CameraMgr.GetInstance().GetCamGain(comboBox_SelCam.Text).ToString();
             CameraMgr.GetInstance().BindWindow(comboBox_SelCamera.Text, visionControl1);
             CameraMgr.GetInstance().SetAcquisitionMode(comboBox_SelCamera.Text);
         }
 
         public void OutPutSignalPictureBoxArray_Click(object sender, EventArgs e)
         {
-
             try
             {
                 TempPictureBox = (PictureBox)sender;
@@ -1791,16 +1784,11 @@ namespace StationDemo
                         OutputSignalPictureBoxArray[TempOutputBit].Image = Properties.Resources.light_gray;
                     }
                 }
-              
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
-
         }
     }
-
-   
-    
 }

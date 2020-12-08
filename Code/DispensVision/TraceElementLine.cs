@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using HalconDotNet;
+using System;
 using System.Windows.Forms;
 using UserCtrl;
-using HalconDotNet;
 
 namespace XYZDispensVision
 {
@@ -19,10 +12,8 @@ namespace XYZDispensVision
             InitializeComponent();
         }
 
-
-        DispTraceBaseElementLine elementLine = null;
+        private DispTraceBaseElementLine elementLine = null;
         //VisionControl vc;
-
 
         public void FlushToDlg(DispTraceBaseElement DispTraceElement, VisionControl visionControl, bool bIsModfiy)
         {
@@ -62,22 +53,19 @@ namespace XYZDispensVision
             if (!bModify)
             {
                 vc?.DrawLine(out StartRow, out StartCol, out EndRow, out EndCol);
-
             }
             else
             {
                 vc?.DrawLineMod(pointValSetStartPoint.dVy, pointValSetStartPoint.dVx,
                     pointValSetEndPoint.dVy, pointValSetEndPoint.dVx,
                     out StartRow, out StartCol, out EndRow, out EndCol);
-              
             }
             pointValSetStartPoint.dVx = StartCol.D;
             pointValSetStartPoint.dVy = StartRow.D;
             pointValSetEndPoint.dVx = EndCol.D;
             pointValSetEndPoint.dVy = EndRow.D;
-
-
         }
+
         public void HideSomeBtns(bool bIsMachine)
         {
             if (bIsMachine)
@@ -89,6 +77,7 @@ namespace XYZDispensVision
                 BtnModifyLine.Visible = true;
             }
         }
+
         public void ShowObj()
         {
             if (vc != null && elementLine != null && !elementLine.bIsAllPointMachine && vc.Img != null && vc.Img.IsInitialized())
@@ -110,5 +99,4 @@ namespace XYZDispensVision
         public VisionControl vc = null;
         public bool bModify = false;
     }
-
 }

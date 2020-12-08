@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Windows.Forms;
-using BaseDll;
+﻿using BaseDll;
 using CameraLib;
 using HalconDotNet;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Threading;
+using System.Windows.Forms;
 using VisionProcess;
+
 namespace StationDemo
 {
     public partial class Form_VisionDebug : Form
@@ -20,13 +16,13 @@ namespace StationDemo
         {
             InitializeComponent();
         }
+
         public void ChangedUserRight(User CurrentUser)
         {
             if (InvokeRequired)
                 this.BeginInvoke(new Action(() => ChangedUserRight(CurrentUser)));
             else
             {
-
                 switch ((int)CurrentUser._userRight)
                 {
                     case (int)UserRight.客户操作员:
@@ -38,6 +34,7 @@ namespace StationDemo
                         dataGridViewProcessItem.Columns[3].ReadOnly = true;
                         dataGridViewProcessItem.Columns[4].ReadOnly = true;
                         break;
+
                     case (int)UserRight.调试工程师:
 
                         dataGridViewProcessItem.AllowUserToAddRows = false;
@@ -48,6 +45,7 @@ namespace StationDemo
                         dataGridViewProcessItem.Columns[3].ReadOnly = false;
                         dataGridViewProcessItem.Columns[4].ReadOnly = false;
                         break;
+
                     case (int)UserRight.软件工程师:
                         dataGridViewProcessItem.AllowUserToAddRows = false;
                         dataGridViewProcessItem.AllowUserToDeleteRows = false;
@@ -57,6 +55,7 @@ namespace StationDemo
                         dataGridViewProcessItem.Columns[3].ReadOnly = false;
                         dataGridViewProcessItem.Columns[4].ReadOnly = false;
                         break;
+
                     case (int)UserRight.超级管理员:
                         dataGridViewProcessItem.AllowUserToAddRows = false;
                         dataGridViewProcessItem.AllowUserToDeleteRows = false;
@@ -72,22 +71,18 @@ namespace StationDemo
                 if ((int)CurrentUser._userRight >= (int)UserRight.调试工程师)
                 {
                     bEnable = true;
-
                 }
                 else
                 {
                     bEnable = false;
-
-
                 }
-
             }
-
         }
-        List<Type> TypeLists = AssemblyOperate.GetAllSubClassTypeOnRunDir(typeof(VisionSetpBase));
-        void UpdataVisionItems()
-        {
 
+        private List<Type> TypeLists = AssemblyOperate.GetAllSubClassTypeOnRunDir(typeof(VisionSetpBase));
+
+        private void UpdataVisionItems()
+        {
             VisionSetpBase visionSetpBase = null;
             if (VisionMgr.GetInstance().GetItemNamesAndTypes() == null)
                 return;
@@ -99,24 +94,22 @@ namespace StationDemo
                 string strVisionTypeName = "";
                 if (TypeLists != null)
                 {
-                  Type type=  TypeLists.Find((t) =>
-                    {
-                        return tem.Value.VisionType == t.ToString() ? true : false;
-                    });
+                    Type type = TypeLists.Find((t) =>
+                      {
+                          return tem.Value.VisionType == t.ToString() ? true : false;
+                      });
                     strVisionTypeName = AssemblyOperate.GetDescription(type);
                 }
-               visionSetpBase = VisionMgr.GetInstance().GetItem(tem.Key);
+                visionSetpBase = VisionMgr.GetInstance().GetItem(tem.Key);
                 dataGridViewProcessItem.Rows.Add("False", tem.Key, strVisionTypeName, visionSetpBase.m_camparam.m_strCamName, visionSetpBase.m_camparam.m_dExposureTime.ToString(), visionSetpBase.m_camparam.m_dGain.ToString());
             }
-
         }
 
         private void Form_CameraDebug_Load(object sender, EventArgs e)
         {
-
             visionControl1.InitWindow();
             HOperatorSet.SetDraw(visionControl1.GetHalconWindow(), "margin");
-      
+
             Thread.Sleep(10);
             List<string> camname = CameraMgr.GetInstance().GetCameraNameArr();
             foreach (var temp in camname)
@@ -127,9 +120,9 @@ namespace StationDemo
             }
             if (camname.Count > 0)
                 comboBox_SelCam.SelectedIndex = 0;
-            DataGridViewComboBoxColumn sd =(DataGridViewComboBoxColumn)dataGridViewProcessItem.Columns[2];
+            DataGridViewComboBoxColumn sd = (DataGridViewComboBoxColumn)dataGridViewProcessItem.Columns[2];
             sd.Items.Clear();
-           
+
             TypeLists = AssemblyOperate.GetAllSubClassTypeOnRunDir(typeof(VisionSetpBase));
             foreach (var temp in TypeLists)
             {
@@ -137,7 +130,7 @@ namespace StationDemo
                 if (DescriptionName != "NoDescription")
                 {
                     sd.Items.Add(DescriptionName);
-                } 
+                }
             }
             dataGridViewProcessItem.Columns[1].ReadOnly = true;
             dataGridViewProcessItem.Columns[2].ReadOnly = true;
@@ -154,7 +147,6 @@ namespace StationDemo
         {
             for (int i = 0; i < comboBox_SelCam.Items.Count; i++)
                 CameraMgr.GetInstance().SetTriggerSoftMode(comboBox_SelCam.Items[i].ToString());
-               
 
             CameraMgr.GetInstance().BindWindow(comboBox_SelCam.Text, visionControl1);
             CameraMgr.GetInstance().SetAcquisitionMode(comboBox_SelCam.Text);
@@ -163,7 +155,6 @@ namespace StationDemo
             //  textBox_GainVal.Text = CameraMgr.GetInstance().GetCamGain(comboBox_SelCam.Text).ToString();
             CameraMgr.GetInstance().SetCamExposure(comboBox_SelCam.Text, textBox_exposureTimeVal.Text.ToDouble());
             CameraMgr.GetInstance().SetCamGain(comboBox_SelCam.Text, textBox_GainVal.Text.ToDouble());
-          
         }
 
         private void roundButton1_Click(object sender, EventArgs e)
@@ -171,7 +162,7 @@ namespace StationDemo
             for (int i = 0; i < comboBox_SelCam.Items.Count; i++)
                 CameraMgr.GetInstance().SetTriggerSoftMode(comboBox_SelCam.Items[i].ToString());
             CameraMgr.GetInstance().BindWindow(comboBox_SelCam.Text, visionControl1);
-           
+
             CameraMgr.GetInstance().GetCamera(comboBox_SelCam.Text).StopGrap();
             CameraMgr.GetInstance().SetTriggerSoftMode(comboBox_SelCam.Text);
             // textBox_exposureTimeVal.Text = CameraMgr.GetInstance().GetCamExposure(comboBox_SelCam.Text).ToString();
@@ -196,9 +187,10 @@ namespace StationDemo
 
         private void roundButton_DrawRect1_Click(object sender, EventArgs e)
         {
-           
         }
-        int indexSelVisionSel = -1;
+
+        private int indexSelVisionSel = -1;
+
         private void roundButton_DelItem_Click(object sender, EventArgs e)
         {
             int CellSelectedRow = dataGridViewProcessItem.SelectedCells[0].RowIndex;
@@ -209,7 +201,7 @@ namespace StationDemo
             dataGridViewProcessItem.Rows.Remove(row);
             VisionMgr.GetInstance().DelItem(strItemName);
             VisionMgr.GetInstance().Save();
-            
+
             foreach (var temp in panel_VisionCtrls.Controls)
                 ((Control)temp).Hide();
             if (indexSelVisionSel != -1 && indexSelVisionSel == CellSelectedRow)
@@ -223,6 +215,7 @@ namespace StationDemo
         public bool IsItemOK(int indexSel)
         {
             #region 界面判断提示
+
             if (indexSel < 0 || indexSel >= dataGridViewProcessItem.Rows.Count)
                 return false;
             if (dataGridViewProcessItem.Rows[indexSel].Cells[2].Value == null
@@ -249,7 +242,9 @@ namespace StationDemo
                 MessageBox.Show("相机增益为空，请填写", "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
+
             #endregion 界面判断提示
+
             return true;
         }
 
@@ -273,7 +268,7 @@ namespace StationDemo
             double dExposure = dataGridViewProcessItem.Rows[indexSelVisionSel].Cells[4].Value.ToString().ToDouble();
             double dGain = dataGridViewProcessItem.Rows[indexSelVisionSel].Cells[5].Value.ToString().ToDouble();
             string strCamName = dataGridViewProcessItem.Rows[indexSelVisionSel].Cells[3].Value.ToString();
-            int nlight=   dataGridViewProcessItem.Rows[indexSelVisionSel].Cells[3].Value.ToString().ToInt();
+            int nlight = dataGridViewProcessItem.Rows[indexSelVisionSel].Cells[3].Value.ToString().ToInt();
             VisionMgr.GetInstance().SetLightVal(strItem, nlight);
             VisionSetpBase visionSetpBase = VisionMgr.GetInstance().GetItem(strItem);
 
@@ -284,12 +279,9 @@ namespace StationDemo
             visionSetpBase.Save();
             VisionMgr.GetInstance().Save();
         }
-      
- 
-      
+
         private void dataGridViewProcessItem_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-          
             if (this.dataGridViewProcessItem.Rows[e.RowIndex].Cells[e.ColumnIndex].GetType() != typeof(DataGridViewCheckBoxCell))
                 return;
             if (this.dataGridViewProcessItem.Rows[e.RowIndex].Cells[e.ColumnIndex].GetType() == typeof(DataGridViewCheckBoxCell))
@@ -300,24 +292,23 @@ namespace StationDemo
                 }
                 //this.dataGridViewProcessItem.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = true;
                 indexSelVisionSel = e.RowIndex;
-               
             }
-            DataGridViewCheckBoxCell checkCell =(DataGridViewCheckBoxCell) this.dataGridViewProcessItem.Rows[e.RowIndex].Cells[e.ColumnIndex];
-            if ((bool)checkCell.EditedFormattedValue==true)
+            DataGridViewCheckBoxCell checkCell = (DataGridViewCheckBoxCell)this.dataGridViewProcessItem.Rows[e.RowIndex].Cells[e.ColumnIndex];
+            if ((bool)checkCell.EditedFormattedValue == true)
                 indexSelVisionSel = e.RowIndex;
             else
                 indexSelVisionSel = -1;
             foreach (var temp in panel_VisionCtrls.Controls)
                 ((Control)temp).Hide();
-      
-            if (indexSelVisionSel==-1)
+
+            if (indexSelVisionSel == -1)
             {
                 dataGridViewProcessItem.Columns[2].ReadOnly = true;
                 return;
             }
-                
+
             dataGridViewProcessItem.Columns[2].ReadOnly = false;
-            
+
             string ItemName = "";
             ItemName = dataGridViewProcessItem.Rows[e.RowIndex].Cells[1].Value.ToString();
             VisionSetpBase visionSetpBase = VisionMgr.GetInstance().GetItem(ItemName);
@@ -343,7 +334,7 @@ namespace StationDemo
             //      return;
             //}
             visionSetpBase.FlushToDlg(visionControl1, panel_VisionCtrls);
-            if(dataGridViewProcessItem.Rows[e.RowIndex].Cells[2].Value.ToString()== "模板匹配")
+            if (dataGridViewProcessItem.Rows[e.RowIndex].Cells[2].Value.ToString() == "模板匹配")
             {
                 roundButton_ShapeROIAdd.Show();
                 roundButton_ShapeROISub.Show();
@@ -354,18 +345,15 @@ namespace StationDemo
                 roundButton_ShapeROISub.Hide();
             }
 
-        
             roundButton_SeachArea.Show();
 
             roundButton_Test.Show();
-  
-
         }
 
         private void roundButton_AddItem_Click(object sender, EventArgs e)
         {
             ItemAdd itemAdd = null;
-            if (CameraMgr.GetInstance().GetCameraNameArr()!=null && CameraMgr.GetInstance().GetCameraNameArr().Count>0)
+            if (CameraMgr.GetInstance().GetCameraNameArr() != null && CameraMgr.GetInstance().GetCameraNameArr().Count > 0)
                 itemAdd = new ItemAdd(CameraMgr.GetInstance().GetCameraNameArr().ToArray());
             else
                 itemAdd = new ItemAdd(null);
@@ -374,15 +362,14 @@ namespace StationDemo
             {
                 dataGridViewProcessItem.Rows.Add("False", itemAdd.ItemName,
                    itemAdd.VisionProcssName, itemAdd.CamName,
-                   itemAdd.Exposure.ToString(), itemAdd.Gain.ToString(),itemAdd.nLightVal.ToString());
+                   itemAdd.Exposure.ToString(), itemAdd.Gain.ToString(), itemAdd.nLightVal.ToString());
             }
         }
 
         private void roundButton_SnapSave_Click(object sender, EventArgs e)
         {
-           // roundButton1_Click(null, null);
+            // roundButton1_Click(null, null);
             CameraMgr.GetInstance().SaveImg(comboBox_SelCam.Text);
-
         }
 
         private void roundButton_ReadImg_Click(object sender, EventArgs e)
@@ -391,7 +378,7 @@ namespace StationDemo
                 CameraMgr.GetInstance().SetTriggerSoftMode(comboBox_SelCam.Items[i].ToString());
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
-               // openFileDialog.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory;//注意这里写路径时要用c:\\而不是c:\
+                // openFileDialog.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory;//注意这里写路径时要用c:\\而不是c:\
                 openFileDialog.Filter = "图片|*.jpg;*.png;*.gif;*.jpeg;*.bmp";
                 openFileDialog.RestoreDirectory = true;
                 openFileDialog.FilterIndex = 1;
@@ -402,15 +389,12 @@ namespace StationDemo
                 {
                     //string  fName = openFileDialog.FileName;
                     string strPath = openFileDialog.FileName;
-                    HObject img=null;
+                    HObject img = null;
                     HOperatorSet.ReadImage(out img, strPath);
                     visionControl1.DispImageFull(img);
                 }
             }
-
         }
-
-     
 
         private void roundButton_Test_Click(object sender, EventArgs e)
         {
@@ -423,7 +407,7 @@ namespace StationDemo
             VisionSetpBase visionSetpBase = VisionMgr.GetInstance().GetItem(str);
             Action action = new Action(() => { visionSetpBase.Process_image(visionControl1.Img, visionControl1); });
 
-            action.BeginInvoke((ar) => { },null);
+            action.BeginInvoke((ar) => { }, null);
         }
 
         private void roundButton_SeachArea_Click(object sender, EventArgs e)
@@ -446,19 +430,20 @@ namespace StationDemo
                     visionSetpBase.Save();
                     ((VisionShapMatch)visionSetpBase).Read();
                     break;
+
                 case "二维码":
                     ((Vision2dCode)visionSetpBase).vision2dCodeParam.Mode2dcodeSearchPath = strPath;
                     HOperatorSet.WriteRegion(obj, strPath);
                     visionSetpBase.Save();
                     ((Vision2dCode)visionSetpBase).Read();
                     break;
+
                 case "一维码":
                     ((Vision1dCode)visionSetpBase).vision1dCodeParam.Mode1dcodeSearchPath = strPath;
                     HOperatorSet.WriteRegion(obj, strPath);
                     visionSetpBase.Save();
                     ((Vision1dCode)visionSetpBase).Read();
                     break;
-
             }
             obj.Dispose();
         }
@@ -510,13 +495,14 @@ namespace StationDemo
                         oldRegion?.Dispose();
                         obj?.Dispose();
                     }
-                    
-                    break;
-                case "二维码":
-                    break;
-                case "一维码":
+
                     break;
 
+                case "二维码":
+                    break;
+
+                case "一维码":
+                    break;
             }
             obj.Dispose();
         }
@@ -549,11 +535,10 @@ namespace StationDemo
                             if (oldRegion != null && oldRegion.IsInitialized())
                             {
                                 HOperatorSet.Difference(oldRegion, obj, out obj);
-                               
                             }
                         }
                         HOperatorSet.WriteRegion(obj, strPath);
-                       
+
                         ((VisionShapMatch)visionSetpBase).SetRoiRegion(obj);
                         HOperatorSet.DispObj(obj, visionControl1.GetHalconWindow());
                         visionSetpBase.Save();
@@ -568,13 +553,14 @@ namespace StationDemo
                         oldRegion?.Dispose();
                         obj?.Dispose();
                     }
-               
-                    break;
-                case "二维码":
-                    break;
-                case "一维码":
+
                     break;
 
+                case "二维码":
+                    break;
+
+                case "一维码":
+                    break;
             }
             obj.Dispose();
         }
@@ -582,9 +568,8 @@ namespace StationDemo
         private void OnShowChanged(object sender, EventArgs e)
         {
             List<string> camname = CameraMgr.GetInstance().GetCameraNameArr();
-            foreach(var tem in camname)
+            foreach (var tem in camname)
                 CameraMgr.GetInstance().ClaerPr(tem);
-
         }
     }
 }

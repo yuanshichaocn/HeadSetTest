@@ -1,28 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using UserCtrl;
-using BaseDll;
 
 namespace VisionProcess
 {
-
-
     public partial class RegionOut : UserControl
     {
         public RegionOut()
         {
             InitializeComponent();
         }
-        int SelIndex = -1;
-        VisionControl vc = null;
-        List<shapeparam> shapeparams = null;
+
+        private int SelIndex = -1;
+        private VisionControl vc = null;
+        private List<shapeparam> shapeparams = null;
+
         public void Flush(VisionControl visionControl, List<shapeparam> listshapelist)
         {
             shapeparams = listshapelist;
@@ -34,8 +27,8 @@ namespace VisionProcess
             {
                 dataGridView_ItemAllElement.Rows.Add("False", temp.name, temp.shapeType.ToString());
             }
-
         }
+
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             if (this.dataGridView_ItemAllElement.Rows[e.RowIndex].Cells[e.ColumnIndex].GetType() == typeof(DataGridViewCheckBoxCell))
@@ -48,9 +41,9 @@ namespace VisionProcess
                 //if((bool)this.dataGridView_ItemAllElement.Rows[e.RowIndex].Cells[e.ColumnIndex].Value==true)
                 SelIndex = e.RowIndex;
             }
-
         }
-        bool CheckItem()
+
+        private bool CheckItem()
         {
             if (SelIndex == -1)
                 return false;
@@ -70,7 +63,6 @@ namespace VisionProcess
                 return false;
             }
             return true;
-
         }
 
         public void btnDraw_Click(object sender, EventArgs e)
@@ -96,19 +88,22 @@ namespace VisionProcess
                 case ShapeType.点:
                     shapeparamInstance.usrshape = new UsrShapePoint();
                     break;
+
                 case ShapeType.圆形:
                     shapeparamInstance.usrshape = new UsrShapeCircle();
                     break;
+
                 case ShapeType.矩形:
                     shapeparamInstance.usrshape = new UsrShapeRect();
                     break;
+
                 case ShapeType.仿射矩形:
                     shapeparamInstance.usrshape = new UsrShapeRect2();
                     break;
             }
 
             shapeparamInstance.usrshape.bDraw(vc);
-            if(shapeparams== null)
+            if (shapeparams == null)
                 shapeparams = new List<shapeparam>();
             if (SelIndex <= shapeparams.Count - 1)
                 shapeparams[SelIndex] = shapeparamInstance;
@@ -116,7 +111,6 @@ namespace VisionProcess
                 shapeparams.Add(shapeparamInstance);
             if (SelIndex <= shapeparams.Count - 1)
                 shapeparams[SelIndex].usrshape.Save();
-
         }
     }
 }

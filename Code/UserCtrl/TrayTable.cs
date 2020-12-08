@@ -1,26 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace UserCtrl
 {
     public partial class TrayTable : UserControl
     {
-        int rowNum = 5;
+        private int rowNum = 5;
+
         [Category("自定义")]
         public int RowNum
         {
             get { return rowNum; }
             set { rowNum = value; InitTrayTable(); }
-        } 
+        }
 
-        int colNum = 5;
+        private int colNum = 5;
+
         [Category("自定义")]
         public int ColNum
         {
@@ -28,7 +25,8 @@ namespace UserCtrl
             set { colNum = value; InitTrayTable(); }
         }
 
-        Color cellBackColor = Color.Gray;
+        private Color cellBackColor = Color.Gray;
+
         [Category("自定义")]
         public Color CellBackColor
         {
@@ -110,7 +108,7 @@ namespace UserCtrl
 
         public void SetCellBackColor(int cellNo, Color cellBackColor)
         {
-            if(InvokeRequired)
+            if (InvokeRequired)
             {
                 this.BeginInvoke((new Action(() => SetCellBackColor(cellNo, cellBackColor))));
             }
@@ -118,24 +116,21 @@ namespace UserCtrl
             {
                 try
                 {
-                    if (cellNo >= 0 && cellNo < RowNum*ColNum)
+                    if (cellNo >= 0 && cellNo < RowNum * ColNum)
                     {
                         cellNo++;
                         int col = (cellNo - 1) % ColNum;
                         int row = (cellNo - 1) / ColNum;
 
-
-                        listView1.Items[row].SubItems[col+1].BackColor = cellBackColor;
+                        listView1.Items[row].SubItems[col + 1].BackColor = cellBackColor;
                     }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message);
                 }
             }
-            
         }
-
 
         public void InitCellBackColor()
         {
@@ -160,8 +155,6 @@ namespace UserCtrl
                     MessageBox.Show(ex.Message);
                 }
             }
-
-            
         }
 
         private void ControlSizeChanged()

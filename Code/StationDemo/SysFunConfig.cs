@@ -1,35 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using System.Threading;
-using CameraLib;
+﻿using BaseDll;
+using CommonTools;
+
 //using HalconLib;
 using MotionIoLib;
-using System.IO;
-using CommonTools;
-using BaseDll;
-using UserData;
-using OtherDevice;
 using Newtonsoft.Json;
+using System;
 
 namespace StationDemo
 {
-
- 
     public interface LoadPatten
     {
         bool IsLoadOK(string SoketName, bool bManual);
+
         void Load(string SoketName, bool bManual);
+
         void ULoad(string SoketName, bool bManual);
+
         bool IsSafeWhenURun(string SoketName);
+
         bool IsOpenSocket(string SoketName);
+
         bool IsUload(string SoketName);
     }
+
     public class ManualLoad : LoadPatten
     {
         public bool IsLoadOK(string SoketName, bool bManual)
@@ -46,8 +39,7 @@ namespace StationDemo
 
         public bool IsOpenSocket(string SoketName)
         {
-     
-                   string Soket = SoketName;
+            string Soket = SoketName;
             return !IOMgr.GetInstace().ReadIoInBit($"{Soket}治具盖上检测");
         }
 
@@ -70,6 +62,7 @@ namespace StationDemo
         {
             return;
         }
+
         public void ULoad(string SoketName, bool bManual)
         {
             return;
@@ -78,7 +71,8 @@ namespace StationDemo
 
     public class CliyderLoad : LoadPatten
     {
-         Stationbase stationAAT = StationMgr.GetInstance().GetStation("AA站");
+        private Stationbase stationAAT = StationMgr.GetInstance().GetStation("AA站");
+
         public bool IsLoadOK(string SoketName, bool bManual)
         {
             string Soket = SoketName;
@@ -107,7 +101,6 @@ namespace StationDemo
 
         public bool IsUload(string SoketName)
         {
-
             return IOMgr.GetInstace().ReadIoInBit($"{SoketName}治具松开检测");
         }
 
@@ -115,7 +108,7 @@ namespace StationDemo
         {
             string Soket = SoketName;
             WaranResult waranResult;
-            retry_close_checkVac:
+        retry_close_checkVac:
             IOMgr.GetInstace().WriteIoBit($"{Soket}真空吸", true);
             waranResult = stationAAT.CheckIobyName($"{Soket}治具真空检测", true, $"{Soket}治具真空检测 失败，请检查 产品是否正常放置，气压", bManual);
             if (waranResult == WaranResult.Retry)
@@ -128,30 +121,31 @@ namespace StationDemo
 
             return;
         }
+
         public void ULoad(string SoketName, bool bManual)
         {
             string Soket = SoketName;
-            retry_open_cliyder:
+        retry_open_cliyder:
             IOMgr.GetInstace().WriteIoBit($"{Soket}工位夹紧", false);
             WaranResult waranResult = stationAAT.CheckIobyName($"{Soket}治具松开检测", true, $"{Soket}治具松开检测 失败，请检查气缸及感应器", bManual);
             if (waranResult == WaranResult.Retry)
                 goto retry_open_cliyder;
             retry_close_checkVac:
             IOMgr.GetInstace().WriteIoBit($"{Soket}真空吸", false);
-
         }
     }
 
-    public   class  SysFunParam
+    public class SysFunParam
     {
         public string LoadPatten;
         public bool bIsLRUV;
     }
+
     /// <summary>
     /// 系统功能 （本类中所有成员全是static）
     /// </summary>
     [Serializable]
-    public  class SysFunConfig
+    public class SysFunConfig
     {
         [JsonIgnore]
         public static bool IsLRUV
@@ -166,62 +160,53 @@ namespace StationDemo
                 return sysFunParam.bIsLRUV;
             }
         }
+
         [JsonIgnore]
         public static LoadPatten LodUnloadPatten = null;
 
-
-        public   static SysFunParam sysFunParam = new SysFunParam(); 
-
+        public static SysFunParam sysFunParam = new SysFunParam();
 
         public static string LoadPatten
         {
             set
             {
-                
                 sysFunParam.LoadPatten = value;
             }
             get
             {
                 return sysFunParam.LoadPatten;
             }
-
         }
 
-        public  static  void Save()
+        public static void Save()
         {
-          AccessJosnSerializer.ObjectToJson(AppDomain.CurrentDomain.BaseDirectory + "SysFunConfig.json", sysFunParam);
-            
+            AccessJosnSerializer.ObjectToJson(AppDomain.CurrentDomain.BaseDirectory + "SysFunConfig.json", sysFunParam);
         }
-    
+
         public static SysFunParam Read()
         {
             object obj = new object();
             obj = AccessJosnSerializer.JsonToObject(AppDomain.CurrentDomain.BaseDirectory + "SysFunConfig.json", typeof(SysFunParam));
-            if(obj!=null)
+            if (obj != null)
             {
-                sysFunParam = (SysFunParam) obj;
+                sysFunParam = (SysFunParam)obj;
                 return sysFunParam;
             }
             return null;
         }
-     
-        public static void  Config()
+
+        public static void Config()
         {
             switch (LoadPatten)
             {
                 case "气缸上料":
                     LodUnloadPatten = new CliyderLoad();
                     break;
+
                 case "手动上料":
                     LodUnloadPatten = new ManualLoad();
                     break;
-
-
             }
-
         }
-
     }
-
-
 }

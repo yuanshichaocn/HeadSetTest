@@ -1,33 +1,22 @@
-﻿
-//using CameraLib;
+﻿//using CameraLib;
+using BaseDll;
 using HalconDotNet;
+using HalconLib;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using UserCtrl;
-using BaseDll;
-using System.Xml.Serialization;
+using System.ComponentModel;
 using System.IO;
 using System.Windows.Forms;
-using HalconLib;
-using log4net;
-using Newtonsoft.Json;
-using System.ComponentModel;
-using System.Reflection;
+using UserCtrl;
 
 namespace VisionProcess
 {
-
-
     public enum eModleType
     {
         形状,
         灰度
     }
-
 
     public class VisionShapParam : IOperateParam
     {
@@ -50,7 +39,7 @@ namespace VisionProcess
         public XYUPoint ModlePoint = new XYUPoint(0, 0, 0);
         public Point2d OutPointInModleImage = new Point2d(0, 0);
         public List<Point2d> OutPointInResultImg = new List<Point2d>();
-       // public List<ShapeNameType> RegionNames = new List<ShapeNameType>();
+        // public List<ShapeNameType> RegionNames = new List<ShapeNameType>();
 
         public eModleType ModeType = eModleType.形状;
 
@@ -60,12 +49,14 @@ namespace VisionProcess
             ResultCol.Clear();
             ResultAngle.Clear();
         }
+
         public void ClearResult()
         {
             ResultRow.Clear();
             ResultCol.Clear();
             ResultAngle.Clear();
         }
+
         public int GetResultNum()
         {
             if (ResultRow != null && ResultRow.Count > 0)
@@ -73,13 +64,13 @@ namespace VisionProcess
             else
                 return 0;
         }
+
         public object Clone()
         {
             return this.MemberwiseClone();
         }
-
-
     }
+
     [Description("模板匹配")]
     public class VisionShapMatch : VisionSetpBase
     {
@@ -88,12 +79,17 @@ namespace VisionProcess
         {
             visionCtr = ctr;
         }
-        static VisionMatchSetCtr ctr = new VisionMatchSetCtr();
+
+        private static VisionMatchSetCtr ctr = new VisionMatchSetCtr();
+
         [JsonIgnore]
-        HTuple ModeID = null;
+        private HTuple ModeID = null;
+
         [JsonIgnore]
-        HObject RegionSearch = null, RegionRoi = null;
+        private HObject RegionSearch = null, RegionRoi = null;
+
         public VisionShapParam visionShapParam = new VisionShapParam();
+
         public override void Disopose()
         {
             if (RegionSearch != null && RegionSearch.IsInitialized())
@@ -102,21 +98,24 @@ namespace VisionProcess
                 RegionRoi.Dispose();
             if (ModeID != null)
                 HOperatorSet.ClearShapeModel(ModeID);
-
         }
+
         public override VisionSetpBase Clone()
         {
             VisionShapMatch visionShapMatch = new VisionShapMatch(m_strStepName);
             visionShapMatch.Read();
             return visionShapMatch;
         }
-        public void SetRoiRegion(HObject obj) { RegionRoi = obj; }
+
+        public void SetRoiRegion(HObject obj)
+        {
+            RegionRoi = obj;
+        }
+
         public List<shapeparam> shapeslist = new List<shapeparam>();
         public List<shapeparam> shapeparamResults = new List<shapeparam>();
-      
-  
-     
-         public override void Save()
+
+        public override void Save()
         {
             //string strPath = VisionMgr.GetInstance().CurrentVisionProcessDir + "\\" + m_strStepName + "\\" + m_strStepName + ".xml";
             //if (strSavePath != "")
@@ -127,8 +126,9 @@ namespace VisionProcess
             if (strSavePath != "")
                 strPath = strSavePath + "\\" + m_strStepName + ".json";
             AccessJosnSerializer.ObjectToJson(strPath, this);
-           // SaveRegions();
+            // SaveRegions();
         }
+
         public override void Save(string strPath)
         {
             string regionsavepath = strPath;
@@ -137,6 +137,7 @@ namespace VisionProcess
             AccessJosnSerializer.ObjectToJson(strPath, this);
             //SaveRegions(regionsavepath);
         }
+
         public override Object Read()
         {
             try
@@ -145,12 +146,10 @@ namespace VisionProcess
                 string strPath = VisionMgr.GetInstance().CurrentVisionProcessDir + "\\" + m_strStepName + "\\" + m_strStepName + ".xml";
                 if (strSavePath != "")
                     strPath = strSavePath + "\\" + m_strStepName + ".xml";
-              
 
                 strPath = VisionMgr.GetInstance().CurrentVisionProcessDir + "\\" + m_strStepName + "\\" + m_strStepName + ".json";
                 if (strSavePath != "")
                     strPath = strSavePath + "\\" + m_strStepName + ".json";
-
 
                 object visionShapMatch2 = AccessJosnSerializer.JsonToObject(strPath, typeof(object));
 
@@ -166,22 +165,22 @@ namespace VisionProcess
                 VisionShapMatch visionShapMatch = (VisionShapMatch)AccessJosnSerializer.JsonToObject(strPath, this.GetType());
                 string str = visionShapMatch2.ToString();
                 int indexFindex = str.IndexOf("\"shapeslist\":");
-                string sub1 = str.Substring(indexFindex );
-                int  indexFirist = sub1.IndexOf("[");
-                string  sub2 = sub1.Substring(indexFirist);
-                int indexLast = sub2.IndexOf("]" );
-                int nLen = indexLast- indexFirist;
-                if(indexLast!=-1 && indexFirist!=-1 && nLen>0)
+                string sub1 = str.Substring(indexFindex);
+                int indexFirist = sub1.IndexOf("[");
+                string sub2 = sub1.Substring(indexFirist);
+                int indexLast = sub2.IndexOf("]");
+                int nLen = indexLast - indexFirist;
+                if (indexLast != -1 && indexFirist != -1 && nLen > 0)
                 {
-                    string sub = sub2.Substring(0, indexLast+1);
+                    string sub = sub2.Substring(0, indexLast + 1);
                     string strReg = "<Item>";
 
                     List<object> list = (List<object>)JsonConvert.DeserializeObject(sub, typeof(List<object>));
-                   // List<shapeparam> list = (List<shapeparam>)AccessJosnSerializer.JsonToObject(strPath,typeof( shapeparam));
+                    // List<shapeparam> list = (List<shapeparam>)AccessJosnSerializer.JsonToObject(strPath,typeof( shapeparam));
 
-                    for( int i=0;i< list.Count;i++)
+                    for (int i = 0; i < list.Count; i++)
                     {
-                        if(list[i].ToString()!=null)
+                        if (list[i].ToString() != null)
                         {
                             int index = list[i].ToString().IndexOf("\"usrshape\": ");
                             if (index != -1)
@@ -191,39 +190,31 @@ namespace VisionProcess
                                 int index2 = subusrshape.IndexOf("{");
                                 int index3 = subusrshape.IndexOf("}");
 
-                                if (index2 != -1 && index3!=-1)
+                                if (index2 != -1 && index3 != -1)
                                 {
                                     int nLenOfUserShape = index3 - index2;
-                                  
-                                    string subusrshapeObj = subusrshape.Substring(index2-1, nLenOfUserShape+2);
+
+                                    string subusrshapeObj = subusrshape.Substring(index2 - 1, nLenOfUserShape + 2);
 
                                     Type TY = AssemblyOperate.GetTypeFromAssembly(visionShapMatch.shapeslist[i].usrshape.UserTypeName);
-                                    UserShape tem =(UserShape)JsonConvert.DeserializeObject(subusrshapeObj, TY);
+                                    UserShape tem = (UserShape)JsonConvert.DeserializeObject(subusrshapeObj, TY);
                                     visionShapMatch.shapeslist[i].usrshape = tem;
-
                                 }
                             }
-
                         }
-                        
                     }
-
                 }
 
-
-
-
-
-                if (visionShapMatch == null  || visionShapMatch.visionShapParam==null)
+                if (visionShapMatch == null || visionShapMatch.visionShapParam == null)
                 {
                     MessageBox.Show(m_strStepName + ": 视觉处理项目加载失败，请检查", "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     _logger.Warn(m_strStepName + ": 视觉处理项目加载失败，请检查");
                     return null;
                 }
-                visionShapParam = tempvisionShapParam= visionShapMatch.visionShapParam;
+                visionShapParam = tempvisionShapParam = visionShapMatch.visionShapParam;
                 this.shapeslist.Clear();
                 int nIndex = 0;
-                for( int  s =0; s< visionShapMatch.shapeslist.Count;s++)
+                for (int s = 0; s < visionShapMatch.shapeslist.Count; s++)
                 {
                     shapeslist.Add(new shapeparam()
                     {
@@ -231,12 +222,9 @@ namespace VisionProcess
                         shapeType = visionShapMatch.shapeslist[s].shapeType,
                         usrshape = visionShapMatch.shapeslist[s].usrshape.Clone(),
                     });
-
-                   
-
                 }
                 string ModeShmPath = VisionMgr.GetInstance().CurrentVisionProcessDir + "\\" + m_strStepName + "\\" + m_strStepName + "_Mode.shm";
-                if (visionShapParam != null  && visionShapParam.ModeType == eModleType.形状 && File.Exists(ModeShmPath))
+                if (visionShapParam != null && visionShapParam.ModeType == eModleType.形状 && File.Exists(ModeShmPath))
                 {
                     if (ModeID != null)
                         HOperatorSet.ClearShapeModel(ModeID);
@@ -267,8 +255,6 @@ namespace VisionProcess
                 else
                 {
                     _logger.Warn(m_strStepName + "读取项目：" + "搜索区域读取失败");
-                 
-
                 }
                 string RoiRegionPath = VisionMgr.GetInstance().CurrentVisionProcessDir + "\\" + m_strStepName + "\\" + m_strStepName + "_Roi.hobj";
                 if (visionShapParam != null && File.Exists(RoiRegionPath))
@@ -280,15 +266,12 @@ namespace VisionProcess
                     {
                         _logger.Warn(m_strStepName + "读取项目：" + "roi读取失败");
                     }
-                    
                 }
                 else
                 {
                     _logger.Warn(m_strStepName + "读取项目：" + "roi读取失败");
-                
                 }
             }
-
             catch (Exception e1)
             {
                 _logger.Warn(m_strStepName + "读取项目：" + e1.Message);
@@ -301,7 +284,7 @@ namespace VisionProcess
             }
 
             GC.Collect();
-       
+
             return visionShapParam;
         }
 
@@ -329,7 +312,6 @@ namespace VisionProcess
                     HOperatorSet.ReadShapeModel(visionShapParam.ModeShmPath, out ModeID);
                     if (ModeID == null || ModeID.Length <= 0)
                     {
-
                         MessageBox.Show(m_strStepName + "读取项目：" + "模板读取失败", "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         _logger.Warn(m_strStepName + "读取项目：" + "模板读取失败");
                     }
@@ -355,7 +337,6 @@ namespace VisionProcess
                 {
                     _logger.Warn(m_strStepName + "读取项目：" + "搜索区域读取失败");
                     // MessageBox.Show(m_strStepName + "读取项目：" + "搜索区域读取失败", "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
                 }
                 if (visionShapParam != null && File.Exists(visionShapParam.RoiRegionPath))
                 {
@@ -374,7 +355,6 @@ namespace VisionProcess
                     // MessageBox.Show(m_strStepName + "读取项目：" + "roi读取失败", "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
-
             catch (Exception e1)
             {
                 _logger.Warn(m_strStepName + "读取项目：" + e1.Message);
@@ -387,11 +367,9 @@ namespace VisionProcess
             }
 
             GC.Collect();
-          //  ReadRegions(strSaveRegions);
+            //  ReadRegions(strSaveRegions);
             return visionShapParam;
         }
-
-
 
         public override bool Process_image(HObject ho_Image, VisionControl visionControl)
         {
@@ -418,7 +396,6 @@ namespace VisionProcess
                 HTuple hv_Column2 = null, hv_Row = null;
                 HTuple hv_Column = null, hv_Angle = null, hv_ScaleR = null;
                 HTuple hv_ScaleC = null, hv_Score = null;
-
 
                 // HOperatorSet.SetSystem("border_shape_models", "true");
                 if (RegionSearch != null && RegionSearch.IsInitialized())
@@ -447,10 +424,9 @@ namespace VisionProcess
                     else
                     {
                         HOperatorSet.FindNccModel(ho_Image, ModeID, (new HTuple(visionShapParam.AngleStart)).TupleRad(), (new HTuple(visionShapParam.AngleExtent)).TupleRad(),
-                           visionShapParam.dSorce, visionShapParam.nNum, visionShapParam.MaxOverlap, "true",  0, out hv_Row, out hv_Column, out hv_Angle, out hv_Score);
+                           visionShapParam.dSorce, visionShapParam.nNum, visionShapParam.MaxOverlap, "true", 0, out hv_Row, out hv_Column, out hv_Angle, out hv_Score);
                     }
                 }
-
 
                 if (hv_Row.Length > 0)
                 {
@@ -487,11 +463,10 @@ namespace VisionProcess
                         foreach (var temp in shapeslist)
                         {
                             shapeparamInstance = temp.Clone();
-                          
+
                             switch (temp.shapeType)
                             {
                                 case ShapeType.点:
-                                  
 
                                     HOperatorSet.AffineTransPixel(hom2d,
                                         ((UsrShapePoint)temp.usrshape).Y,
@@ -502,8 +477,9 @@ namespace VisionProcess
 
                                     shapeparamResults.Add(shapeparamInstance);
                                     break;
+
                                 case ShapeType.圆形:
-                                   
+
                                     ((UsrShapeCircle)shapeparamInstance.usrshape).CircleRadius = ((UsrShapeCircle)temp.usrshape).CircleRadius;
                                     HOperatorSet.AffineTransPixel(hom2d,
                                         ((UsrShapeCircle)temp.usrshape).CircleCenterY,
@@ -519,15 +495,14 @@ namespace VisionProcess
                                             ((UsrShapeCircle)shapeparamInstance.usrshape).CircleCenterX, ((UsrShapeCircle)shapeparamInstance.usrshape).CircleRadius);
 
                                         //  HOperatorSet.DispObj(rectobj, visionControl.GetHalconWindow());
-
                                     }
                                     catch (Exception e)
                                     {
-
                                     }
                                     break;
+
                                 case ShapeType.仿射矩形:
-                                    
+
                                     ((UsrShapeRect2)shapeparamInstance.usrshape).Len1 = ((UsrShapeRect2)temp.usrshape).Len1;
                                     ((UsrShapeRect2)shapeparamInstance.usrshape).Len2 = ((UsrShapeRect2)temp.usrshape).Len2;
                                     ((UsrShapeRect2)shapeparamInstance.usrshape).Phi = ((UsrShapeRect2)temp.usrshape).Phi + hv_Angle[i].D;
@@ -546,16 +521,14 @@ namespace VisionProcess
                                              ((UsrShapeRect2)shapeparamInstance.usrshape).Len2
                                             );
                                         //  HOperatorSet.DispObj(rectobj, visionControl.GetHalconWindow());
-
                                     }
                                     catch (Exception e)
                                     {
-
                                     }
                                     break;
 
                                 case ShapeType.矩形:
-                                   
+
                                     HOperatorSet.AffineTransPixel(hom2d,
                                         ((UsrShapeRect)temp.usrshape).Y1,
                                         ((UsrShapeRect)temp.usrshape).X1,
@@ -571,12 +544,12 @@ namespace VisionProcess
                                     shapeparamResults.Add(shapeparamInstance);
                                     try
                                     {
-                                     //   HOperatorSet.GenRectangle1(out HObject rectobj, ((UsrShapeRect)shapeparamInstance.usrshape).Y1,
-                                     // ((UsrShapeRect)shapeparamInstance.usrshape).X1,
+                                        //   HOperatorSet.GenRectangle1(out HObject rectobj, ((UsrShapeRect)shapeparamInstance.usrshape).Y1,
+                                        // ((UsrShapeRect)shapeparamInstance.usrshape).X1,
 
-                                     //((UsrShapeRect)shapeparamInstance.usrshape).Y2,
-                                     //       ((UsrShapeRect)shapeparamInstance.usrshape).X2);
-                                     //   HOperatorSet.DispObj(rectobj, visionControl.GetHalconWindow());
+                                        //((UsrShapeRect)shapeparamInstance.usrshape).Y2,
+                                        //       ((UsrShapeRect)shapeparamInstance.usrshape).X2);
+                                        //   HOperatorSet.DispObj(rectobj, visionControl.GetHalconWindow());
                                         if (((UsrShapeRect)shapeparamInstance.usrshape).Y2 > ((UsrShapeRect)shapeparamInstance.usrshape).Y1)
                                         {
                                             HOperatorSet.DispRectangle1(visionControl.GetHalconWindow(),
@@ -584,7 +557,7 @@ namespace VisionProcess
                                            ((UsrShapeRect)shapeparamInstance.usrshape).X1, ((UsrShapeRect)shapeparamInstance.usrshape).Y2,
                                                         ((UsrShapeRect)shapeparamInstance.usrshape).X2
                                                        );
-                                           // HOperatorSet.DispObj(rectobj, visionControl.GetHalconWindow());
+                                            // HOperatorSet.DispObj(rectobj, visionControl.GetHalconWindow());
                                         }
                                         else
                                         {
@@ -592,7 +565,7 @@ namespace VisionProcess
                                                       ((UsrShapeRect)shapeparamInstance.usrshape).X2,
                                                        ((UsrShapeRect)shapeparamInstance.usrshape).Y1,
                                          ((UsrShapeRect)shapeparamInstance.usrshape).X1);
-                                          //  HOperatorSet.DispObj(rectobj, visionControl.GetHalconWindow());
+                                            //  HOperatorSet.DispObj(rectobj, visionControl.GetHalconWindow());
                                         }
                                         //   HOperatorSet.DispRectangle1(visionControl.GetHalconWindow(),
                                         //((UsrShapeRect)shapeparamInstance.usrshape).Y1,
@@ -604,14 +577,11 @@ namespace VisionProcess
                                     }
                                     catch (Exception e)
                                     {
-
                                     }
 
                                     break;
-
                             }
                         }
-
                     }
                     Save();
                     if (visionControl != null && visionControl.isOpen())
@@ -620,7 +590,6 @@ namespace VisionProcess
                         HOperatorSet.DispObj(RegionSearch, visionControl.GetHalconWindow());
                     if (visionControl != null && visionControl.isOpen())
                     {
-
                         HalconExternFunExport.dev_display_shape_matching_results(ModeID, visionControl.GetHalconWindow(), "green", hv_Row, hv_Column, hv_Angle, 1, 1, 0);
                         for (int i = 0; i < hv_Row.Length; i++)
                         {
@@ -628,9 +597,7 @@ namespace VisionProcess
                             string strmsg = string.Format("x:{0},y:{1},u:{2},score{3},Numlevels", hv_Column[i].D.ToString("F2"), hv_Row[i].D.ToString("F2"), (hv_Angle[i].D / Math.PI * 180).ToString("F2"), hv_Score[i].D.ToString("F2"), visionShapParam.MatchPyamidHigh);
                             HalconExternFunExport.disp_message(visionControl.GetHalconWindow(), strmsg, "window", 0 + i * 20, 100, "green", "false");
                         }
-
                     }
-
                 }
                 else
                 {
@@ -645,8 +612,6 @@ namespace VisionProcess
 
                     return false;
                 }
-
-
             }
             catch (HalconException e)
             {
@@ -656,13 +621,13 @@ namespace VisionProcess
             }
             finally
             {
-
                 ReduceImg?.Dispose();
                 GC.Collect();
             }
 
             return true;
         }
+
         public XYUPoint GetAffineTransPointAffterMatch(double VisionPointOnModleImgX, double VisionPointOnModleImgY, XYUPoint NowVisionDstModlePoint, VisionControl visionControl = null)
         {
             HOperatorSet.VectorAngleToRigid(visionShapParam.ModlePoint.y, visionShapParam.ModlePoint.x, visionShapParam.ModlePoint.u,
@@ -677,6 +642,7 @@ namespace VisionProcess
             XYUPoint NowResultPoint = new XYUPoint(colTrans[0].D, rowTrans[0].D, 0);
             return NowResultPoint;
         }
+
         public override void ClearResult()
         {
             visionShapParam.ResultRow.Clear();
@@ -712,13 +678,11 @@ namespace VisionProcess
                     HOperatorSet.EdgesSubPix(ho_ImageReduced, out HObject edges, "canny", 2, visionShapParam.ContrastLow, visionShapParam.ContrastHigh);
                     if (visionShapParam.CratePyramid == 0)
                     {
-
                         HOperatorSet.CreateShapeModelXld(edges, "auto", (new HTuple(visionShapParam.AngleStart)).TupleRad(), (new HTuple(visionShapParam.AngleExtent)).TupleRad(), new HTuple(0.05), "auto",
                                  new HTuple(visionShapParam.strPolaritySel), 5, out hv_ModelID);
                     }
                     else
                     {
-
                         HOperatorSet.CreateShapeModelXld(edges, visionShapParam.CratePyramid, (new HTuple(visionShapParam.AngleStart)).TupleRad()
                       , (new HTuple(visionShapParam.AngleExtent)).TupleRad(), new HTuple(0.05), "auto", new HTuple(visionShapParam.strPolaritySel), 5, out hv_ModelID);
                     }
@@ -760,7 +724,6 @@ namespace VisionProcess
                 Save();
                 if (Process_image(image, visionControl) && visionShapParam.ResultCol.Count > 0)
                 {
-
                     visionShapParam.ModlePoint.x = visionShapParam.ResultCol[0];
                     visionShapParam.ModlePoint.y = visionShapParam.ResultRow[0];
                     visionShapParam.ModlePoint.u = visionShapParam.ResultAngle[0];
@@ -777,7 +740,6 @@ namespace VisionProcess
                     return false;
                 }
             }
-
             catch (HalconException e)
             {
                 MessageBox.Show(m_strStepName + ":创建模板失败-" + e.Message, "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -794,7 +756,6 @@ namespace VisionProcess
 
             return true;
         }
-
 
         public override bool GenObj(HObject image, string savePath, VisionControl visionControl)
         {
@@ -821,32 +782,26 @@ namespace VisionProcess
                 string strPathModeImg = "";
                 if (visionShapParam.ModeType.ToString() == "形状")
                 {
-
                     HOperatorSet.ReadRegion(out ho_Rectangle, strPathRoi);
                     HOperatorSet.ReduceDomain(image, ho_Rectangle, out ho_ImageReduced);
                     HOperatorSet.EdgesSubPix(ho_ImageReduced, out HObject edges, "canny", 2, visionShapParam.ContrastLow, visionShapParam.ContrastHigh);
                     if (visionShapParam.CratePyramid == 0)
                     {
-
                         HOperatorSet.CreateShapeModelXld(edges, "auto", (new HTuple(visionShapParam.AngleStart)).TupleRad(), (new HTuple(visionShapParam.AngleExtent)).TupleRad(), new HTuple(0.05), "auto",
                                  new HTuple(visionShapParam.strPolaritySel), 5, out hv_ModelID);
                     }
                     else
                     {
-
                         HOperatorSet.CreateShapeModelXld(edges, visionShapParam.CratePyramid, (new HTuple(visionShapParam.AngleStart)).TupleRad()
                       , (new HTuple(visionShapParam.AngleExtent)).TupleRad(), new HTuple(0.05), "auto", new HTuple(visionShapParam.strPolaritySel), 5, out hv_ModelID);
                     }
                     HOperatorSet.GetShapeModelParams(hv_ModelID, out HTuple numlevels, out HTuple startangle,
                         out HTuple endextend, out HTuple anglestep, out HTuple scaleMin, out HTuple scaleMax, out HTuple scalestep, out HTuple metric, out HTuple minContrast);
                     visionShapParam.MatchPyamidHigh = numlevels.I;
-       
-
 
                     strPathMode = savePath + "\\" + m_strStepName + "_Mode.shm";
                     visionShapParam.ModeShmPath = strPathMode;
                     HOperatorSet.WriteShapeModel(hv_ModelID, strPathMode);
-
                 }
                 else
                 {
@@ -871,7 +826,6 @@ namespace VisionProcess
                 Save();
                 if (Process_image(image, visionControl) && visionShapParam.ResultCol.Count > 0)
                 {
-
                     visionShapParam.ModlePoint.x = visionShapParam.ResultCol[0];
                     visionShapParam.ModlePoint.y = visionShapParam.ResultRow[0];
                     visionShapParam.ModlePoint.u = visionShapParam.ResultAngle[0];
@@ -888,7 +842,6 @@ namespace VisionProcess
                     return false;
                 }
             }
-
             catch (HalconException e)
             {
                 MessageBox.Show(m_strStepName + ":创建模板失败-" + e.Message, "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -908,13 +861,12 @@ namespace VisionProcess
 
         public override object GetResult()
         {
-
             return visionShapParam;
         }
+
         public override List<shapeparam> GetRegionOuts()
         {
             return shapeparamResults;
         }
-
     }
 }

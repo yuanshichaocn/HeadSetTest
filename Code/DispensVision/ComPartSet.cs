@@ -1,14 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BaseDll;
+using System;
 using System.Windows.Forms;
-using BaseDll;
-using UserCtrl;
 
 namespace XYZDispensVision
 {
@@ -18,41 +10,43 @@ namespace XYZDispensVision
         {
             InitializeComponent();
         }
+
         public event UpdateCoordinate ReUpdateCoordinateHandler;
+
         private void ComPartSet_Load(object sender, EventArgs e)
         {
-
         }
 
         private DispTraceBaseElement TraceElement = null;
         private DispEveryTraceMoveParam MoveParam = null;
-        public void UpdataParam(DispTraceBaseElement  element, DispEveryTraceMoveParam dispmoveparam)
+
+        public void UpdataParam(DispTraceBaseElement element, DispEveryTraceMoveParam dispmoveparam)
         {
             TraceElement = element;
             MoveParam = dispmoveparam;
         }
+
         public string ItemName
         {
-
             set
             {
                 txtName.Text = value;
-                if(TraceElement!=null)
-                     TraceElement.ItemName = value;
+                if (TraceElement != null)
+                    TraceElement.ItemName = value;
             }
             get
             {
                 if (TraceElement != null)
-                    TraceElement.ItemName= txtName.Text;
+                    TraceElement.ItemName = txtName.Text;
                 return txtName.Text;
             }
-
         }
+
         public bool bIsAllPointMachine
         {
             set
             {
-                if(ReUpdateCoordinateHandler!=null && checkBoxSelMachie.Checked != value)
+                if (ReUpdateCoordinateHandler != null && checkBoxSelMachie.Checked != value)
                 {
                     ReUpdateCoordinateHandler(value);
                 }
@@ -67,22 +61,24 @@ namespace XYZDispensVision
                 return checkBoxSelMachie.Checked;
             }
         }
+
         public double VelHigh
         {
             set
             {
                 if (MoveParam != null)
-                    MoveParam.SpeedHigh= value;
+                    MoveParam.SpeedHigh = value;
                 txtVelHigh.Text = value.ToString();
             }
 
             get
             {
-                if(MoveParam != null)
+                if (MoveParam != null)
                     MoveParam.SpeedHigh = txtVelHigh.Text.ToString().ToDouble();
                 return txtVelHigh.Text.ToString().ToDouble();
             }
         }
+
         public double VelLow
         {
             set
@@ -99,12 +95,13 @@ namespace XYZDispensVision
                 return txtVelLow.Text.ToString().ToDouble();
             }
         }
+
         public double Acc
         {
             set
             {
                 if (MoveParam != null)
-                    MoveParam.Dec= MoveParam.Acc = value;
+                    MoveParam.Dec = MoveParam.Acc = value;
                 txtAcc.Text = value.ToString();
             }
 
@@ -126,5 +123,6 @@ namespace XYZDispensVision
                 TraceElement.bIsAllPointMachine = bIsAllPointMachine;
         }
     }
+
     public delegate void UpdateCoordinate(bool bIsMahcinePoint);
 }

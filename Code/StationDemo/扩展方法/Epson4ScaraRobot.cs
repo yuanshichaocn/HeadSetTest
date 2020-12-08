@@ -1,36 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using BaseDll;
 using CommonTools;
-using MotionIoLib;
-using Communicate;
-using System.Windows.Forms;
-using System.Diagnostics;
-using System.Threading;
-using UserCtrl;
 using EpsonRobot;
-using BaseDll;
-using UserData;
-using VisionProcess;
-using HalconDotNet;
-using System.IO;
-
-using CameraLib;
-using OtherDevice;
-using XYZDispensVision;
-using MachineSafe;
 using log4net;
+using System;
+using System.Threading;
 
 namespace StationDemo
 {
-
     public static class RoboteExt
     {
-        static ILog logger = LogManager.GetLogger("RoboteExt");
-        static string RobotPauseIo = "";
-        static string RobotResumeIo = "";
-        static double limitz = -10;
+        private static ILog logger = LogManager.GetLogger("RoboteExt");
+        private static string RobotPauseIo = "";
+        private static string RobotResumeIo = "";
+        private static double limitz = -10;
 
         private static double getLimit(Coordinate pos)
         {
@@ -38,6 +20,7 @@ namespace StationDemo
             limtZ = limtZ >= ScaraRobot.GetInstance().CurrentPosition.Z ? limtZ : ScaraRobot.GetInstance().CurrentPosition.Z + 0.2;
             return limtZ;
         }
+
         public static WaranResult JumpInPos(this ScaraRobot scaraRobot, Coordinate coordinate, HandDirection direction, double limz, bool bCheckHandleSys = false, bool bmauanl = false, int nTimeout = 20000)
         {
             logger.Info($"JumpInPos start pos{coordinate.X}，{coordinate.Y}，{coordinate.Z}，{coordinate.U}");
@@ -90,7 +73,6 @@ namespace StationDemo
                                 ScaraRobot.GetInstance().Jump(coordinate, direction, limz);
                                 return WaranResult.CheckAgain;
                             }
-
                         }
                     }
 
@@ -108,7 +90,6 @@ namespace StationDemo
                         return WaranResult.TimeOut;
                     }
 
-
                     if (ScaraRobot.GetInstance().InPos && bInPos)
                         return WaranResult.Run;
                     else
@@ -124,9 +105,8 @@ namespace StationDemo
                 ScaraRobot.GetInstance().ReasetStopActionFlag();
                 throw ex;
             }
-
-
         }
+
         public static WaranResult GoInPos(this ScaraRobot scaraRobot, Coordinate coordinate, HandDirection direction, bool bCheckHandleSys = false, bool bmauanl = false, int nTimeout = 20000)
         {
             try
@@ -176,7 +156,6 @@ namespace StationDemo
                                 ScaraRobot.GetInstance().Go(coordinate, direction);
                                 return WaranResult.CheckAgain;
                             }
-
                         }
                     }
 
@@ -191,7 +170,6 @@ namespace StationDemo
 
                         return WaranResult.TimeOut;
                     }
-
 
                     if (ScaraRobot.GetInstance().InPos && bInPos)
                         return WaranResult.Run;
@@ -209,11 +187,11 @@ namespace StationDemo
                 throw ex;
             }
         }
+
         public static WaranResult GoInPosZ(this ScaraRobot scaraRobot, double Zpos, bool bCheckHandleSys = true, bool bmauanl = false, int nTimeout = 20000)
         {
             try
             {
-
                 Coordinate coordinate = ScaraRobot.GetInstance().CurrentPosition;
                 HandDirection direction = ScaraRobot.GetInstance().CurrentHandDirection;
                 coordinate.Z = Zpos;
@@ -264,7 +242,6 @@ namespace StationDemo
                                 ScaraRobot.GetInstance().Go(coordinate, direction);
                                 return WaranResult.CheckAgain;
                             }
-
                         }
                     }
 
@@ -281,7 +258,6 @@ namespace StationDemo
 
                         return WaranResult.TimeOut;
                     }
-
 
                     if (ScaraRobot.GetInstance().InPos && bInPos)
                         return WaranResult.Run;
@@ -352,7 +328,6 @@ namespace StationDemo
                                 ScaraRobot.GetInstance().Jump(coordinate, direction, getLimit(coordinate));
                                 return WaranResult.CheckAgain;
                             }
-
                         }
                     }
 
@@ -370,7 +345,6 @@ namespace StationDemo
                         return WaranResult.TimeOut;
                     }
 
-
                     if (ScaraRobot.GetInstance().InPos && bInPos)
                         return WaranResult.Run;
                     else
@@ -386,11 +360,6 @@ namespace StationDemo
                 ScaraRobot.GetInstance().ReasetStopActionFlag();
                 throw ex;
             }
-
-
         }
-        
     }
-
-
 }

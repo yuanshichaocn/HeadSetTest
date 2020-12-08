@@ -1,31 +1,21 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using BaseDll;
-using log4net;
-using VisionProcess;
-using System.IO;
-using HalconDotNet;
+﻿using BaseDll;
 using CameraLib;
-using System.Threading;
-using System.Diagnostics;
+using HalconDotNet;
+using log4net;
 using MotionIoLib;
 using OtherDevice;
-using Newtonsoft.Json;
-using System.Reflection;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
+using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using VisionProcess;
 
 namespace XYZDispensVision
 {
-
-
-
     public partial class DispenseCtrl : UserControl, IUserRightSwitch
     {
         public DispenseCtrl()
@@ -52,16 +42,17 @@ namespace XYZDispensVision
             }
         }
 
-        ILog log = LogManager.GetLogger(nameof(DispenseCtrl));
-    
+        private ILog log = LogManager.GetLogger(nameof(DispenseCtrl));
+
         public DispCalibParam dispCalibParam = new DispCalibParam();
 
         public DispConfig dispConfig = new DispConfig();
 
-        VisionShapMatch shapeDispCalib = new VisionShapMatch("点胶标定");
+        private VisionShapMatch shapeDispCalib = new VisionShapMatch("点胶标定");
         public VisionShapMatch shapeDst = new VisionShapMatch("目标设定");
         public XY_UR_Calib XYUR_Pin = new XY_UR_Calib();
         public XY_UR_Calib XYUR_Laser = new XY_UR_Calib();
+
         public void FlushToScreen()
         {
             double vel = 100, vellow = 0;
@@ -97,12 +88,11 @@ namespace XYZDispensVision
             z = dispCalibParam.pointDispenseCalibs.Find(t => t.strPointName == "针头测高点").MachinePoint.z;
             dataGridView_PointInfo.Rows.Add("针头测高点", x.ToString("F3"), y.ToString("F3"), z.ToString("F3"));
 
-
             dXStep = dispCalibParam.dXStep;
             dYStep = dispCalibParam.dYStep;
             dLaserOffsetX = dispCalibParam.dLaserOffsetX;
             dLaserOffsetY = dispCalibParam.dLaserOffsetY;
-            dPinOffsetX= dispCalibParam.dPinOffsetX;
+            dPinOffsetX = dispCalibParam.dPinOffsetX;
             dPinOffsetY = dispCalibParam.dPinOffsetY;
             dNeedleZLatchHeight = dispCalibParam.dNeedleZLatchHeight;
 
@@ -110,8 +100,8 @@ namespace XYZDispensVision
             dCalibGain = dispCalibParam.dCalibGain;
             dDstExposure = dispCalibParam.dDstExposure;
             dCalibGain = dispCalibParam.dCalibGain;
-
         }
+
         public double dNeedleZLatchHeight
         {
             set
@@ -124,7 +114,6 @@ namespace XYZDispensVision
             {
                 return txtZLatchData.Text.ToDouble();
             }
-
         }
 
         public double dDstGain
@@ -140,6 +129,7 @@ namespace XYZDispensVision
                 return textDstGain.Text.ToDouble();
             }
         }
+
         public double dDstExposure
         {
             set
@@ -153,6 +143,7 @@ namespace XYZDispensVision
                 return textDstExpsoure.Text.ToDouble();
             }
         }
+
         public double dCalibExposure
         {
             set
@@ -166,6 +157,7 @@ namespace XYZDispensVision
                 return textExpsoure.Text.ToDouble();
             }
         }
+
         public double dCalibGain
         {
             set
@@ -207,6 +199,7 @@ namespace XYZDispensVision
                 return textYStep.Text.ToDouble();
             }
         }
+
         public double dPinOffsetX
         {
             set
@@ -220,6 +213,7 @@ namespace XYZDispensVision
                 return textPinXOffset.Text.ToDouble();
             }
         }
+
         public double dPinOffsetY
         {
             set
@@ -233,6 +227,7 @@ namespace XYZDispensVision
                 return textPinYOffset.Text.ToDouble();
             }
         }
+
         public double dLaserOffsetX
         {
             set
@@ -246,6 +241,7 @@ namespace XYZDispensVision
                 return textLaserXOffset.Text.ToDouble();
             }
         }
+
         public double dLaserOffsetY
         {
             set
@@ -262,11 +258,9 @@ namespace XYZDispensVision
 
         public void ScreenToData()
         {
-
             string strPointName = "";
             int indexCol = 1;
             double accSet, decSet, speedSet, speedLowSet;
-
 
             DataGridView dataGridView = dataGridView_PointInfo;
             for (int i = 0; i < dataGridView.Rows.Count; i++)
@@ -318,9 +312,8 @@ namespace XYZDispensVision
             {
                 MessageBox.Show($"保存点胶标定参数中异常：" + e.Message, "Err", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
-
-
         }
+
         public int AxisX
         {
             set
@@ -356,6 +349,7 @@ namespace XYZDispensVision
                 return dispConfig.AxisZ;
             }
         }
+
         public int AxisU
         {
             set
@@ -366,7 +360,8 @@ namespace XYZDispensVision
             {
                 return dispConfig.AxisU;
             }
-        } 
+        }
+
         public bool IsHaveLaset
         {
             set
@@ -390,6 +385,7 @@ namespace XYZDispensVision
                 return dispConfig.IsIoTriggerLight;
             }
         } // 是否使用IO触发光源
+
         public bool IsComTriggerLight
         {
             set
@@ -401,6 +397,7 @@ namespace XYZDispensVision
                 return dispConfig.IsComTriggerLight;
             }
         } // 是否使用Com触发光源
+
         public string TriggerLightIoName
         {
             set
@@ -412,6 +409,7 @@ namespace XYZDispensVision
                 return dispConfig.TriggerLightIoName;
             }
         }//触发光源的IO
+
         public string DispModleName
         {
             set
@@ -423,6 +421,7 @@ namespace XYZDispensVision
                 return dispConfig.DispModleName;
             }
         } // 点胶模块名
+
         public string TopCamName
         {
             set
@@ -435,23 +434,24 @@ namespace XYZDispensVision
             }
         }
 
-
         public void ChangeState(Label labelControl, bool bval)
         {
             labelControl.Text = bval ? "ON" : "OFF";
             labelControl.BackColor = bval ? Color.LightGreen : Color.LightBlue;
         }
 
-        void ChangeStateSeverOnBtn(Button button, bool bval)
+        private void ChangeStateSeverOnBtn(Button button, bool bval)
         {
             button.Text = bval ? "伺服ON" : "伺服OFF";
             button.BackColor = bval ? Color.LightGreen : Color.LightBlue;
         }
-        void ChangeAxisPos(Label label, double pos)
+
+        private void ChangeAxisPos(Label label, double pos)
         {
             label.Text = pos.ToString();
         }
-        void ChangeMotionConfig(int nAxis, AxisConfig axisConfig)
+
+        private void ChangeMotionConfig(int nAxis, AxisConfig axisConfig)
         {
             if (AxisX == nAxis)
                 button_ServoOnX.Enabled = ((axisConfig.motorType >= MotorType.SEVER) ? true : false);
@@ -464,16 +464,16 @@ namespace XYZDispensVision
 
             if (AxisU == nAxis)
                 button_ServoOnU.Enabled = ((axisConfig.motorType >= MotorType.SEVER) ? true : false);
-
-
         }
+
         public LightControler lightControler = null;
+
         public void UpdataDispData()
         {
-
             Read();
             InitCtr();
         }
+
         public void ChangeMotionIoStateAndPos(int index, bool[] bChangeBitGet, AxisIOState axisIOState, AxisPos axisPos)
         {
             bool[] bChangeBit = new bool[bChangeBitGet.Length];
@@ -485,7 +485,6 @@ namespace XYZDispensVision
             }
             else
             {
-
                 if (index == AxisX)
                 {
                     if (bChangeBit[0])
@@ -504,7 +503,6 @@ namespace XYZDispensVision
                         ChangeAxisPos(label_ActPosX, axisPos._lActPos);
                     if (bChangeBit[7])
                         ChangeAxisPos(label_CmdPosX, axisPos._lCmdPos);
-
                 }
                 if (index == AxisY)
                 {
@@ -543,7 +541,6 @@ namespace XYZDispensVision
                         ChangeAxisPos(label_ActPosZ, axisPos._lActPos);
                     if (bChangeBit[7])
                         ChangeAxisPos(label_CmdPosZ, axisPos._lCmdPos);
-
                 }
                 if (index == AxisU)
                 {
@@ -563,13 +560,11 @@ namespace XYZDispensVision
                         ChangeAxisPos(label_ActPosU, axisPos._lActPos);
                     if (bChangeBit[7])
                         ChangeAxisPos(label_CmdPosU, axisPos._lCmdPos);
-
                 }
-
             }
-
         }
-        void UpdataAxisIoAndPos(int nAxisNo, AxisIOState axisIOState, AxisPos pos)
+
+        private void UpdataAxisIoAndPos(int nAxisNo, AxisIOState axisIOState, AxisPos pos)
         {
             if (nAxisNo == -1)
                 return;
@@ -584,8 +579,6 @@ namespace XYZDispensVision
                 ChangeState(labelControl_EMGX, axisIOState._bEmg);
                 ChangeAxisPos(label_ActPosX, pos._lActPos);
                 ChangeAxisPos(label_CmdPosX, pos._lCmdPos);
-
-
             }
             if (nAxisNo == AxisY)
             {
@@ -597,7 +590,6 @@ namespace XYZDispensVision
                 ChangeState(labelControl_EMGY, axisIOState._bEmg);
                 ChangeAxisPos(label_ActPosY, pos._lActPos);
                 ChangeAxisPos(label_CmdPosY, pos._lCmdPos);
-
             }
             if (nAxisNo == AxisZ)
             {
@@ -621,11 +613,10 @@ namespace XYZDispensVision
                 ChangeAxisPos(label_ActPosU, pos._lActPos);
                 ChangeAxisPos(label_CmdPosU, pos._lCmdPos);
             }
-
         }
+
         private void UpdataMotion()
         {
-
             AxisIOState axisIOState = new AxisIOState();
             AxisPos axisPos = new AxisPos();
             AxisConfig axisConfig = new AxisConfig();
@@ -643,9 +634,7 @@ namespace XYZDispensVision
                 labelControl_LimtNX.Enabled = false;
                 labelControl_ORIX.Enabled = false;
                 labelControl_EMGX.Enabled = false;
-
             }
-
 
             MotionMgr.GetInstace().GetAxisIOState(AxisY, ref axisIOState);
             MotionMgr.GetInstace().GetAxisPos(AxisY, ref axisPos);
@@ -678,7 +667,6 @@ namespace XYZDispensVision
                 labelControl_EMGZ.Enabled = false;
             }
 
-
             MotionMgr.GetInstace().GetAxisIOState(AxisU, ref axisIOState);
             MotionMgr.GetInstace().GetAxisPos(AxisU, ref axisPos);
             UpdataAxisIoAndPos(AxisU, axisIOState, axisPos);
@@ -694,7 +682,6 @@ namespace XYZDispensVision
                 labelControl_EMGU.Enabled = false;
             }
 
-
             //工站IO 更新
             //foreach (var tem in m_Stationbase.m_listIoInput)
             //    if (m_dicInput.ContainsKey(tem))
@@ -703,9 +690,8 @@ namespace XYZDispensVision
             //foreach (var tem in m_Stationbase.m_listIoOutput)
             //    if (m_dicOutput.ContainsKey(tem))
             //        userBtnPanel_Output.SetBtnState(tem, IOMgr.GetInstace().ReadIoOutBit(tem));
-
-
         }
+
         public void UpdataDataTraceDataGridView(string OperateName, object obj)
         {
             if (OperateName == ("Del"))
@@ -729,8 +715,8 @@ namespace XYZDispensVision
             {
                 dataGridViewDispTrace.Rows.Clear();
             }
-
         }
+
         public void UpdataDataCalibDataGridView(string OperateName, object obj)
         {
             if (OperateName == ("SetDispenseCalibsPoint"))
@@ -745,14 +731,13 @@ namespace XYZDispensVision
             }
             else if (OperateName == ("Add"))
             {
-              
             }
             else if (OperateName == ("Clr"))
             {
                 dataGridViewDispTrace.Rows.Clear();
             }
-
         }
+
         private void DispenseCtrl_Load(object sender, EventArgs e)
         {
             InitCtr();
@@ -808,10 +793,8 @@ namespace XYZDispensVision
                 button_Upositive.Enabled = false;
                 button_Unegtive.Enabled = false;
             }
-
-
-           
         }
+
         public void ChangedIoInState(string IoName, bool bStateCurrent)
         {
             int nRow = 0;
@@ -821,12 +804,10 @@ namespace XYZDispensVision
             }
             else
             {
-
                 // userPanel_Input.SetLebalState(IoName, bStateCurrent);
-
-
             }
         }
+
         public void ChangedIoOutState(string IoName, bool bStateCurrent)
         {
             int nRow = 0;
@@ -836,7 +817,6 @@ namespace XYZDispensVision
             }
             else
             {
-
                 // userBtnPanel_Output.SetBtnState(IoName, bStateCurrent);
             }
         }
@@ -848,6 +828,7 @@ namespace XYZDispensVision
             else
                 MotionMgr.GetInstace().ServoOff((short)AxisX);
         }
+
         private void button_ServoOnY_Click(object sender, EventArgs e)
         {
             if (button_ServoOnY.Text == "伺服OFF")
@@ -909,7 +890,7 @@ namespace XYZDispensVision
                     MotionMgr.GetInstace().SetAxisCmdPos(nAxisNo, 0);
                     MotionMgr.GetInstace().SetAxisHomeFinishFlag(nAxisNo);
                 }
-                Exception_ENDX:
+            Exception_ENDX:
                 button.Invoke(
                       new Action(() =>
                       {
@@ -920,19 +901,21 @@ namespace XYZDispensVision
                  );
             });
         }
+
         private void button_homeX_Click(object sender, EventArgs e)
         {
             bStopMove = false;
             int nAxisNo = AxisX;
             HomeAction(nAxisNo, button_homeX);
-
         }
+
         private void button_homeY_Click(object sender, EventArgs e)
         {
             bStopMove = false;
             int nAxisNo = AxisY;
             HomeAction(nAxisNo, button_homeY);
         }
+
         private void button_homeZ_Click(object sender, EventArgs e)
         {
             bStopMove = false;
@@ -940,6 +923,7 @@ namespace XYZDispensVision
 
             HomeAction(nAxisNo, button_homeY);
         }
+
         private void button_homeU_Click(object sender, EventArgs e)
         {
             bStopMove = false;
@@ -976,7 +960,7 @@ namespace XYZDispensVision
                 MotionMgr.GetInstace().SetAxisActualPos(nAxisNo, 0);
                 MotionMgr.GetInstace().SetAxisCmdPos(nAxisNo, 0);
                 MotionMgr.GetInstace().SetAxisHomeFinishFlag(nAxisNo);
-                Exception_ENDU:
+            Exception_ENDU:
                 button_homeU.Invoke(
                          new Action(() =>
                          {
@@ -985,22 +969,19 @@ namespace XYZDispensVision
                              button_homeU.Text = "回原点";
                          })
                     );
-
             });
-
         }
 
         private void VisionCalibSet_Click(object sender, EventArgs e)
         {
-
         }
-
 
         public bool InitFinished
         {
             private set;
             get;
         } = false;
+
         public UserRight userRight { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public void Read()
@@ -1036,13 +1017,11 @@ namespace XYZDispensVision
                 dispCalibParam.Save();
             }
 
-      
-
-            shapeDispCalib.strSavePath = visionMatchSetCtr1.strPath= strvisionPath + "点胶标定";
-            shapeDst.strSavePath = visionMatchSetCtr2.strPath= strvisionPath + "目标设定";
+            shapeDispCalib.strSavePath = visionMatchSetCtr1.strPath = strvisionPath + "点胶标定";
+            shapeDst.strSavePath = visionMatchSetCtr2.strPath = strvisionPath + "目标设定";
 
             dispCalibParam.FileSavePath = strvisionPath + this.DispModleName + ".xml";
-         
+
             shapeDispCalib.Read(strvisionPath + "点胶标定");
 
             shapeDst.Read(strvisionPath + "目标设定");
@@ -1056,7 +1035,7 @@ namespace XYZDispensVision
                     PointDispense pointDispenseCalibPin = dispCalibParam.pointDispenseCalibs[nIndex];
                     XYUR_Pin.CalibPoint = pointDispenseCalibPin.MachinePoint;
                 }
-                 nIndex = dispCalibParam.pointDispenseCalibs.FindIndex(t => t.strPointName == "对镭射点");
+                nIndex = dispCalibParam.pointDispenseCalibs.FindIndex(t => t.strPointName == "对镭射点");
                 if (nIndex == -1)
                     MessageBox.Show("不存在对针点,标定失败", "Err", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 else
@@ -1161,17 +1140,12 @@ namespace XYZDispensVision
                                 break;
                             }
                         }
-
-
                     }
-
                 }
             }
             else
             {
-
             }
-
         }
 
         private async void button_SingleAxisMove_Click(object sender, EventArgs e)
@@ -1181,25 +1155,21 @@ namespace XYZDispensVision
             double val = 0;
             try
             {
-
                 log.Info("SingleAxisMove");
                 int indexRow = 0;
                 string strPointName = "";
                 if (rightTab1.SelectedIndex == 0)
                 {
-
                     if (dataGridView_PointInfo.CurrentCell != null && dataGridView_PointInfo.CurrentCell.Value != null)
                     {
                         indexRow = dataGridView_PointInfo.CurrentCell.RowIndex;
                         strPointName = dataGridView_PointInfo.Rows[indexRow].Cells[0].Value.ToString();
                         indexCol = dataGridView_PointInfo.CurrentCell.ColumnIndex;
                         val = Convert.ToDouble(dataGridView_PointInfo.CurrentCell.Value.ToString());
-
                     }
                 }
                 else
                 {
-
                     if (dataGridView_DispPosList.CurrentCell != null && dataGridView_DispPosList.CurrentCell.Value != null)
                     {
                         indexRow = dataGridView_DispPosList.CurrentCell.RowIndex;
@@ -1207,12 +1177,8 @@ namespace XYZDispensVision
                         indexCol = dataGridView_DispPosList.CurrentCell.ColumnIndex;
 
                         val = Convert.ToDouble(dataGridView_DispPosList.CurrentCell.Value.ToString());
-
                     }
-
                 }
-
-
             }
             catch (Exception ex)
             {
@@ -1222,7 +1188,6 @@ namespace XYZDispensVision
             }
             finally
             {
-
             }
             Task s = Task.Run(() =>
             {
@@ -1233,9 +1198,11 @@ namespace XYZDispensVision
                         case 1:
                             MotionMgr.GetInstace().AbsMove(AxisX, val, (int)SpeedType.Low);
                             break;
+
                         case 2:
                             MotionMgr.GetInstace().AbsMove(AxisY, val, (int)SpeedType.Low);
                             break;
+
                         case 3:
                             MotionMgr.GetInstace().AbsMove(AxisZ, val, (int)SpeedType.Low);
                             break;
@@ -1254,7 +1221,6 @@ namespace XYZDispensVision
             double val3 = 0;
             try
             {
-
                 log.Info("AllAxisMove");
                 int indexRow = 0;
                 string strPointName = "";
@@ -1268,7 +1234,6 @@ namespace XYZDispensVision
                         val1 = Convert.ToDouble(dataGridView_PointInfo.Rows[indexRow].Cells[1].Value.ToString());
                         val2 = Convert.ToDouble(dataGridView_PointInfo.Rows[indexRow].Cells[2].Value.ToString());
                         val3 = Convert.ToDouble(dataGridView_PointInfo.Rows[indexRow].Cells[3].Value.ToString());
-
                     }
                 }
                 else
@@ -1281,7 +1246,6 @@ namespace XYZDispensVision
                         val1 = Convert.ToDouble(dataGridView_DispPosList.Rows[indexRow].Cells[1].Value.ToString());
                         val2 = Convert.ToDouble(dataGridView_DispPosList.Rows[indexRow].Cells[2].Value.ToString());
                         val3 = Convert.ToDouble(dataGridView_DispPosList.Rows[indexRow].Cells[3].Value.ToString());
-
                     }
                 }
             }
@@ -1293,7 +1257,6 @@ namespace XYZDispensVision
             }
             finally
             {
-
             }
 
             Task s = Task.Run(() =>
@@ -1305,7 +1268,6 @@ namespace XYZDispensVision
             await s;
             BtnEable();
         }
-
 
         private void BtnSave_Click(object sender, EventArgs e)
         {
@@ -1338,6 +1300,7 @@ namespace XYZDispensVision
             textExpsoureTimeVal.Text = valexposure == null ? "0" : valexposure.ToString();
             textGainVal.Text = valgain == null ? "0" : valgain.ToString();
         }
+
         private void DispenseCtrl_VisibleChanged(object sender, EventArgs e)
         {
             if (this.Visible)
@@ -1346,7 +1309,6 @@ namespace XYZDispensVision
             }
             else
             {
-
             }
             if (Visible)
             {
@@ -1355,9 +1317,6 @@ namespace XYZDispensVision
                 MotionMgr.GetInstace().m_eventChangeMotionConfig += ChangeMotionConfig;
                 //IOMgr.GetInstace().m_eventIoInputChanageByName += ChangedIoInState;
                 IOMgr.GetInstace().m_eventIoOutputChanageByName += ChangedIoOutState;
-
-
-
             }
             else
             {
@@ -1450,7 +1409,6 @@ namespace XYZDispensVision
             {
                 oldRegion?.Dispose();
                 obj?.Dispose();
-
             }
             BtnEable();
         }
@@ -1486,7 +1444,6 @@ namespace XYZDispensVision
             BtnEable(false);
             try
             {
-
                 obj = visionControl1.DrawShape();
                 if (obj == null)
                     return;
@@ -1496,7 +1453,6 @@ namespace XYZDispensVision
                     if (oldRegion != null && oldRegion.IsInitialized())
                     {
                         HOperatorSet.Difference(oldRegion, obj, out obj);
-
                     }
                 }
                 HOperatorSet.WriteRegion(obj, strPath);
@@ -1514,7 +1470,6 @@ namespace XYZDispensVision
             {
                 oldRegion?.Dispose();
                 obj?.Dispose();
-
             }
             obj.Dispose(); BtnEable();
         }
@@ -1533,7 +1488,8 @@ namespace XYZDispensVision
                 rightTab1.BeginInvoke(new MethodInvoker(() => { BtnEable(); }));
             }, null);
         }
-        FormMoveOperate formMoveOperate = null;
+
+        private FormMoveOperate formMoveOperate = null;
 
         private void btnMoveOperate_Click(object sender, EventArgs e)
         {
@@ -1546,7 +1502,6 @@ namespace XYZDispensVision
             formMoveOperate.Location = p;
 
             formMoveOperate.Show();
-
         }
 
         private void BtnSanp_Click(object sender, EventArgs e)
@@ -1558,7 +1513,6 @@ namespace XYZDispensVision
             cameraBase.SetTriggerMode(CameraModeType.Software);
             CameraMgr.GetInstance().GetCamera(strCamName).StartGrab();
             CameraMgr.GetInstance().GetCamera(strCamName).GarbBySoftTrigger();
-
         }
 
         private void btnSnapSave_Click(object sender, EventArgs e)
@@ -1572,8 +1526,8 @@ namespace XYZDispensVision
 
             CameraMgr.GetInstance().SaveImg(strCamName);
             CameraMgr.GetInstance().GetCamera(strCamName).GarbBySoftTrigger();
-
         }
+
         public bool CheckAllAxisState(int[] axisarr)
         {
             int axisno = 0;
@@ -1585,6 +1539,7 @@ namespace XYZDispensVision
             }
             return ballAxisNoState;
         }
+
         public bool CheckAllAxisState(int[] axisarr, double[] cmppos, double dfine)
         {
             int axisno = 0;
@@ -1627,15 +1582,16 @@ namespace XYZDispensVision
                 }
                 if (CheckAllAxisState(axisarr) && CheckAllAxisState(axisarr, cmppos, dfine))
                     return true;
-
             }
 
             return true;
         }
+
         public bool MoveSigleAxis(int axisNo, double cmppos, double speed, double dfine, int timeout = 60000)
         {
             return MoveMulitAxis(new int[] { axisNo }, new double[] { cmppos }, new double[] { speed }, dfine, timeout);
         }
+
         private void ContinuousSnap_Click(object sender, EventArgs e)
         {
             string strCamName = TopCamName;
@@ -1652,10 +1608,8 @@ namespace XYZDispensVision
             CameraMgr.GetInstance().SetCamGain(strCamName, Convert.ToDouble(textGainVal.Text));
         }
 
-
         private async void BtnCalibMotion_Click(object sender, EventArgs e)
         {
-
             double xstep = Convert.ToDouble(textXStep.Text);
             double ystep = Convert.ToDouble(textYStep.Text);
             int nIndex = dispCalibParam.pointDispenseCalibs.FindIndex(t => t.strPointName == "标定点");
@@ -1678,7 +1632,6 @@ namespace XYZDispensVision
                 new Point2d( pointDispenseCalib.MachinePoint.x+ xstep, pointDispenseCalib.MachinePoint.y - ystep),
                 new Point2d( pointDispenseCalib.MachinePoint.x+ xstep, pointDispenseCalib.MachinePoint.y),
                 new Point2d( pointDispenseCalib.MachinePoint.x+ xstep,pointDispenseCalib.MachinePoint.y + ystep)
-
             };
 
             nIndex = dispCalibParam.pointDispenseCalibs.FindIndex(t => t.strPointName == "对针点");
@@ -1709,7 +1662,6 @@ namespace XYZDispensVision
             {
                 try
                 {
-
                     List<double> Vrow = new List<double>(); Vrow.Clear();
                     List<double> Vcol = new List<double>(); Vcol.Clear();
 
@@ -1721,7 +1673,6 @@ namespace XYZDispensVision
                     HTuple hTupleMy = new HTuple();
                     for (int i = 0; i < point2Ds.Length; i++)
                     {
-
                         //  Device.GetDevice().FRobot.MoveAbs(point2Ds[i].y, point2Ds[i].x, zheight, null);
                         MoveMulitAxis(new int[] { AxisX, AxisY }, new double[] { point2Ds[i].x, point2Ds[i].y },
                             new double[] { (double)SpeedType.High, (double)SpeedType.Low }, 0.05);
@@ -1774,7 +1725,6 @@ namespace XYZDispensVision
                     HOperatorSet.WriteTuple(hTupleVcol, strvisionPath + "点胶标定\\" + "VM_VCol.tup");
                     HOperatorSet.WriteTuple(hTupleMx, strvisionPath + "点胶标定\\" + "VM_Mx.tup");
                     HOperatorSet.WriteTuple(hTupleMy, strvisionPath + "点胶标定\\" + "VM_My.tup");
-
                 }
                 catch (Exception ex)
                 {
@@ -1788,7 +1738,6 @@ namespace XYZDispensVision
                         IOMgr.GetInstace().WriteIoBit(TriggerLightIoName, false);
                     }
                 }
-
             });
             await task;
             BtnEable();
@@ -1852,12 +1801,9 @@ namespace XYZDispensVision
                     XYUPoint visionPoint = new XYUPoint(visionShapMatchobj.ResultCol[0], visionShapMatchobj.ResultRow[0], 0);
                     XYUPoint DstPoint = XYUR_Pin.GetDstPonit(visionPoint, SnapPoint);
                     MoveMulitAxis(new int[] { AxisX, AxisY }, new double[] { DstPoint.x, DstPoint.y }, new double[] { (double)SpeedType.High, (double)SpeedType.High }, 0.02);
-
-
                 }
                 catch (Exception ex)
                 {
-
                 }
                 finally
                 {
@@ -1865,14 +1811,12 @@ namespace XYZDispensVision
                     {
                         IOMgr.GetInstace().WriteIoBit(TriggerLightIoName, false);
                     }
-
                 }
-
             });
             await task;
             BtnEable(true);
-
         }
+
         public void ReadCalibPin()
         {
             if (!Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + @"VisionCalb\Pin\"))
@@ -1895,17 +1839,14 @@ namespace XYZDispensVision
                 {
                     MessageBox.Show($"读取标定参数异常：" + "对针点丢失", "Err", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
-
-
             }
             catch (Exception e)
             {
                 MessageBox.Show($"读取标定参数异常：" + e.Message, "Err", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
-
         }
-        HTuple m_Hom2Dutr, Hom2D, m_Hom2Drtu;
 
+        private HTuple m_Hom2Dutr, Hom2D, m_Hom2Drtu;
 
         public async void ReadCalibLaser()
         {
@@ -1919,7 +1860,6 @@ namespace XYZDispensVision
                 HOperatorSet.ReadTuple(AppDomain.CurrentDomain.BaseDirectory + @"VisionCalb\Laser\VM_VCol.tup", out HTuple hTupleVcol);
                 HOperatorSet.ReadTuple(AppDomain.CurrentDomain.BaseDirectory + @"VisionCalb\Laser\VM_Mx.tup", out HTuple hTupleMx);
                 HOperatorSet.ReadTuple(AppDomain.CurrentDomain.BaseDirectory + @"VisionCalb\Laser\VM_My.tup", out HTuple hTupleMy);
-
 
                 HOperatorSet.VectorToHomMat2d(hTupleVcol, hTupleVrow, hTupleMx, hTupleMy, out Hom2D);
                 m_Hom2Dutr = Hom2D.Clone();
@@ -1936,13 +1876,11 @@ namespace XYZDispensVision
                 {
                     MessageBox.Show($"读取标定参数异常：" + "对镭射点丢失", "Err", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
-
             }
             catch (Exception e)
             {
                 MessageBox.Show($"读取标定参数异常：" + e.Message, "Err", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
-
         }
 
         private async void BtnLaserCalib_Click(object sender, EventArgs e)
@@ -1969,7 +1907,6 @@ namespace XYZDispensVision
                 new Point2d( pointDispenseCalib.MachinePoint.x+ xstep, pointDispenseCalib.MachinePoint.y - ystep),
                 new Point2d( pointDispenseCalib.MachinePoint.x+ xstep, pointDispenseCalib.MachinePoint.y),
                 new Point2d( pointDispenseCalib.MachinePoint.x+ xstep,pointDispenseCalib.MachinePoint.y + ystep)
-
             };
 
             nIndex = dispCalibParam.pointDispenseCalibs.FindIndex(t => t.strPointName == "对镭射点");
@@ -1995,7 +1932,6 @@ namespace XYZDispensVision
             {
                 try
                 {
-
                     //  Device.GetDevice().IO.CCDLight = true;
                     List<double> Vrow = new List<double>(); Vrow.Clear();
                     List<double> Vcol = new List<double>(); Vcol.Clear();
@@ -2008,7 +1944,6 @@ namespace XYZDispensVision
                     HTuple hTupleMy = new HTuple();
                     for (int i = 0; i < point2Ds.Length; i++)
                     {
-
                         //    Device.GetDevice().FRobot.MoveAbs(point2Ds[i].y, point2Ds[i].x, zheight, null);
                         Thread.Sleep(20);
                         img = cam.GetImage();
@@ -2061,7 +1996,6 @@ namespace XYZDispensVision
                 finally
                 {
                     // Device.GetDevice().IO.CCDLight = false;
-
                 }
             });
             await task1;
@@ -2075,7 +2009,6 @@ namespace XYZDispensVision
             {
                 try
                 {
-
                     Stopwatch stopwatch = new Stopwatch();
                     HObject img = null;
                     CameraBase cam = CameraMgr.GetInstance().GetCamera("Top");
@@ -2113,23 +2046,18 @@ namespace XYZDispensVision
                     XYUPoint visionPoint = new XYUPoint(visionShapMatchobj.ResultCol[0], visionShapMatchobj.ResultRow[0], 0);
                     XYUPoint DstPoint = XYUR_Laser.GetDstPonit(visionPoint, SnapPoint);
                     //Device.GetDevice().FRobot.MoveAbs(DstPoint.y, DstPoint.x, -0.5, null);
-
                 }
                 catch (Exception ex)
                 {
-
                 }
                 finally
                 {
                     // Device.GetDevice().IO.CCDLight = false;
-
                 }
-
             });
             await task;
             BtnEable();
         }
-
 
         public void BtnEable(bool bEable = true)
         {
@@ -2143,6 +2071,7 @@ namespace XYZDispensVision
             BtnPrTest.Enabled = bEable;
             BtnSave.Enabled = bEable;
         }
+
 #if false
 
         private async void BtnSnapGoDisoPos1_Click(object sender, EventArgs e)
@@ -2203,18 +2132,15 @@ namespace XYZDispensVision
                     PinGoDstPos = XYUR_Pin.GetDstPonit(nowLaserPoint, SnapPoint);
                   //  Device.GetDevice().FRobot.MoveAbs(PinGoDstPos.y, PinGoDstPos.x, -0.5, null);
                   //  Device.GetDevice().FRobot.MoveAbs(null, null, zDispensePointHeight, null);
-
                 }
                 catch (Exception ex)
                 {
-
                 }
                 finally
                 {
                    // Device.GetDevice().IO.CCDLight = false;
                     BtnEable();
                 }
-
             });
             await task;
         }
@@ -2223,7 +2149,6 @@ namespace XYZDispensVision
         {
             Task task = Task.Run(() =>
             {
-
                 try
                 {
                     BtnEable(false);
@@ -2278,18 +2203,15 @@ namespace XYZDispensVision
                     PinGoDstPos = XYUR_Pin.GetDstPonit(nowLaserPoint, SnapPoint);
                     Device.GetDevice().FRobot.MoveAbs(PinGoDstPos.y, PinGoDstPos.x, -0.5, null);
                     Device.GetDevice().FRobot.MoveAbs(null, null, zDispensePointHeight, null);
-
                 }
                 catch (Exception ex)
                 {
-
                 }
                 finally
                 {
                     Device.GetDevice().IO.CCDLight = false;
                     BtnEable();
                 }
-
             });
             await task;
         }
@@ -2352,18 +2274,15 @@ namespace XYZDispensVision
                     PinGoDstPos = XYUR_Pin.GetDstPonit(nowLaserPoint, SnapPoint);
                     Device.GetDevice().FRobot.MoveAbs(PinGoDstPos.y, PinGoDstPos.x, -0.5, null);
                     Device.GetDevice().FRobot.MoveAbs(null, null, zDispensePointHeight, null);
-
                 }
                 catch (Exception ex)
                 {
-
                 }
                 finally
                 {
                     Device.GetDevice().IO.CCDLight = false;
                     BtnEable();
                 }
-
             });
             await task;
         }
@@ -2437,7 +2356,6 @@ namespace XYZDispensVision
                 //针头和激光高度差
                 dispCalibParam.dNeedleLaserHeightOffset = height - LaserHeightDetect.MachinePoint.z;
                 dispCalibParam.Save();
-
             });
             await task;
         }
@@ -2449,7 +2367,6 @@ namespace XYZDispensVision
             DispenseHeight = -(heightValve - zpos) + dispCalibParam.dNeedleZLatchHeight + dispCalibParam.dNeedleLaserHeightOffset + height;
             return true;
         }
-
 
         private async void BtnSnapGoDisoPos4_Click(object sender, EventArgs e)
         {
@@ -2509,18 +2426,15 @@ namespace XYZDispensVision
                     PinGoDstPos = XYUR_Pin.GetDstPonit(nowLaserPoint, SnapPoint);
                     Device.GetDevice().FRobot.MoveAbs(PinGoDstPos.y, PinGoDstPos.x, -0.5, null);
                     Device.GetDevice().FRobot.MoveAbs(null, null, zDispensePointHeight, null);
-
                 }
                 catch (Exception ex)
                 {
-
                 }
                 finally
                 {
                     Device.GetDevice().IO.CCDLight = false;
                     BtnEable();
                 }
-
             });
             await task;
         }
@@ -2568,7 +2482,8 @@ namespace XYZDispensVision
                 lbldispensepressure.BackColor = Color.Pink;
             }
         }
-#endif 
+#endif
+
         private void btnDispenseOutManual_Click(object sender, EventArgs e)
         {
             int value = 0;
@@ -2579,7 +2494,6 @@ namespace XYZDispensVision
                     value = 1000;
                     txtManualDispenseOutTime.Text = "1000";
                 }
-
             }
             else
             {
@@ -2591,13 +2505,13 @@ namespace XYZDispensVision
         {
             Light(rightTab1.SelectedIndex);
         }
+
         public void Light(int nSel)
         {
             if (IsIoTriggerLight)
             {
                 if (IsComTriggerLight)
                 {
-
                     if (nSel == 0)
                     {
                         lightControler?.Light(DispModleName + "点胶标定光源");
@@ -2618,7 +2532,6 @@ namespace XYZDispensVision
             {
                 if (IsComTriggerLight)
                 {
-
                     if (nSel == 0)
                     {
                         lightControler?.Light(DispModleName + "点胶标定光源");
@@ -2633,12 +2546,10 @@ namespace XYZDispensVision
 
         public void AddBuffMove(string gpName)
         {
-
         }
+
         private async void btnDispenseTest_Click(object sender, EventArgs e)
         {
-
-
             BtnEable(false);
             Task task = Task.Run(() =>
             {
@@ -2653,7 +2564,6 @@ namespace XYZDispensVision
                             return;
                         }
                     }
-
                 }
                 catch (Exception ex)
                 {
@@ -2661,8 +2571,6 @@ namespace XYZDispensVision
                 }
                 finally
                 {
-
-
                 }
             });
             await task;
@@ -2671,13 +2579,10 @@ namespace XYZDispensVision
 
         public bool VisionDispense(bool NoDispenseOut = false)
         {
-
             //先照位定位
 
             return true;
         }
-
-
 
         private void labelLightDispDst_Click(object sender, EventArgs e)
         {
@@ -2700,7 +2605,6 @@ namespace XYZDispensVision
                         lightControler.SetItem(DispModleName + "产品点胶光源", nCh, lightval);
                         textBox_DispDstLightVal.Text = lightval.ToString();
                     }
-
                 }
                 else
                 {
@@ -2713,17 +2617,13 @@ namespace XYZDispensVision
                     {
                         lightval = textBox_DispDstLightVal.Text.ToInt();
                         lightControler.SetItem(DispModleName + "产品点胶光源", nCh, lightval);
-
                     }
-
                 }
-
             }
-
         }
+
         private void JogStart(object sender, MouseEventArgs e)
         {
-
             if (comboBox_SelMotionType.SelectedItem != null && comboBox_SelMotionType.SelectedItem.ToString() != "Jog")
                 return;
             int nAxisNo = 1;
@@ -2735,42 +2635,49 @@ namespace XYZDispensVision
                     // MotionMgr.GetInstace().ServoOn((short)nAxisNo);
                     MotionMgr.GetInstace().JogMove(nAxisNo, true, 0, 2);
                     break;
+
                 case "button_Xnegtive":
                     nAxisNo = AxisX;
                     if (nAxisNo < 0) return;
                     //   MotionMgr.GetInstace().ServoOn((short)nAxisNo);
                     MotionMgr.GetInstace().JogMove(nAxisNo, false, 0, 2);
                     break;
+
                 case "button_Ypositive":
                     nAxisNo = AxisY;
                     if (nAxisNo < 0) return;
                     //   MotionMgr.GetInstace().ServoOn((short)nAxisNo);
                     MotionMgr.GetInstace().JogMove(nAxisNo, true, 0, 2);
                     break;
+
                 case "button_Ynegtive":
                     nAxisNo = AxisY;
                     if (nAxisNo < 0) return;
                     //    MotionMgr.GetInstace().ServoOn((short)nAxisNo);
                     MotionMgr.GetInstace().JogMove(nAxisNo, false, 0, 2);
                     break;
+
                 case "button_Zpositive":
                     nAxisNo = AxisZ;
                     if (nAxisNo < 0) return;
                     //     MotionMgr.GetInstace().ServoOn((short)nAxisNo);
                     MotionMgr.GetInstace().JogMove(nAxisNo, true, 0, 2);
                     break;
+
                 case "button_Znegtive":
                     nAxisNo = AxisZ;
                     if (nAxisNo < 0) return;
                     //    MotionMgr.GetInstace().ServoOn((short)nAxisNo);
                     MotionMgr.GetInstace().JogMove(nAxisNo, false, 0, 2);
                     break;
+
                 case "button_Upositive":
                     nAxisNo = AxisU;
                     if (nAxisNo < 0) return;
                     //     MotionMgr.GetInstace().ServoOn((short)nAxisNo);
                     MotionMgr.GetInstace().JogMove(nAxisNo, true, 0, 2);
                     break;
+
                 case "button_Unegtive":
                     nAxisNo = AxisU;
                     if (nAxisNo < 0) return;
@@ -2801,9 +2708,9 @@ namespace XYZDispensVision
                     //    //      MotionMgr.GetInstace().ServoOn((short)nAxisNo);
                     //    MotionMgr.GetInstace().JogMove(nAxisNo, false, 0, 2);
                     //    break;
-
             }
         }
+
         private void JogEnd(object sender, MouseEventArgs e)
         {
             if (comboBox_SelMotionType.SelectedItem != null && comboBox_SelMotionType.SelectedItem.ToString() != "Jog")
@@ -2817,36 +2724,43 @@ namespace XYZDispensVision
                     if (nAxisNo < 0) return;
                     MotionMgr.GetInstace().StopAxis(nAxisNo);
                     break;
+
                 case "button_Xnegtive":
                     nAxisNo = AxisX;
                     if (nAxisNo < 0) return;
                     MotionMgr.GetInstace().StopAxis(nAxisNo);
                     break;
+
                 case "button_Ypositive":
                     nAxisNo = AxisY;
                     if (nAxisNo < 0) return;
                     MotionMgr.GetInstace().StopAxis(nAxisNo);
                     break;
+
                 case "button_Ynegtive":
                     nAxisNo = AxisY;
                     if (nAxisNo < 0) return;
                     MotionMgr.GetInstace().StopAxis(nAxisNo);
                     break;
+
                 case "button_Zpositive":
                     nAxisNo = AxisZ;
                     if (nAxisNo < 0) return;
                     MotionMgr.GetInstace().StopAxis(nAxisNo);
                     break;
+
                 case "button_Znegtive":
                     nAxisNo = AxisZ;
                     if (nAxisNo < 0) return;
                     MotionMgr.GetInstace().StopAxis(nAxisNo);
                     break;
+
                 case "button_Upositive":
                     nAxisNo = AxisU;
                     if (nAxisNo < 0) return;
                     MotionMgr.GetInstace().StopAxis(nAxisNo);
                     break;
+
                 case "button_Unegtive":
                     nAxisNo = AxisU;
                     if (nAxisNo < 0) return;
@@ -2872,10 +2786,11 @@ namespace XYZDispensVision
                     //    if (nAxisNo < 0) return;
                     //    MotionMgr.GetInstace().StopAxis(nAxisNo);
                     //    break;
-
             }
         }
-        bool bStopMove = false;
+
+        private bool bStopMove = false;
+
         private void SelMoveType(int nAxisNo, bool bpostive, int speed)
         {
             if (comboBox_SelMotionType.SelectedItem == null || comboBox_SelMotionType.SelectedItem.ToString() == "Jog")
@@ -2915,14 +2830,13 @@ namespace XYZDispensVision
             //        break;
             //}
         }
+
         private void button_Upositive_Click(object sender, EventArgs e)
         {
-
         }
 
         private void button_Unegtive_Click(object sender, EventArgs e)
         {
-
         }
 
         private void button_Xnegtive_Click(object sender, EventArgs e)
@@ -2963,7 +2877,6 @@ namespace XYZDispensVision
 
         public XYUPoint GetPointL(XYUPoint OldVisoionModlePos, XYUPoint NowVisionModlePos, XYUPoint OldSnapModlePos, XYUPoint OldPinMachinePos, XYUPoint NowSnapMchinePos)
         {
-
             HOperatorSet.VectorAngleToRigid(OldVisoionModlePos.x, OldVisoionModlePos.y, OldVisoionModlePos.u, NowVisionModlePos.x, NowVisionModlePos.y, NowVisionModlePos.u, out HTuple hom2d);
 
             HTuple vx, vy;
@@ -2976,7 +2889,6 @@ namespace XYZDispensVision
             XYUPoint NowPinMachinePoint = XYUR_Laser.GetDstPonit(new XYUPoint(qvx, qvy, 0), NowSnapMchinePos);
 
             return NowPinMachinePoint;
-
         }
 
         private void button_stop_Click(object sender, EventArgs e)
@@ -3060,7 +2972,9 @@ namespace XYZDispensVision
                     MessageBox.Show("之前产品设定尚未完成，请完成后修改", "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        DispTraceElementSet dispTraceElementSet = new DispTraceElementSet();
+
+        private DispTraceElementSet dispTraceElementSet = new DispTraceElementSet();
+
         private void BtnAddPoint_Click(object sender, EventArgs e)
         {
             DispTraceBaseElementPoint dispTraceBaseElementPoint = new DispTraceBaseElementPoint();
@@ -3070,7 +2984,6 @@ namespace XYZDispensVision
                 dispTraceElementSet.UpdateData(dispTraceBaseElementPoint);
             else
                 MessageBox.Show("之前产品设定尚未完成，请完成后添加", "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
         }
 
         private void btnAddLine_Click(object sender, EventArgs e)
@@ -3084,10 +2997,6 @@ namespace XYZDispensVision
             // DispTraceMgr.GetInstance().AddItemToList(dispTraceBaseElementline);
         }
 
-
-
-
-
         private void button2_Click_1(object sender, EventArgs e)
         {
             //string  strjson= File.ReadAllText("D:\\1235.json");
@@ -3100,17 +3009,14 @@ namespace XYZDispensVision
 
         private void DispTrace_Click(object sender, EventArgs e)
         {
-
         }
 
         private void BtnIO_Click(object sender, EventArgs e)
         {
-
         }
 
         private void BtnDelay_Click(object sender, EventArgs e)
         {
-
         }
 
         private void BtnAddArc_Click(object sender, EventArgs e)
@@ -3143,19 +3049,14 @@ namespace XYZDispensVision
             {
                 try
                 {
-
-
                 }
                 catch (Exception ex)
                 {
-
                 }
                 finally
                 {
                     //Device.GetDevice().IO.CCDLight = false;
-
                 }
-
             });
             await task;
             BtnEable();
@@ -3163,7 +3064,6 @@ namespace XYZDispensVision
 
         public void ChangedUserRight(User CurrentUser)
         {
-
         }
     }
 }

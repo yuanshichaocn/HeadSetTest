@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using HalconDotNet;
+using System;
 using System.Windows.Forms;
 using UserCtrl;
-using HalconDotNet;
 
 namespace VisionProcess
 {
@@ -18,10 +11,12 @@ namespace VisionProcess
         {
             InitializeComponent();
         }
+
         public HObject m_imgObj = null;
-        
-        Vision2dCode m_vision2dCode = null;
+
+        private Vision2dCode m_vision2dCode = null;
         public string strPath { set; get; } = "";
+
         private void roundButton_Create2dCode_Click(object sender, EventArgs e)
         {
             if (m_vision2dCode == null)
@@ -33,15 +28,14 @@ namespace VisionProcess
             HOperatorSet.CopyImage(m_visionControl.Img, out m_imgObj);
             if (m_imgObj == null || !m_imgObj.IsInitialized())
             {
-                MessageBox.Show(m_vision2dCode.m_strStepName+"创建2code模板时， 没有图片，请先读取图片", "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(m_vision2dCode.m_strStepName + "创建2code模板时， 没有图片，请先读取图片", "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 return;
             }
-            
-          
+
             SaveParm(m_vision2dCode);
-            if(strPath=="")
-               m_vision2dCode.Save();
+            if (strPath == "")
+                m_vision2dCode.Save();
             else
                 m_vision2dCode.Save(strPath);
             m_vision2dCode.GenObj(m_imgObj, m_visionControl);
@@ -63,12 +57,11 @@ namespace VisionProcess
                 MessageBox.Show("视觉类型为空 刷新失败，请选择", "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            if (m_vision2dCode!=null)
+            if (m_vision2dCode != null)
             {
                 comboBox_CodeSystem.Text = m_vision2dCode.vision2dCodeParam.Code2dSystem;
                 comboBox_ContrastTolerance.Text = m_vision2dCode.vision2dCodeParam.ContrastTolerance;
             }
-           
         }
 
         public override void SaveParm(VisionSetpBase visionSetp)
@@ -78,8 +71,8 @@ namespace VisionProcess
                 MessageBox.Show("视觉类型为空 保存失败，请选择", "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-             m_vision2dCode.vision2dCodeParam.Code2dSystem= comboBox_CodeSystem.Text;
-             m_vision2dCode.vision2dCodeParam.ContrastTolerance= comboBox_ContrastTolerance.Text;
+            m_vision2dCode.vision2dCodeParam.Code2dSystem = comboBox_CodeSystem.Text;
+            m_vision2dCode.vision2dCodeParam.ContrastTolerance = comboBox_ContrastTolerance.Text;
             if (strPath == "")
                 m_vision2dCode.Save();
             else
@@ -88,7 +81,6 @@ namespace VisionProcess
 
         private void Vision2dCodeSetCtr_Load(object sender, EventArgs e)
         {
-
         }
     }
 }

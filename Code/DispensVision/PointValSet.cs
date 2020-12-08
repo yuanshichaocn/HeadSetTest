@@ -1,36 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using BaseDll;
-using UserCtrl;
-using MotionIoLib;
+﻿using BaseDll;
 using HalconDotNet;
+using MotionIoLib;
+using System;
+using UserCtrl;
 
 namespace XYZDispensVision
 {
-     
     public partial class PointValSet : DispUserControl
     {
         public PointValSet()
         {
             InitializeComponent();
-           
         }
-     
+
         private void PointValSet_Load(object sender, EventArgs e)
         {
-           
         }
-        PointCoordinateElement PointCoordinate = null;
-        bool bIsAllPointMachine = false;
-       
-       
+
+        private PointCoordinateElement PointCoordinate = null;
+        private bool bIsAllPointMachine = false;
+
         public void UpDataParam(bool bIsMachine, PointCoordinateElement point = null, VisionControl visionControl = null, bool bIsModify = false)
         {
             bIsModify = false;
@@ -42,16 +31,13 @@ namespace XYZDispensVision
                 pointparam = point;
                 PointCoordinate = point;
             }
-               
             else
                 pointparam = PointCoordinate;
             if (pointparam == null)
                 return;
-            
-            
 
             dMz = point.dMz;
-            if (bIsMachine )
+            if (bIsMachine)
             {
                 dMx = point.dMx;
                 dMy = point.dMy;
@@ -62,7 +48,7 @@ namespace XYZDispensVision
                 dVy = point.dVy;
             }
             bIsAllPointMachine = bIsMachine;
-            bModify=  bIsModify;
+            bModify = bIsModify;
         }
 
         public void SwitchCoordinat(bool bIsMachine)
@@ -81,14 +67,13 @@ namespace XYZDispensVision
                 dVy = PointCoordinate.dVy;
             }
             bIsAllPointMachine = bIsMachine;
-           
         }
 
         public double dMx
         {
             set
             {
-                if(PointCoordinate!=null)
+                if (PointCoordinate != null)
                     PointCoordinate.dMx = value;
                 txtX.Text = value.ToString();
             }
@@ -102,7 +87,6 @@ namespace XYZDispensVision
 
         public double dMy
         {
-
             set
             {
                 if (PointCoordinate != null)
@@ -135,7 +119,6 @@ namespace XYZDispensVision
 
         public double dVy
         {
-
             set
             {
                 if (PointCoordinate != null)
@@ -149,9 +132,9 @@ namespace XYZDispensVision
                 return txtY.Text.ToString().ToDouble();
             }
         }
+
         public double dMz
         {
-
             set
             {
                 if (PointCoordinate != null)
@@ -163,6 +146,7 @@ namespace XYZDispensVision
                 return txtZ.Text.ToString().ToDouble();
             }
         }
+
         public void SaveParam()
         {
             dMx = dMx;
@@ -172,33 +156,33 @@ namespace XYZDispensVision
             dMz = dMz;
         }
 
-
         public int nAxisX;
         public int nAxisY;
         public int nAxisZ;
+
         private void BtnRecordZ_Click(object sender, EventArgs e)
         {
-            dMz= MotionMgr.GetInstace().GetAxisPos(nAxisZ);
+            dMz = MotionMgr.GetInstace().GetAxisPos(nAxisZ);
         }
 
         private void BtnSetXY_Click(object sender, EventArgs e)
         {
             if (!bIsAllPointMachine)
-              if (vc == null || vc.Img == null || !vc.Img.IsInitialized())
-                return;
+                if (vc == null || vc.Img == null || !vc.Img.IsInitialized())
+                    return;
             if (bIsAllPointMachine)
             {
                 dMx = MotionMgr.GetInstace().GetAxisPos(nAxisX);
-                dMy = MotionMgr.GetInstace().GetAxisPos(nAxisY);  
+                dMy = MotionMgr.GetInstace().GetAxisPos(nAxisY);
             }
             else
             {
                 HTuple rowc, colc;
-               if(!bModify)
+                if (!bModify)
                 {
                     vc.DrawPoint(out rowc, out colc);
                 }
-               else
+                else
                 {
                     vc.DrawPointMod(dVy, dVx, out rowc, out colc);
                 }
@@ -207,7 +191,4 @@ namespace XYZDispensVision
             }
         }
     }
-
-   
-
 }

@@ -1,27 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using BaseDll;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Ports;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using BaseDll;
-using log4net;
-using SerialDict;
 
 namespace OtherDevice
 {
-    public abstract  class Scanner
+    public abstract class Scanner
     {
-
         protected const Byte STX = 0x02;
         protected const Byte ETX = 0x03;
         protected const Byte CR = 0x0d;
         protected const Byte CL = 0x0a;
         protected SerialPort serialPortInstance = null;
         protected SerialPortParam serialPortParam = new SerialPortParam();
+
         public object ReadParam()
         {
             object obj = null;
@@ -35,7 +30,6 @@ namespace OtherDevice
                 {
                     Save();
                 }
-
             }
             catch
             {
@@ -47,12 +41,14 @@ namespace OtherDevice
             }
             return obj;
         }
+
         public void Save()
         {
             string strPath = AppDomain.CurrentDomain.BaseDirectory + @"\config\COM_KEYENCE_Scanner" + ".xml";
             AccessXmlSerializer.ObjectToXml(strPath, serialPortParam);
         }
-        public  bool Init()
+
+        public bool Init()
         {
             try
             {
@@ -61,7 +57,7 @@ namespace OtherDevice
                 //serialPortInstance.Parity = (Parity)Enum.Parse(typeof(Parity), serialPortParam.m_strPartiy);    // Even or Odd
                 //serialPortInstance.StopBits = (StopBits)Enum.Parse(typeof(Parity), serialPortParam.m_strStopBit);   // One or Two
                 //serialPortInstance.PortName = string.Format("COM{0}", serialPortParam.m_nComNo);
-               
+
                 //if (serialPortInstance.IsOpen)
                 //{
                 //    this.serialPortInstance.Close();
@@ -94,48 +90,46 @@ namespace OtherDevice
             }
             catch (Exception ex)
             {
-
                 return false;
             }
             return true;
         }
 
-        public  bool DisconnectScanner()
+        public bool DisconnectScanner()
         {
             try
             {
-                if (serialPortInstance!=null &&serialPortInstance.IsOpen)
+                if (serialPortInstance != null && serialPortInstance.IsOpen)
                     this.serialPortInstance?.Close();
             }
             catch (IOException ex)
             {
-
                 return false;
             }
             return true;
         }
 
         public abstract bool LonScanner();
+
         public abstract bool LoffScanner();
 
         public abstract bool ReceiveScannerData(ref string result, int nTimeout = 200);
     }
 
-    public class COM_KEYENCE_Scanner: Scanner
+    public class COM_KEYENCE_Scanner : Scanner
     {
-        
         ~COM_KEYENCE_Scanner()
         {
             DisconnectScanner();
         }
-      
+
         public override bool LonScanner()
         {
             //
             // Send "LON" command.
             // Set STX to command header and ETX to the terminator to distinguish between command respons
             // and read data when receives data from readers.
-            // 
+            //
             string lon = "LON\x0D\x0A";   // <STX>LON<ETX>
             Byte[] sendBytes = ASCIIEncoding.ASCII.GetBytes(lon);
 
@@ -148,13 +142,11 @@ namespace OtherDevice
                 }
                 catch (IOException ex)
                 {
-
                     return false;
                 }
             }
             else
             {
-
                 return false;
             }
             return true;
@@ -166,7 +158,7 @@ namespace OtherDevice
             // Send "LOFF" command.
             // Set STX to command header and ETX to the terminator to distinguish between command respons
             // and read data when receives data from readers.
-            // 
+            //
             string loff = "LOFF\x0D\x0A";   // <STX>LOFF<ETX>
             Byte[] sendBytes = ASCIIEncoding.ASCII.GetBytes(loff);
 
@@ -179,20 +171,18 @@ namespace OtherDevice
                 }
                 catch (IOException ex)
                 {
-
                     return false;
                 }
             }
             else
             {
-
                 return false;
             }
 
             return true;
         }
 
-        public override  bool ReceiveScannerData(ref string result, int nTimeout = 5000)
+        public override bool ReceiveScannerData(ref string result, int nTimeout = 5000)
         {
             Byte[] recvBytes = new Byte[1024];
             int recvSize = 0;
@@ -201,7 +191,6 @@ namespace OtherDevice
 
             if (this.serialPortInstance.IsOpen == false)
             {
-
                 return false;
             }
             Stopwatch stopwatch = new Stopwatch();
@@ -222,7 +211,7 @@ namespace OtherDevice
 
                     continue;
                 }
-                
+
                 if (recvSize >= 2 && recvBytes[recvSize - 1] == 0x0A && recvBytes[recvSize - 2] == 0x0D)
                 {
                     result = Encoding.GetEncoding("Shift_JIS").GetString(recvBytes);
@@ -233,12 +222,8 @@ namespace OtherDevice
                     }
                     return true;
                 }
-
             }
             while (true);
-          
         }
     }
-
-
 }

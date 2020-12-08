@@ -1,26 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using BaseDll;
 using CommonTools;
-using MotionIoLib;
-using Communicate;
-using System.Windows.Forms;
-using System.Diagnostics;
-using System.Threading;
-using UserCtrl;
-using EpsonRobot;
-using BaseDll;
 using UserData;
-using VisionProcess;
-using HalconDotNet;
-using System.IO;
-
-using CameraLib;
-using OtherDevice;
-using XYZDispensVision;
-using MachineSafe;
-
 
 namespace StationDemo
 {
@@ -30,7 +10,6 @@ namespace StationDemo
         {
             if (("取料站" == strStationName || "Barrel站" == strStationName) && posName.Contains("料盘"))
             {
-
                 if (StationMgr.GetInstance().GetStation(strStationName).GetStationPointDic().ContainsKey(posName))
                 {
                     int indexofstring = posName.IndexOf("_");
@@ -40,7 +19,6 @@ namespace StationDemo
                     int index = sub.ToInt();
                     if (posName.Contains($"_M_SP"))
                     {
-
                         TrayMgr.GetInstance().trayDataLoadArr[index - 1].PlaceLeftTopcoordinate =
                         TrayMgr.GetInstance().trayDataLoadArr[index - 1].PickLeftTopcoordinate =
                            new Coordinate()
@@ -65,7 +43,6 @@ namespace StationDemo
                     }
                     if (posName.Contains($"_V_SP"))
                     {
-
                         TrayMgr.GetInstance().trayDataLoadArr[index - 1].SnapLeftTopcoordinate =
                            new Coordinate()
                            {
@@ -94,6 +71,5 @@ namespace StationDemo
         {
             return true;
         }
-
     }
 }

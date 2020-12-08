@@ -1,19 +1,17 @@
-﻿using CommonTools;
+﻿using BaseDll;
+using CommonTools;
 using MotionIoLib;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UserData;
-using BaseDll;
 using System.Reflection;
 using System.Threading;
-using System.Collections.Concurrent;
+using System.Threading.Tasks;
+using UserData;
 
 namespace StationDemo
 {
-
     public interface ILineOprater
     {
         void OpearteLineBeforeEntry(bool bmanual);
@@ -27,83 +25,84 @@ namespace StationDemo
         bool IsCanLeave(bool bmanual);
 
         void OperateLineBeforeLevave(bool bmanual);
+
         bool IsCanPut(bool bmanual);
 
         void OprateOutFinishDeal(bool bmaual);
 
         bool IsOutFinishDealOK(bool bmaual);
-
     }
+
     public class OprateNormalLine : ILineOprater
     {
-
         public LineSegmentDataBase lb
         {
             set;
             get;
-
         }
+
         public bool IsOKAwaysOnLineRun(bool bmanual)
         {
             return true;
         }
+
         public void OpearteLineBeforeEntry(bool bmanual)
         {
             lb?.StopClinderUp(true);
             lb?.JackUpCliyderUp(false);
-
         }
+
         public bool IsCanEntry(bool bmanual)
         {
             return lb.CheckJackUpCliyderStateInPos(false) &&
                 lb.CheckStopCliyderStateInPos(true);
         }
+
         public void OperateLineReadyIng(bool bmanual)
         {
             lb?.JackUpCliyderUp(true);
         }
+
         public bool IsbeReady(bool bmanual)
         {
             return lb.CheckJackUpCliyderStateInPos(false);
         }
+
         public bool IsCanLeave(bool bmanual)
         {
             return lb.CheckJackUpCliyderStateInPos(false) &&
                 lb.CheckStopCliyderStateInPos(false);
         }
+
         public void OperateLineBeforeLevave(bool bmanual)
         {
             lb.JackUpCliyderUp(false);
             lb.StopClinderUp(false);
         }
+
         public void OprateOutFinishDeal(bool bmaual)
         {
             lb?.StopClinderUp(true);
         }
+
         public bool IsOutFinishDealOK(bool bmaual)
         {
             return lb.CheckStopCliyderStateInPos(true);
         }
+
         public bool IsCanPut(bool bmanual)
         {
             return true;
         }
-
     }
-
-
-
-
 
     public class LineSegmentAction : LineSegmentDataBase
     {
-
         public LineSegmentAction(string Name)
         {
             LineName = Name;
             DealAlarm();
         }
-
 
         public LineSegementState GetState()
         {
@@ -115,66 +114,90 @@ namespace StationDemo
         public delegate bool DoSomeThingHandler(Stationbase sb, bool bmaual);
 
         public event DoSomeThingHandler SomeThingsOnlineRun = null;
+
         public delegate bool ShowLastSegInfo();
+
         public event ShowLastSegInfo eventShowLastLineSegInfo = null;
 
         public delegate bool IsOKAwaysOnLineRunUser(LineSegmentAction lineobj, Stationbase sb, bool bmanual);
+
         public event IsOKAwaysOnLineRunUser eventIsOKAwaysOnLineRunUser = null;
 
         public delegate void OpearteLineBeforeEntryUser(LineSegmentAction lineobj, Stationbase sb, bool bmanual);
+
         public event OpearteLineBeforeEntryUser eventOpearteLineBeforeEntryUser = null;
+
         public delegate bool IsCanEntryUser(LineSegmentAction lineobj, Stationbase sb, bool bmanual);
+
         public event IsCanEntryUser eventIsCanEntryUser = null;
+
         public delegate void OpearteLineBeforeBackEntryUser(LineSegmentAction lineobj, Stationbase sb, bool bmanual);
+
         public event OpearteLineBeforeBackEntryUser eventOpearteLineBeforeBackEntryUser = null;
+
         public delegate bool IsCanBackEntryUser(LineSegmentAction lineobj, Stationbase sb, bool bmanual);
+
         public event IsCanBackEntryUser eventIsCanBackEntryUser = null;
+
         public delegate void OperateLineReadyIngUser(LineSegmentAction lineobj, Stationbase sb, bool bmanual);
+
         public event OperateLineReadyIngUser eventOperateLineReadyIngUser = null;
+
         public delegate bool IsbeReadyUser(LineSegmentAction lineobj, Stationbase sb, bool bmanual);
+
         public event IsbeReadyUser eventIsbeReadyUser = null;
+
         public delegate bool IsCanLeaveUser(LineSegmentAction lineobj, Stationbase sb, bool bmanual);
+
         public event IsCanLeaveUser eventIsCanLeaveUser = null;
+
         public delegate void OperateLineBeforeLevaveUser(LineSegmentAction lineobj, Stationbase sb, bool bmanual);
+
         public event OperateLineBeforeLevaveUser eventOperateLineBeforeLevaveUser = null;
 
-
         public delegate bool IsCanOutUser(LineSegmentAction lineobj, Stationbase sb, bool bmanual);
+
         public event IsCanOutUser eventIsCanOutUser = null;
+
         public delegate void OperateLineBeforeOutUser(LineSegmentAction lineobj, Stationbase sb, bool bmanual);
+
         public event OperateLineBeforeOutUser eventOperateLineBeforeOutUser = null;
 
         public delegate void OprateOutFinishDealUser(LineSegmentAction lineobj, Stationbase sb, bool bmaual);
-        public event OprateOutFinishDealUser eventOprateOutFinishDealUser = null;
-        public delegate bool IsOutFinishDealOKUser(LineSegmentAction lineobj, Stationbase sb, bool bmaual);
-        public event IsOutFinishDealOKUser eventIsOutFinishDealOKUser = null;
-        public delegate bool IsCanPutUser(LineSegmentAction lineobj, Stationbase sb, bool bmanual);
-        public event IsCanPutUser eventIsCanPutUser = null;
 
+        public event OprateOutFinishDealUser eventOprateOutFinishDealUser = null;
+
+        public delegate bool IsOutFinishDealOKUser(LineSegmentAction lineobj, Stationbase sb, bool bmaual);
+
+        public event IsOutFinishDealOKUser eventIsOutFinishDealOKUser = null;
+
+        public delegate bool IsCanPutUser(LineSegmentAction lineobj, Stationbase sb, bool bmanual);
+
+        public event IsCanPutUser eventIsCanPutUser = null;
 
         //public static  System.Collections.Hashtable htSyn = System.Collections.Hashtable.Synchronized(new System.Collections.Hashtable());
         public static ConcurrentDictionary<string, LineException> htSyn = new ConcurrentDictionary<string, LineException>();
+
         public static int nIsStartCheck = 0;
+
         public static void DealAlarm()
         {
             Task.Run(() =>
             {
                 //if (nIsStartCheck == 1)
                 //    return;
-                int s= Interlocked.CompareExchange(ref nIsStartCheck, 1, 0);
+                int s = Interlocked.CompareExchange(ref nIsStartCheck, 1, 0);
                 if (s == 1 && nIsStartCheck == 1)
                     return;
-                
+
                 List<string> strAlarmMsgs = new List<string>(); ;
                 while (true)
                 {
-
-                   strAlarmMsgs = htSyn.Keys.ToList();
-                   for(int i=0; strAlarmMsgs!=null && i< strAlarmMsgs.Count;i++ )
+                    strAlarmMsgs = htSyn.Keys.ToList();
+                    for (int i = 0; strAlarmMsgs != null && i < strAlarmMsgs.Count; i++)
                     {
-
                         LineException exp = null;
-                        if(htSyn.ContainsKey(strAlarmMsgs[i]))
+                        if (htSyn.ContainsKey(strAlarmMsgs[i]))
                         {
                             htSyn[strAlarmMsgs[i]]?.AlarmDeal();
                             htSyn.TryRemove(strAlarmMsgs[i], out exp);
@@ -185,7 +208,6 @@ namespace StationDemo
                 }
             }
             );
-          
         }
 
         public virtual bool doSomingThingWhenLineRun(Stationbase sb, bool bmaual)
@@ -206,26 +228,27 @@ namespace StationDemo
 
         public void LineRun(Stationbase sb, LineSegementState FrontLineState, LineSegementState backLineState, bool bmaual)
         {
-           // LineSegementState FrontLineState = FrontLine.LineSegState;
-          //  LineSegementState backLineState = backLine.LineSegState;
+            // LineSegementState FrontLineState = FrontLine.LineSegState;
+            //  LineSegementState backLineState = backLine.LineSegState;
             switch (feedMode)
             {
                 case FeedMode.前进料:
                     ForwardRun(sb, FrontLineState, backLineState, bmaual);
                     break;
+
                 case FeedMode.后进料:
                     BackRun(sb, backLineState, FrontLineState, bmaual);
                     break;
             }
         }
+
         protected cUserTimer cUserTimerCheck = new cUserTimer(30000);
         protected string strMsg = "";
         protected string strOldWarnMsg = "";
         protected bool bIsTimerStatrtFalg = false;
 
-        public void  InfoAndCheck(Stationbase sb, string strmsg, bool IsNeedTimer = false , LineException genLineException = null)
+        public void InfoAndCheck(Stationbase sb, string strmsg, bool IsNeedTimer = false, LineException genLineException = null)
         {
-
             if (strmsg != strMsg)
             {
                 cUserTimerCheck.Stop();
@@ -239,7 +262,6 @@ namespace StationDemo
             }
             else
             {
-              
                 if (cUserTimerCheck.IsRuning && cUserTimerCheck.IsTimerOver && IsNeedTimer && !htSyn.ContainsKey(strmsg))
                 {
                     cUserTimerCheck.Stop();
@@ -247,26 +269,23 @@ namespace StationDemo
                     sb.Warn("超时:" + strmsg);
                 }
             }
-          
         }
-        void PushLineException(string strmsg, LineException genLineException)
+
+        private void PushLineException(string strmsg, LineException genLineException)
         {
             if (genLineException != null)
             {
                 genLineException.strAlarmmsg = strmsg;
                 genLineException.lineObj = this;
-                     
             }
-            if(strOldWarnMsg!= strmsg || !htSyn.ContainsKey(strmsg))
+            if (strOldWarnMsg != strmsg || !htSyn.ContainsKey(strmsg))
             {
                 htSyn.TryAdd(strmsg, genLineException);
             }
             strOldWarnMsg = strmsg;
-
-
         }
 
-        void LeaveOperate(Stationbase sb, LineSegementState backLineState, bool bmaual)
+        private void LeaveOperate(Stationbase sb, LineSegementState backLineState, bool bmaual)
         {
             WaranResult waranResult;
             switch (LineSegState)
@@ -278,6 +297,7 @@ namespace StationDemo
                         InfoAndCheck(sb, $"{LineName} 直通模式 :状态 {LineSegState}--> { LineSegementState.Finish}");
                     }
                     break;
+
                 case LineSegementState.Finish:
                     OperateLineBeforeLevave(bmaual);
                     if (!IsCanLeave(bmaual))
@@ -287,16 +307,16 @@ namespace StationDemo
                         return;
                     }
                     if (eventOperateLineBeforeLevaveUser != null)
-                        eventOperateLineBeforeLevaveUser?.Invoke(this, sb, bmaual); 
+                        eventOperateLineBeforeLevaveUser?.Invoke(this, sb, bmaual);
                     if (eventIsCanLeaveUser != null && !eventIsCanLeaveUser(this, sb, bmaual))
                     {
-                        InfoAndCheck(sb, $"{LineName},状态 {LineSegState} 正在使用eventOperateLineBeforeLevaveUser 方法检查是否可以离开",true);
+                        InfoAndCheck(sb, $"{LineName},状态 {LineSegState} 正在使用eventOperateLineBeforeLevaveUser 方法检查是否可以离开", true);
                         return;
                     }
                     LeaveDelayTimer.Stop();
                     LeaveTimer.Stop();
                     OutTimer.Stop();
-                    //物料取料完成  加工完成  
+                    //物料取料完成  加工完成
                     if (LeaveCheckIo == null || LeaveCheckIo == "")
                     {
                         InfoAndCheck(sb, $"{LineName},{feedMode.ToString()}, 无后端检测IO  状态： {LineSegState}--> { LineSegementState.Leaveing}");
@@ -320,12 +340,13 @@ namespace StationDemo
                             return;
                     }
                     break;
+
                 case LineSegementState.Leaveing:
                     StopClinderUp(false);
                     if (!CheckStopCliyderStateInPos(false))
                     {
                         LineException exp = new LineExceptionLeaveingCheck(this);
-                        InfoAndCheck(sb, $"{LineName}  :状态 {LineSegState} 用CheckStopCliyderStateInPos 方法检查阻挡气缸是否下降到位", true,exp);
+                        InfoAndCheck(sb, $"{LineName}  :状态 {LineSegState} 用CheckStopCliyderStateInPos 方法检查阻挡气缸是否下降到位", true, exp);
                         return;
                     }
                     if (!LeaveTimer.IsRuning)
@@ -346,11 +367,9 @@ namespace StationDemo
                         //{
                         //    LineSegState = LineSegementState.None;
                         //}
-
                     }
                     else
                     {
-
                         if (LeaveDelayTimer.IsTimerOver)
                         {
                             // b.3 有后端检测IO感应  离开延时定时器时间到达 电机停止
@@ -387,7 +406,6 @@ namespace StationDemo
                             else
                                 MotionBackRun();
                             InfoAndCheck(sb, $"{LineName} ,{feedMode.ToString()}, 有后端检测IO 离开延时定时器开启 : 状态 {LineSegState}");
-
                         }
                         else
                         {
@@ -400,18 +418,17 @@ namespace StationDemo
                         }
                     }
                     break;
+
                 case LineSegementState.WaitOut:
-                    if(eventOperateLineBeforeOutUser!=null)
+                    if (eventOperateLineBeforeOutUser != null)
                     {
                         eventOperateLineBeforeOutUser(this, sb, bmaual);
                     }
-                    if( eventIsCanOutUser!=null)
+                    if (eventIsCanOutUser != null)
                     {
                         if (!eventIsCanOutUser(this, sb, bmaual))
                             return;
-
                     }
-
 
                     if (backLineState == LineSegementState.None && !OutTimer.IsRuning)
                     {
@@ -445,6 +462,7 @@ namespace StationDemo
                         InfoAndCheck(sb, $"{LineName} ,{feedMode.ToString()},   : 状态 {LineSegState}");
                     }
                     break;
+
                 case LineSegementState.Outing:
                     // f 后一段流水线没有物料 后端进料 本端 出料延时中
                     if (OutTimer.IsRuning)
@@ -452,7 +470,7 @@ namespace StationDemo
                         if (OutTimer.IsTimerOver)
                         {
                             MotionStop();
-                            if ((outFinishJudeType== OutFinishJudeType.信号 || outFinishJudeType== OutFinishJudeType.下一段流水线或信号) 
+                            if ((outFinishJudeType == OutFinishJudeType.信号 || outFinishJudeType == OutFinishJudeType.下一段流水线或信号)
                                 && (LeaveCheckIo == null || LeaveCheckIo == ""))
                             {
                                 InfoAndCheck(sb, $"{LineName}:{feedMode.ToString()}, 无后端检测IO, 本段是流水线最后一段 ，延时时间到 状态：{LineSegState}-->{ LineSegementState.OutFinish}");
@@ -471,8 +489,8 @@ namespace StationDemo
                         }
                         else
                         {
-                            if(outFinishJudeType == OutFinishJudeType.下一段流水线或信号)
-                             {
+                            if (outFinishJudeType == OutFinishJudeType.下一段流水线或信号)
+                            {
                                 if (backLineState >= LineSegementState.ReadyIng)
                                 {
                                     InfoAndCheck(sb, $"{LineName}：{feedMode.ToString()}, 下一段流水线状态改变成 准备状态 本段流水线状态：{LineSegState}-->{ LineSegementState.OutFinish}");
@@ -480,27 +498,6 @@ namespace StationDemo
                                     MotionStop();
                                     return;
                                 }
-                                if (!(LeaveCheckIo == null || LeaveCheckIo == "") &&!IOMgr.GetInstace().ReadIoInBit(LeaveCheckIo))
-                                {
-                                    InfoAndCheck(sb, $"{LineName}：{feedMode.ToString()}, 信号消失 状态：{LineSegState}-->{ LineSegementState.OutFinish}");
-                                    LineSegState = LineSegementState.OutFinish;
-                                    MotionStop();
-                                    return;
-                                }
-                            }
-                            else if (outFinishJudeType == OutFinishJudeType.下一段流水线)
-                             {
-                                 if (backLineState >= LineSegementState.ReadyIng)
-                                 {
-                                     InfoAndCheck(sb, $"{LineName}：{feedMode.ToString()}, 下一段流水线状态改变成 准备状态 本段流水线 状态：{LineSegState}-->{ LineSegementState.OutFinish}");
-                                     LineSegState = LineSegementState.OutFinish;
-                                     MotionStop();
-                                     return;
-                                 }
-                             }
-                            else if (outFinishJudeType == OutFinishJudeType.信号)
-                            {
-                                //  有出料感器 信号消失 
                                 if (!(LeaveCheckIo == null || LeaveCheckIo == "") && !IOMgr.GetInstace().ReadIoInBit(LeaveCheckIo))
                                 {
                                     InfoAndCheck(sb, $"{LineName}：{feedMode.ToString()}, 信号消失 状态：{LineSegState}-->{ LineSegementState.OutFinish}");
@@ -509,8 +506,27 @@ namespace StationDemo
                                     return;
                                 }
                             }
-                            
-
+                            else if (outFinishJudeType == OutFinishJudeType.下一段流水线)
+                            {
+                                if (backLineState >= LineSegementState.ReadyIng)
+                                {
+                                    InfoAndCheck(sb, $"{LineName}：{feedMode.ToString()}, 下一段流水线状态改变成 准备状态 本段流水线 状态：{LineSegState}-->{ LineSegementState.OutFinish}");
+                                    LineSegState = LineSegementState.OutFinish;
+                                    MotionStop();
+                                    return;
+                                }
+                            }
+                            else if (outFinishJudeType == OutFinishJudeType.信号)
+                            {
+                                //  有出料感器 信号消失
+                                if (!(LeaveCheckIo == null || LeaveCheckIo == "") && !IOMgr.GetInstace().ReadIoInBit(LeaveCheckIo))
+                                {
+                                    InfoAndCheck(sb, $"{LineName}：{feedMode.ToString()}, 信号消失 状态：{LineSegState}-->{ LineSegementState.OutFinish}");
+                                    LineSegState = LineSegementState.OutFinish;
+                                    MotionStop();
+                                    return;
+                                }
+                            }
                         }
                         if (bOutMotorRunDir)
                             MotionForwardRun();
@@ -518,10 +534,11 @@ namespace StationDemo
                             MotionBackRun();
                     }
                     break;
+
                 case LineSegementState.OutFinish:
                     if (!OutDelayTimer.IsRuning)
                         OutDelayTimer.ResetStartTimer();
-                    if(OutDelayTimer.IsRuning   && !OutDelayTimer.IsTimerOver)
+                    if (OutDelayTimer.IsRuning && !OutDelayTimer.IsTimerOver)
                     {
                         if (bOutMotorRunDir)
                             MotionForwardRun();
@@ -536,18 +553,18 @@ namespace StationDemo
                         return;
                     if (eventOprateOutFinishDealUser != null)
                         eventOprateOutFinishDealUser(this, sb, bmaual);
-                    if (eventIsOutFinishDealOKUser != null &&!eventIsOutFinishDealOKUser(this, sb, bmaual))
+                    if (eventIsOutFinishDealOKUser != null && !eventIsOutFinishDealOKUser(this, sb, bmaual))
                         return;
-                    if (eventShowLastLineSegInfo != null&&!eventShowLastLineSegInfo())
+                    if (eventShowLastLineSegInfo != null && !eventShowLastLineSegInfo())
                         return;
                     InfoAndCheck(sb, $"{LineName}：{feedMode.ToString()},  状态：{LineSegState}-->{ LineSegementState.None}");
                     LineSegState = LineSegementState.None;
                     break;
             }
         }
+
         public void ForwardRun(Stationbase sb, LineSegementState FrontLineState, LineSegementState backLineState, bool bmaual)
         {
-
             //LineSegementState FrontLineState = FrontLine.LineSegState;
             //LineSegementState backLineState = backLine.LineSegState;
             WaranResult waranResult;
@@ -570,7 +587,7 @@ namespace StationDemo
                     if (!IsCanEntry(bmaual))
                     {
                         LineException exp = new LineExceptionEntreyCheck(this);
-                        InfoAndCheck(sb, $"{LineName} ,{feedMode.ToString()},状态{LineSegState}用方法IsCanEntry检查 不满足进入Entrying条件: 阻挡气缸上升是否到位，顶升气缸是否下降到位", true,exp);
+                        InfoAndCheck(sb, $"{LineName} ,{feedMode.ToString()},状态{LineSegState}用方法IsCanEntry检查 不满足进入Entrying条件: 阻挡气缸上升是否到位，顶升气缸是否下降到位", true, exp);
                         return;
                     }
                     eventOpearteLineBeforeEntryUser?.Invoke(this, sb, bmaual);
@@ -579,8 +596,8 @@ namespace StationDemo
                         InfoAndCheck(sb, $"{LineName} ,{feedMode.ToString()},状态{LineSegState}用方法eventIsCanEntryUser检查 不满足进入Entrying条件", true);
                         return;
                     }
-                    if(entryingJude == EntryingJudeType.信号  || entryingJude == EntryingJudeType.上一段流水线或信号)
-                         FrontLineState = LineSegementState.Outing;
+                    if (entryingJude == EntryingJudeType.信号 || entryingJude == EntryingJudeType.上一段流水线或信号)
+                        FrontLineState = LineSegementState.Outing;
 
                     if (FrontLineState == LineSegementState.Outing)
                     {
@@ -611,15 +628,14 @@ namespace StationDemo
                             }
                             else if (IOMgr.GetInstace().ReadIoInBit(EnteryCheckIo))
                             {
-
-                                 InfoAndCheck(sb, $"{LineName} ,{feedMode.ToString()}, 无中端检测IO 有前端检测IO:《{EnteryCheckIo}》 :状态 {LineSegState}--> { LineSegementState.Entrying}");
-                                 LineSegState = LineSegementState.Entrying;
+                                InfoAndCheck(sb, $"{LineName} ,{feedMode.ToString()}, 无中端检测IO 有前端检测IO:《{EnteryCheckIo}》 :状态 {LineSegState}--> { LineSegementState.Entrying}");
+                                LineSegState = LineSegementState.Entrying;
                             }
                         }
                         else if (EnteryCheckIo == InPosCheckIo && IOMgr.GetInstace().ReadIoInBit(EnteryCheckIo))
                         {
-                                InfoAndCheck(sb, $"{LineName} ,{feedMode.ToString()}, 有中端检测IO:《{InPosCheckIo}》,有前端检测IO:《{EnteryCheckIo}》:状态 {LineSegState}--> { LineSegementState.Entrying}");
-                                LineSegState = LineSegementState.Entrying;
+                            InfoAndCheck(sb, $"{LineName} ,{feedMode.ToString()}, 有中端检测IO:《{InPosCheckIo}》,有前端检测IO:《{EnteryCheckIo}》:状态 {LineSegState}--> { LineSegementState.Entrying}");
+                            LineSegState = LineSegementState.Entrying;
                         }
                         else if (IOMgr.GetInstace().ReadIoInBit(InPosCheckIo))
                         {
@@ -642,6 +658,7 @@ namespace StationDemo
                         InfoAndCheck(sb, $"{LineName} ,{feedMode.ToString()},状态{LineSegState} 等待上一段流水线 出料进入条件", true);
                     }
                     break;
+
                 case LineSegementState.Entrying:
                     StopClinderUp(true);
                     if (!CheckStopCliyderStateInPos(true))
@@ -702,6 +719,7 @@ namespace StationDemo
                         }
                     }
                     break;
+
                 case LineSegementState.ReadyIng:
                     eventOperateLineReadyIngUser?.Invoke(this, sb, bmaual);
                     if (eventIsbeReadyUser != null && !eventIsbeReadyUser(this, sb, bmaual))
@@ -721,16 +739,14 @@ namespace StationDemo
                         return;
                     }
                     break;
+
                 default:
                     LeaveOperate(sb, backLineState, bmaual);
                     break;
-
-
             }
-
-
         }
-        public void BackRun(Stationbase sb,  LineSegementState FrontLineState,  LineSegementState backLineState, bool bmaual)
+
+        public void BackRun(Stationbase sb, LineSegementState FrontLineState, LineSegementState backLineState, bool bmaual)
         {
             WaranResult waranResult;
             if (IsPause)
@@ -781,7 +797,6 @@ namespace StationDemo
                             }
                             else if (IOMgr.GetInstace().ReadIoInBit(LeaveCheckIo))
                             {
-
                                 InfoAndCheck(sb, $"{LineName},{feedMode.ToString()}, 无中端检测IO 有后端检测IO《{LeaveCheckIo}》  :状态 {LineSegState}--> { LineSegementState.Entrying}");
                                 LineSegState = LineSegementState.Entrying;
                             }
@@ -802,6 +817,7 @@ namespace StationDemo
                         }
                     }
                     break;
+
                 case LineSegementState.Entrying:
 
                     if (!EnterTimer.IsRuning)
@@ -867,7 +883,6 @@ namespace StationDemo
                             EnterDelayTimer.ResetStartTimer();
                             InfoAndCheck(sb, $"{LineName}:{feedMode.ToString()}, 流水线状态{LineSegState}->{LineSegementState.BackEntryReady} 无中段检测信号 进料定时器到达 退料结束  正向进料");
                             LineSegState = LineSegementState.BackEntryReady;
-
                         }
                         else if (!(InPosCheckIo == null || InPosCheckIo == "") &&
                             BackEnterDelayTimer.IsRuning && IOMgr.GetInstace().ReadIoInBit(InPosCheckIo))
@@ -905,6 +920,7 @@ namespace StationDemo
                         }
                     }
                     break;
+
                 case LineSegementState.BackEntryReady:
                     if (!EnterTimer.IsRuning)
                         EnterTimer.ResetStartTimer();
@@ -935,10 +951,10 @@ namespace StationDemo
                             InfoAndCheck(sb, $"{LineName}:{feedMode.ToString()}, 进料延时中，流水线状态：{LineSegState}");
                             MotionForwardRun();
                         }
-
                     }
 
                     break;
+
                 case LineSegementState.ReadyIng:
                     eventOperateLineReadyIngUser?.Invoke(this, sb, bmaual);
                     if (eventIsbeReadyUser != null && !eventIsbeReadyUser(this, sb, bmaual))
@@ -958,65 +974,76 @@ namespace StationDemo
                         InfoAndCheck(sb, $"{LineName} ,{feedMode.ToString()},状态{LineSegState} 用方法IsbeReady检查 不满足进入准备有料（have）条件", true, exp);
                         return;
                     }
-                        
+
                     break;
+
                 default:
                     LeaveOperate(sb, backLineState, bmaual);
                     break;
             }
         }
 
-
         public virtual bool IsOKAwaysOnLineRun(bool bmanual)
         {
             return true;
         }
+
         public virtual void OpearteLineBeforeEntry(bool bmanual)
         {
             StopClinderUp(true);
             JackUpCliyderUp(false);
         }
+
         public virtual bool IsCanEntry(bool bmanual)
         {
             return CheckJackUpCliyderStateInPos(false) &&
                 CheckStopCliyderStateInPos(true);
         }
+
         public virtual void OpearteLineBeforeBackEntry(bool bmanual)
         {
             StopClinderUp(false);
             JackUpCliyderUp(false);
         }
+
         public virtual bool IsCanBackEntry(bool bmanual)
         {
             return CheckJackUpCliyderStateInPos(false) &&
                 CheckStopCliyderStateInPos(false);
         }
+
         public virtual void OperateLineReadyIng(bool bmanual)
         {
             JackUpCliyderUp(true);
         }
+
         public virtual bool IsbeReady(bool bmanual)
         {
             return CheckJackUpCliyderStateInPos(true);
         }
+
         public virtual bool IsCanLeave(bool bmanual)
         {
             return CheckJackUpCliyderStateInPos(false) &&
                 CheckStopCliyderStateInPos(false);
         }
+
         public virtual void OperateLineBeforeLevave(bool bmanual)
         {
             JackUpCliyderUp(false);
             StopClinderUp(false);
         }
+
         public virtual void OprateOutFinishDeal(bool bmaual)
         {
             StopClinderUp(true);
         }
+
         public virtual bool IsOutFinishDealOK(bool bmaual)
         {
             return CheckStopCliyderStateInPos(true);
         }
+
         public virtual bool IsCanPut(bool bmanual)
         {
             return LineSegState == LineSegementState.None;
@@ -1032,7 +1059,9 @@ namespace StationDemo
             nEnteryDelay = 800;
             nOutTimeout = 200;
         }
+
         public string FullMaterialCheckIO = "";
+
         public override void OpearteLineBeforeEntry(bool bmanual)
         {
             if (IOMgr.GetInstace().ReadIoInBit(FullMaterialCheckIO))
@@ -1051,25 +1080,27 @@ namespace StationDemo
             {
                 MotionForwardRun();
             }
-
         }
+
         public override bool IsOKAwaysOnLineRun(bool bmanual)
         {
             return (FullMaterialCheckIO != null && FullMaterialCheckIO != "") && !IOMgr.GetInstace().ReadIoInBit(FullMaterialCheckIO);
-
         }
+
         public override bool IsCanEntry(bool bmanual)
         {
             return !IOMgr.GetInstace().ReadIoInBit(EnteryCheckIo) && !IOMgr.GetInstace().ReadIoInBit(FullMaterialCheckIO);
         }
+
         public override void OperateLineReadyIng(bool bmanual)
         {
-
         }
+
         public override bool IsbeReady(bool bmanual)
         {
             return true;
         }
+
         public override void OperateLineBeforeLevave(bool bmanual)
         {
             if (!IOMgr.GetInstace().ReadIoInBit(FullMaterialCheckIO))
@@ -1081,17 +1112,15 @@ namespace StationDemo
                 MotionForwardRun();
             }
         }
+
         public override bool IsCanLeave(bool bmanual)
         {
             return !IOMgr.GetInstace().ReadIoInBit(FullMaterialCheckIO);
         }
+
         public override bool IsCanPut(bool bmanual)
         {
             return (FullMaterialCheckIO != null && FullMaterialCheckIO != "") && !IOMgr.GetInstace().ReadIoInBit(FullMaterialCheckIO) && IOMgr.GetInstace().ReadIoInBit(EnteryCheckIo);
         }
-
-
     }
-
-
 }

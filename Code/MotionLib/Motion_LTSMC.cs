@@ -306,5 +306,15 @@ namespace MotionIoLib
             LTSMC.smc_stop(_ConnecNo, (ushort)nAxisNo, 1);
             return true;
         }
+
+        public override bool TranMMToPluse(int nAxisNo, ref double dSpeed, ref double acc, ref double dec)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool TransMMToPluseForHomeParam(int nAxisNo, ref double dVelH, ref double dVelL, ref double dAccH, ref double dAccL, ref double dDecH, ref double dDecL)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

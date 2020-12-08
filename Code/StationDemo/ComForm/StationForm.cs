@@ -1,34 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using MotionIoLib;
-using System.Threading.Tasks;
-using System.Threading;
-using HalconDotNet;
+﻿using BaseDll;
 using CameraLib;
-
 using CommonTools;
+using HalconDotNet;
+using MotionIoLib;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
-using BaseDll;
+using System.Drawing;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 using VisionProcess;
+
 //using HalconLib;
 namespace StationDemo
 {
     public delegate void StationPosChangedHandle(string strStationName, string posName);
 
-
     public partial class StationForm : Form, IUserRightSwitch
     {
         public static event StationPosChangedHandle eventStationPosChanged;
-        Stationbase m_Stationbase = null;
+
+        private Stationbase m_Stationbase = null;
+
         //整个IO列表
-        Dictionary<string, IOMgr.IoDefine> m_dicInput;
-        Dictionary<string, IOMgr.IoDefine> m_dicOutput;
+        private Dictionary<string, IOMgr.IoDefine> m_dicInput;
+
+        private Dictionary<string, IOMgr.IoDefine> m_dicOutput;
         //工站IO-->datagridview 第一列名
         //Dictionary<string, int> m_dicNameIndexInput = new Dictionary<string, int>();
         //Dictionary<string, int> m_dicNameIndexOutput = new Dictionary<string, int>();
@@ -39,24 +37,29 @@ namespace StationDemo
         {
             InitializeComponent();
         }
+
         public void SetBtnStartEnable(bool bEnable)    //“启动”按键
         {
             button_start.Visible = bEnable;
         }
-        void ChangeState(Label labelControl, bool bval)
+
+        private void ChangeState(Label labelControl, bool bval)
         {
             labelControl.Text = bval ? "ON" : "OFF";
             labelControl.BackColor = bval ? Color.LightGreen : Color.LightBlue;
         }
-        void ChangeStateSeverOnBtn(Button button, bool bval)
+
+        private void ChangeStateSeverOnBtn(Button button, bool bval)
         {
             button.Text = bval ? "伺服ON" : "伺服OFF";
             button.BackColor = bval ? Color.LightGreen : Color.LightBlue;
         }
-        void ChangeAxisPos(Label label, double pos)
+
+        private void ChangeAxisPos(Label label, double pos)
         {
             label.Text = pos.ToString();
         }
+
         public void ChangeMotionIoStateAndPos(int index, bool[] bChangeBitGet, AxisIOState axisIOState, AxisPos axisPos)
         {
             bool[] bChangeBit = new bool[bChangeBitGet.Length];
@@ -87,7 +90,6 @@ namespace StationDemo
                         ChangeAxisPos(label_ActPosX, axisPos._lActPos);
                     if (bChangeBit[7])
                         ChangeAxisPos(label_CmdPosX, axisPos._lCmdPos);
-
                 }
                 if (index == pbase.AxisY)
                 {
@@ -126,7 +128,6 @@ namespace StationDemo
                         ChangeAxisPos(label_ActPosZ, axisPos._lActPos);
                     if (bChangeBit[7])
                         ChangeAxisPos(label_CmdPosZ, axisPos._lCmdPos);
-
                 }
                 if (index == pbase.AxisU)
                 {
@@ -146,7 +147,6 @@ namespace StationDemo
                         ChangeAxisPos(label_ActPosU, axisPos._lActPos);
                     if (bChangeBit[7])
                         ChangeAxisPos(label_CmdPosU, axisPos._lCmdPos);
-
                 }
                 if (index == pbase.AxisTx)
                 {
@@ -186,15 +186,15 @@ namespace StationDemo
                     if (bChangeBit[7])
                         ChangeAxisPos(label_CmdPosTy, axisPos._lCmdPos);
                 }
-
             }
-
         }
+
         public void OutIoWhenClickBtn(string str)
         {
             bool bState = IOMgr.GetInstace().ReadIoOutBit(str);
             IOMgr.GetInstace().WriteIoBit(str, !bState);
         }
+
         public void OutIoWhenClickDownBtn(string str)
         {
             // bool bState = IOMgr.GetInstace().ReadIoOutBit(str);
@@ -206,7 +206,8 @@ namespace StationDemo
             //  bool bState = IOMgr.GetInstace().ReadIoOutBit(str);
             //   IOMgr.GetInstace().WriteIoBit(str, !bState);
         }
-        void UpdatadataGridView_PointInfo()
+
+        private void UpdatadataGridView_PointInfo()
         {
             dataGridView_PointInfo.Rows.Clear();
             Dictionary<string, PointInfo> tempdic = StationMgr.GetInstance().GetStation(this.Name).GetStationPointDic();
@@ -217,8 +218,6 @@ namespace StationDemo
                      temp.Value.pointTx.ToString(), temp.Value.pointTy.ToString());
             }
         }
-
-
 
         private void StationForm_Load(object sender, EventArgs e)
         {
@@ -259,7 +258,6 @@ namespace StationDemo
             int indexOutput = 0;
             foreach (var tem in m_Stationbase.m_listIoOutput)
             {
-
                 if (m_dicOutput.ContainsKey(tem))
                 {
                     indexOutput++;
@@ -269,7 +267,6 @@ namespace StationDemo
                     userBtnPanel_Output.SetBtnClickUpEvent(tem, OutIoWhenClickUpBtn);
                     userBtnPanel_Output.SetBtnState(tem, IOMgr.GetInstace().ReadIoOutBit(tem));
                 }
-
                 else
                 {
                     MessageBox.Show(tem + "不在IO 表中，请检查工站IO配置", "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -278,7 +275,6 @@ namespace StationDemo
 
             if (userBtnPanel_Output.Count == 0)
             {
-            
                 userBtnPanel_Output.Visible = false;
             }
             userBtnPanel_Output.m_nNumPerRow = 2;
@@ -314,6 +310,7 @@ namespace StationDemo
             ParamSetMgr.GetInstance().m_eventLoadProductFileUpadata += UpdatadataGridView_PointInfo;//更新产品点位置信息
             HOperatorSet.SetDraw(visionControl1.GetHalconWindow(), "margin");
         }
+
         public void ChagedPrItem(string name)
         {
             if (InvokeRequired)
@@ -329,11 +326,11 @@ namespace StationDemo
                 }
             }
         }
+
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-
-
         }
+
         private void UpdataMovePnBtnText()
         {
             m_Stationbase = StationMgr.GetInstance().GetStation(this);
@@ -350,12 +347,11 @@ namespace StationDemo
             button_Upositive.Text = MotionMgr.GetInstace().GetAxisName(m_Stationbase.AxisU) + "+";
             button_Txpositive.Text = MotionMgr.GetInstace().GetAxisName(m_Stationbase.AxisTx) + "+";
             button_Typositive.Text = MotionMgr.GetInstace().GetAxisName(m_Stationbase.AxisTy) + "+";
-
-
         }
-        void UpdataPointDataGridView()
+
+        private void UpdataPointDataGridView()
         {
-            if(m_Stationbase!=null &&m_Stationbase.AxisX== -1 && m_Stationbase.AxisY==-1 && m_Stationbase.AxisZ==-1  && m_Stationbase.AxisU==-1 && m_Stationbase.AxisTx==-1 && m_Stationbase.AxisTy==-1)
+            if (m_Stationbase != null && m_Stationbase.AxisX == -1 && m_Stationbase.AxisY == -1 && m_Stationbase.AxisZ == -1 && m_Stationbase.AxisU == -1 && m_Stationbase.AxisTx == -1 && m_Stationbase.AxisTy == -1)
             {
                 button_Xnegtive.Visible = false;
                 button_Ynegtive.Visible = false;
@@ -388,10 +384,8 @@ namespace StationDemo
                 dataGridView_PointInfo.Columns[1].HeaderText = HeaderText;
                 nCount++;
             }
-
             else
             {
-
                 dataGridView_PointInfo.Columns[1].Width = 0;
                 dataGridView_PointInfo.Columns[1].Visible = false;
                 button_homeX.Visible = false;
@@ -405,8 +399,6 @@ namespace StationDemo
                 labelControl_EMGX.Visible = false;
                 button_Xnegtive.Visible = false;
                 button_Xpositive.Visible = false;
-
-
             }
             HeaderText = MotionMgr.GetInstace().GetAxisName(m_Stationbase.AxisY);
             if (m_Stationbase != null && HeaderText != "" && m_Stationbase.AxisY != -1)
@@ -424,12 +416,9 @@ namespace StationDemo
                 button_Ynegtive.Location = new Point(button_Ynegtive.Location.X, points[nCount].Y);
                 button_Ypositive.Location = new Point(button_Ypositive.Location.X, points[nCount].Y); ;
                 nCount++;
-
-
             }
             else
             {
-
                 dataGridView_PointInfo.Columns[2].Width = 0;
                 dataGridView_PointInfo.Columns[2].Visible = false;
 
@@ -445,7 +434,6 @@ namespace StationDemo
                 labelControl_EMGY.Visible = false;
                 button_Ynegtive.Visible = false;
                 button_Ypositive.Visible = false;
-
             }
             HeaderText = MotionMgr.GetInstace().GetAxisName(m_Stationbase.AxisZ);
             if (m_Stationbase != null && HeaderText != "" && m_Stationbase.AxisZ != -1)
@@ -466,10 +454,8 @@ namespace StationDemo
                 button_Zpositive.Location = new Point(button_Zpositive.Location.X, points[nCount].Y); ;
                 nCount++;
             }
-
             else
             {
-
                 dataGridView_PointInfo.Columns[3].Width = 0;
                 dataGridView_PointInfo.Columns[3].Visible = false;
 
@@ -504,11 +490,9 @@ namespace StationDemo
                 button_Unegtive.Location = new Point(button_Unegtive.Location.X, points[nCount].Y);
                 button_Upositive.Location = new Point(button_Upositive.Location.X, points[nCount].Y); ;
                 nCount++;
-
             }
             else
             {
-
                 dataGridView_PointInfo.Columns[4].Width = 0;
                 dataGridView_PointInfo.Columns[4].Visible = false;
 
@@ -542,12 +526,9 @@ namespace StationDemo
                 button_Txnegtive.Location = new Point(button_Txnegtive.Location.X, points[nCount].Y);
                 button_Txpositive.Location = new Point(button_Txpositive.Location.X, points[nCount].Y); ;
                 nCount++;
-
             }
-
             else
             {
-
                 dataGridView_PointInfo.Columns[5].Width = 0;
                 dataGridView_PointInfo.Columns[5].Visible = false;
 
@@ -582,12 +563,9 @@ namespace StationDemo
                 button_Tynegtive.Location = new Point(button_Tynegtive.Location.X, points[nCount].Y);
                 button_Typositive.Location = new Point(button_Typositive.Location.X, points[nCount].Y); ;
                 nCount++;
-
             }
-
             else
             {
-
                 dataGridView_PointInfo.Columns[6].Width = 0;
                 dataGridView_PointInfo.Columns[6].Visible = false;
 
@@ -629,13 +607,11 @@ namespace StationDemo
             button = button_AllAxisMove;
             btn_Del.Location = new Point(dataGridView_PointInfo.Location.X + dataGridView_PointInfo.Width + 1, button.Location.Y + button.Height + 5);
 
-
             userPanel_Input.Location = new Point(button_Save.Location.X + button_Save.Width + 5, dataGridView_PointInfo.Location.Y);
             userBtnPanel_Output.Location = new Point(userPanel_Input.Location.X + userPanel_Input.Width + 1, dataGridView_PointInfo.Location.Y);
 
             // dataGridView_ioInput.Location = new Point(dataGridView_PointInfo.Location.X + dataGridView_PointInfo.Width + 5, dataGridView_PointInfo.Location.Y);
             // dataGridView_IoOutput.Location = new Point(dataGridView_PointInfo.Location.X + dataGridView_PointInfo.Width + dataGridView_ioInput.Width + 5, dataGridView_PointInfo.Location.Y);
-
 
             dataGridView_PointInfo.Columns[0].Width = (int)(0.22 * width);
             for (int i = 1; i < 6; i++)
@@ -695,20 +671,21 @@ namespace StationDemo
                  );
             });
         }
+
         private void button_homeX_Click(object sender, EventArgs e)
         {
             bStopMove = false;
             int nAxisNo = StationMgr.GetInstance().GetStation(this.Name).AxisX;
             HomeAction(nAxisNo, button_homeX);
-
         }
+
         private void button_homeY_Click(object sender, EventArgs e)
         {
             bStopMove = false;
             int nAxisNo = StationMgr.GetInstance().GetStation(this.Name).AxisY;
             HomeAction(nAxisNo, button_homeY);
-
         }
+
         private void button_homeZ_Click(object sender, EventArgs e)
         {
             bStopMove = false;
@@ -716,19 +693,21 @@ namespace StationDemo
 
             HomeAction(nAxisNo, button_homeZ);
         }
+
         private void button_homeU_Click(object sender, EventArgs e)
         {
             bStopMove = false;
             int nAxisNo = StationMgr.GetInstance().GetStation(this.Name).AxisU;
             HomeAction(nAxisNo, button_homeU);
-
         }
+
         private void button_homeTx_Click(object sender, EventArgs e)
         {
             bStopMove = false;
             int nAxisNo = StationMgr.GetInstance().GetStation(this.Name).AxisTx;
             HomeAction(nAxisNo, button_homeTx);
         }
+
         private void button_homeTy_Click(object sender, EventArgs e)
         {
             bStopMove = false;
@@ -738,7 +717,6 @@ namespace StationDemo
 
         private void JogStart(object sender, MouseEventArgs e)
         {
-
             if (comboBox_SelMotionType.SelectedItem != null && comboBox_SelMotionType.SelectedItem.ToString() != "Jog")
                 return;
             int nAxisNo = 1;
@@ -750,73 +728,83 @@ namespace StationDemo
                     // MotionMgr.GetInstace().ServoOn((short)nAxisNo);
 
                     break;
+
                 case "button_Xnegtive":
                     nAxisNo = StationMgr.GetInstance().GetStation(this).AxisX;
                     // if (nAxisNo < 0) return;
                     //   MotionMgr.GetInstace().ServoOn((short)nAxisNo);
                     MotionMgr.GetInstace().JogMove(nAxisNo, false, 0, 2);
                     break;
+
                 case "button_Ypositive":
                     nAxisNo = StationMgr.GetInstance().GetStation(this).AxisY;
                     //  if (nAxisNo < 0) return;
                     //   MotionMgr.GetInstace().ServoOn((short)nAxisNo);
                     MotionMgr.GetInstace().JogMove(nAxisNo, true, 0, 2);
                     break;
+
                 case "button_Ynegtive":
                     nAxisNo = StationMgr.GetInstance().GetStation(this).AxisY;
                     //  if (nAxisNo < 0) return;
                     //    MotionMgr.GetInstace().ServoOn((short)nAxisNo);
                     MotionMgr.GetInstace().JogMove(nAxisNo, false, 0, 2);
                     break;
+
                 case "button_Zpositive":
                     nAxisNo = StationMgr.GetInstance().GetStation(this).AxisZ;
                     //  if (nAxisNo < 0) return;
                     //     MotionMgr.GetInstace().ServoOn((short)nAxisNo);
                     MotionMgr.GetInstace().JogMove(nAxisNo, true, 0, 2);
                     break;
+
                 case "button_Znegtive":
                     nAxisNo = StationMgr.GetInstance().GetStation(this).AxisZ;
                     //    if (nAxisNo < 0) return;
                     //    MotionMgr.GetInstace().ServoOn((short)nAxisNo);
                     //      MotionMgr.GetInstace().JogMove(nAxisNo, false, 0, 2);
                     break;
+
                 case "button_Upositive":
                     nAxisNo = StationMgr.GetInstance().GetStation(this).AxisU;
                     //   if (nAxisNo < 0) return;
                     //     MotionMgr.GetInstace().ServoOn((short)nAxisNo);
                     //     MotionMgr.GetInstace().JogMove(nAxisNo, true, 0, 2);
                     break;
+
                 case "button_Unegtive":
                     nAxisNo = StationMgr.GetInstance().GetStation(this).AxisU;
                     //     if (nAxisNo < 0) return;
                     //      MotionMgr.GetInstace().ServoOn((short)nAxisNo);
                     //     MotionMgr.GetInstace().JogMove(nAxisNo, false, 0, 2);
                     break;
+
                 case "button_Txpositive":
                     nAxisNo = StationMgr.GetInstance().GetStation(this).AxisTx;
                     //    if (nAxisNo < 0) return;
                     //     MotionMgr.GetInstace().ServoOn((short)nAxisNo);
                     //      MotionMgr.GetInstace().JogMove(nAxisNo, true, 0, 2);
                     break;
+
                 case "button_Txnegtive":
                     nAxisNo = StationMgr.GetInstance().GetStation(this).AxisTx;
                     //      if (nAxisNo < 0) return;
                     //      MotionMgr.GetInstace().ServoOn((short)nAxisNo);
                     //      MotionMgr.GetInstace().JogMove(nAxisNo, false, 0, 2);
                     break;
+
                 case "button_Typositive":
                     nAxisNo = StationMgr.GetInstance().GetStation(this).AxisTy;
                     //     if (nAxisNo < 0) return;
                     //       MotionMgr.GetInstace().ServoOn((short)nAxisNo);
                     //    MotionMgr.GetInstace().JogMove(nAxisNo, true, 0, 2);
                     break;
+
                 case "button_Tynegtive":
                     nAxisNo = StationMgr.GetInstance().GetStation(this).AxisTy;
                     //     if (nAxisNo < 0) return;
                     //      MotionMgr.GetInstace().ServoOn((short)nAxisNo);
                     //  MotionMgr.GetInstace().JogMove(nAxisNo, false, 0, 2);
                     break;
-
             }
             if (nAxisNo < 0) return;
 
@@ -824,6 +812,7 @@ namespace StationDemo
             if (MotionMgr.GetInstace().IsAxisNormalStop(nAxisNo) != AxisState.Moving)
                 MotionMgr.GetInstace().JogMove(nAxisNo, bDir, 0, 2);
         }
+
         private void JogEnd(object sender, MouseEventArgs e)
         {
             if (comboBox_SelMotionType.SelectedItem != null && comboBox_SelMotionType.SelectedItem.ToString() != "Jog")
@@ -835,44 +824,55 @@ namespace StationDemo
                 case "button_Xpositive":
                     nAxisNo = StationMgr.GetInstance().GetStation(this).AxisX;
                     break;
+
                 case "button_Xnegtive":
                     nAxisNo = StationMgr.GetInstance().GetStation(this).AxisX;
                     break;
+
                 case "button_Ypositive":
                     nAxisNo = StationMgr.GetInstance().GetStation(this).AxisY;
                     break;
+
                 case "button_Ynegtive":
                     nAxisNo = StationMgr.GetInstance().GetStation(this).AxisY;
                     break;
+
                 case "button_Zpositive":
                     nAxisNo = StationMgr.GetInstance().GetStation(this).AxisZ;
                     break;
+
                 case "button_Znegtive":
                     nAxisNo = StationMgr.GetInstance().GetStation(this).AxisZ;
                     break;
+
                 case "button_Upositive":
                     nAxisNo = StationMgr.GetInstance().GetStation(this).AxisU;
                     break;
+
                 case "button_Unegtive":
                     nAxisNo = StationMgr.GetInstance().GetStation(this).AxisU;
                     break;
+
                 case "button_Txpositive":
                     nAxisNo = StationMgr.GetInstance().GetStation(this).AxisTx;
                     break;
+
                 case "button_Txnegtive":
                     nAxisNo = StationMgr.GetInstance().GetStation(this).AxisTx;
                     break;
+
                 case "button_Typositive":
                     nAxisNo = StationMgr.GetInstance().GetStation(this).AxisTy;
                     break;
+
                 case "button_Tynegtive":
                     nAxisNo = StationMgr.GetInstance().GetStation(this).AxisTy;
                     break;
-
             }
             if (nAxisNo < 0) return;
             MotionMgr.GetInstace().StopAxis(nAxisNo);
         }
+
         private void SelMoveType(int nAxisNo, bool bpostive, int speed)
         {
             if (comboBox_SelMotionType.SelectedItem == null || comboBox_SelMotionType.SelectedItem.ToString() == "Jog")
@@ -910,59 +910,65 @@ namespace StationDemo
             //        MotionMgr.GetInstace().RelativeMove(nAxisNo, k * 100000, speed);
             //        break;
             //}
-
         }
+
         private void button_Xpositive_Click(object sender, EventArgs e)
         {
-
             bStopMove = false;
             string str = (this.Parent).Parent.Parent.Name;
             int nAxisNo = StationMgr.GetInstance().GetStation(this).AxisX;
             SelMoveType(nAxisNo, true, 2);
-
         }
+
         private void button_Xnegtive_Click(object sender, EventArgs e)
         {
             bStopMove = false;
             int nAxisNo = StationMgr.GetInstance().GetStation(this).AxisX;
             SelMoveType(nAxisNo, false, 2);
         }
+
         private void button_Ypostive_Click(object sender, EventArgs e)
         {
             bStopMove = false;
             int nAxisNo = StationMgr.GetInstance().GetStation(this).AxisY;
             SelMoveType(nAxisNo, true, 2);
         }
+
         private void button_Ynegtive_Click(object sender, EventArgs e)
         {
             bStopMove = false;
             int nAxisNo = StationMgr.GetInstance().GetStation(this).AxisY;
             SelMoveType(nAxisNo, false, 2);
         }
+
         private void button_Zpostive_Click(object sender, EventArgs e)
         {
             bStopMove = false;
             int nAxisNo = StationMgr.GetInstance().GetStation(this).AxisZ;
             SelMoveType(nAxisNo, true, 2);
         }
+
         private void button_Znegtive_Click(object sender, EventArgs e)
         {
             bStopMove = false;
             int nAxisNo = StationMgr.GetInstance().GetStation(this).AxisZ;
             SelMoveType(nAxisNo, false, 2);
         }
+
         private void button_Upostive_Click(object sender, EventArgs e)
         {
             bStopMove = false;
             int nAxisNo = StationMgr.GetInstance().GetStation(this).AxisU;
             SelMoveType(nAxisNo, true, 2);
         }
+
         private void buttonU_negtive_Click(object sender, EventArgs e)
         {
             bStopMove = false;
             int nAxisNo = StationMgr.GetInstance().GetStation(this).AxisU;
             SelMoveType(nAxisNo, false, 2);
         }
+
         private void button_Txpositive_Click(object sender, EventArgs e)
         {
             bStopMove = false;
@@ -990,7 +996,9 @@ namespace StationDemo
             int nAxisNo = StationMgr.GetInstance().GetStation(this).AxisTy;
             SelMoveType(nAxisNo, false, 2);
         }
-        bool bStopMove = false;
+
+        private bool bStopMove = false;
+
         private void button_stop_Click(object sender, EventArgs e)
         {
             bStopMove = true;
@@ -1036,9 +1044,9 @@ namespace StationDemo
             button_homeTy.BackColor = Color.LightGreen;
             button_homeTy.Text = "回原点";
         }
+
         private void CloseForm(object sender, FormClosedEventArgs e)
         {
-
         }
 
         private void button_AllAxisMove_Click(object sender, EventArgs e)
@@ -1082,7 +1090,6 @@ namespace StationDemo
                 MotionMgr.GetInstace().AbsMove(nAxisTx, postx, 2);
             if (nAxisTy != -1)
                 MotionMgr.GetInstace().AbsMove(nAxisTy, posty, 2);
-
         }
 
         private void button_SingleAxisMove_Click(object sender, EventArgs e)
@@ -1108,21 +1115,27 @@ namespace StationDemo
                 case 1:
                     nAxis = StationMgr.GetInstance().GetStation(this).AxisX;
                     break;
+
                 case 2:
                     nAxis = StationMgr.GetInstance().GetStation(this).AxisY;
                     break;
+
                 case 3:
                     nAxis = StationMgr.GetInstance().GetStation(this).AxisZ;
                     break;
+
                 case 4:
                     nAxis = StationMgr.GetInstance().GetStation(this).AxisU;
                     break;
+
                 case 5:
                     nAxis = StationMgr.GetInstance().GetStation(this).AxisTx;
                     break;
+
                 case 6:
                     nAxis = StationMgr.GetInstance().GetStation(this).AxisTy;
                     break;
+
                 default:
                     //tempInfoForm.m_OperateInfoText = "轴号选择错误";
                     // tempInfoForm.ShowDialog();
@@ -1133,6 +1146,7 @@ namespace StationDemo
             if (nAxis != -1)
                 MotionMgr.GetInstace().AbsMove(nAxis, pos, 2);
         }
+
         private bool CheckReName(string[] staPointName)
         {
             if (staPointName == null)
@@ -1143,12 +1157,13 @@ namespace StationDemo
             {
                 for (int j = i + 1; j < staPointName.Length; j++)
                 {
-                    if (staPointName[i] == staPointName[j]  )
+                    if (staPointName[i] == staPointName[j])
                         return true;
                 }
             }
             return false;
         }
+
         private void button_Save_Click(object sender, EventArgs e)
         {
             string strPointNameErr = "";
@@ -1209,7 +1224,6 @@ namespace StationDemo
                         }
                         PointArrIndataGridView_PointInfo.Add(strPonitName);
                     }
-
                 }
                 List<string> DeletePointName = new List<string>();
                 DeletePointName.Clear();
@@ -1226,13 +1240,10 @@ namespace StationDemo
                 foreach (var tem in staPoint)
                     eventStationPosChanged?.Invoke(this.Name, tem.Key);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show($"点位数据：{strPointNameErr} 错误 ");
             }
-
-           
-
         }
 
         private void button_RecordPoint_Click(object sender, EventArgs e)
@@ -1245,7 +1256,6 @@ namespace StationDemo
                 p.X = this.Size.Width / 2;
                 p.Y = this.Size.Height / 2;
                 tempInfoForm.Location = p;
-
 
                 int nAxisNot = StationMgr.GetInstance().GetStation(this).AxisX;
 
@@ -1291,7 +1301,6 @@ namespace StationDemo
 
                         nAxisNo = StationMgr.GetInstance().GetStation(this.Name).AxisTy;
                         tempPoint.pointTy = (nAxisNo >= 0) ? MotionMgr.GetInstace().GetAxisPos(nAxisNo) : 0;
-
                     }
                     else
                     {
@@ -1308,27 +1317,31 @@ namespace StationDemo
                                 nAxisNo = StationMgr.GetInstance().GetStation(this.Name).AxisX;
                                 tempPoint.pointX = (nAxisNo >= 0) ? MotionMgr.GetInstace().GetAxisPos(nAxisNo) : 0;
                                 break;
+
                             case 2:
                                 nAxisNo = StationMgr.GetInstance().GetStation(this.Name).AxisY;
                                 tempPoint.pointY = (nAxisNo >= 0) ? MotionMgr.GetInstace().GetAxisPos(nAxisNo) : 0;
                                 break;
+
                             case 3:
                                 nAxisNo = StationMgr.GetInstance().GetStation(this.Name).AxisZ;
                                 tempPoint.pointZ = (nAxisNo >= 0) ? MotionMgr.GetInstace().GetAxisPos(nAxisNo) : 0;
                                 break;
+
                             case 4:
                                 nAxisNo = StationMgr.GetInstance().GetStation(this.Name).AxisU;
                                 tempPoint.pointU = (nAxisNo >= 0) ? MotionMgr.GetInstace().GetAxisPos(nAxisNo) : 0;
                                 break;
+
                             case 5:
                                 nAxisNo = StationMgr.GetInstance().GetStation(this.Name).AxisTx;
                                 tempPoint.pointTx = (nAxisNo >= 0) ? MotionMgr.GetInstace().GetAxisPos(nAxisNo) : 0;
                                 break;
+
                             case 6:
                                 nAxisNo = StationMgr.GetInstance().GetStation(this.Name).AxisTy;
                                 tempPoint.pointTy = (nAxisNo >= 0) ? MotionMgr.GetInstace().GetAxisPos(nAxisNo) : 0;
                                 break;
-
                         }
                     }
 
@@ -1342,11 +1355,10 @@ namespace StationDemo
                     StationMgr.GetInstance().GetStation(this.Name).AddPoint(strPointName, tempPoint);
                 }
             }
-            catch( Exception es)
+            catch (Exception es)
             {
                 MessageBox.Show($"点位：{strPointErrName} 出错误");
             }
-         
         }
 
         private void button_ContinuousSnap_Click(object sender, EventArgs e)
@@ -1437,16 +1449,12 @@ namespace StationDemo
                 //}
                 comboBox_SelCamera.Visible = true;
                 comboBox_SelCamera.SelectedIndex = 0;
-
-
             }
             else
             {
                 comboBox_SelCamera.Visible = false;
             }
-
         }
-
 
         private void PointDel(object sender, DataGridViewRowsRemovedEventArgs e)
         {
@@ -1467,8 +1475,6 @@ namespace StationDemo
                 IOMgr.GetInstace().m_eventIoInputChanageByName += ChangedIoInState;
                 IOMgr.GetInstace().m_eventIoOutputChanageByName += ChangedIoOutState;
                 ChagedPrItem("");
-
-
             }
             else
             {
@@ -1479,7 +1485,7 @@ namespace StationDemo
             }
         }
 
-        void ChangeMotionConfig(int nAxis, AxisConfig axisConfig)
+        private void ChangeMotionConfig(int nAxis, AxisConfig axisConfig)
         {
             if (m_Stationbase.AxisX == nAxis)
                 button_ServoOnX.Enabled = ((axisConfig.motorType >= MotorType.SEVER) ? true : false);
@@ -1499,7 +1505,8 @@ namespace StationDemo
             if (m_Stationbase.AxisTy == nAxis)
                 button_ServoOnTy.Enabled = ((axisConfig.motorType >= MotorType.SEVER) ? true : false);
         }
-        void UpdataAxisIoAndPos(int nAxisNo, AxisIOState axisIOState, AxisPos pos)
+
+        private void UpdataAxisIoAndPos(int nAxisNo, AxisIOState axisIOState, AxisPos pos)
         {
             if (nAxisNo == -1)
                 return;
@@ -1514,8 +1521,6 @@ namespace StationDemo
                 ChangeState(labelControl_EMGX, axisIOState._bEmg);
                 ChangeAxisPos(label_ActPosX, pos._lActPos);
                 ChangeAxisPos(label_CmdPosX, pos._lCmdPos);
-
-
             }
             if (nAxisNo == pbase.AxisY)
             {
@@ -1527,7 +1532,6 @@ namespace StationDemo
                 ChangeState(labelControl_EMGY, axisIOState._bEmg);
                 ChangeAxisPos(label_ActPosY, pos._lActPos);
                 ChangeAxisPos(label_CmdPosY, pos._lCmdPos);
-
             }
             if (nAxisNo == pbase.AxisZ)
             {
@@ -1596,9 +1600,7 @@ namespace StationDemo
                 labelControl_LimtNX.Enabled = false;
                 labelControl_ORIX.Enabled = false;
                 labelControl_EMGX.Enabled = false;
-
             }
-
 
             MotionMgr.GetInstace().GetAxisIOState(psb.AxisY, ref axisIOState);
             MotionMgr.GetInstace().GetAxisPos(psb.AxisY, ref axisPos);
@@ -1633,7 +1635,6 @@ namespace StationDemo
                 labelControl_EMGZ.Enabled = false;
             }
 
-
             MotionMgr.GetInstace().GetAxisIOState(psb.AxisU, ref axisIOState);
             MotionMgr.GetInstace().GetAxisPos(psb.AxisU, ref axisPos);
             UpdataAxisIoAndPos(psb.AxisU, axisIOState, axisPos);
@@ -1657,7 +1658,6 @@ namespace StationDemo
             button_ServoOnTx.Enabled = axisConfig.motorType <= MotorType.SEVER ? true : false;
             if (psb.AxisTx == -1)
             {
-
                 label_ActPosTx.Enabled = false;
                 label_CmdPosTx.Enabled = false;
                 labelControl_AlarmTx.Enabled = false;
@@ -1674,7 +1674,6 @@ namespace StationDemo
             button_ServoOnTy.Enabled = axisConfig.motorType <= MotorType.SEVER ? true : false;
             if (psb.AxisTy == -1)
             {
-
                 label_ActPosTy.Enabled = false;
                 label_CmdPosTy.Enabled = false;
                 labelControl_AlarmTy.Enabled = false;
@@ -1687,7 +1686,6 @@ namespace StationDemo
             foreach (var tem in m_Stationbase.m_listIoInput)
                 if (m_dicInput.ContainsKey(tem))
                     userPanel_Input.SetLebalState(tem, IOMgr.GetInstace().ReadIoInBit(tem));
-
 
             foreach (var tem in m_Stationbase.m_listIoOutput)
                 if (m_dicOutput.ContainsKey(tem))
@@ -1711,6 +1709,7 @@ namespace StationDemo
             }
 #endif
         }
+
         private void button_ServoOnX_Click(object sender, EventArgs e)
         {
             if (button_ServoOnX.Text == "伺服OFF")
@@ -1718,6 +1717,7 @@ namespace StationDemo
             else
                 MotionMgr.GetInstace().ServoOff((short)m_Stationbase.AxisX);
         }
+
         private void button_ServoOnY_Click(object sender, EventArgs e)
         {
             if (button_ServoOnY.Text == "伺服OFF")
@@ -1758,8 +1758,6 @@ namespace StationDemo
                 MotionMgr.GetInstace().ServoOff((short)m_Stationbase.AxisTy);
         }
 
-
-
         public void ChangedIoInState(string IoName, bool bStateCurrent)
         {
             int nRow = 0;
@@ -1772,6 +1770,7 @@ namespace StationDemo
                 userPanel_Input.SetLebalState(IoName, bStateCurrent);
             }
         }
+
         public void ChangedIoOutState(string IoName, bool bStateCurrent)
         {
             int nRow = 0;
@@ -1781,12 +1780,9 @@ namespace StationDemo
             }
             else
             {
-
                 userBtnPanel_Output.SetBtnState(IoName, bStateCurrent);
             }
         }
-
-
 
         private void OnSelectionDataGridView(object sender, EventArgs e)
         {
@@ -1794,8 +1790,7 @@ namespace StationDemo
             dgv.ClearSelection();
         }
 
-   
-        void EnBtn(bool bEnable = true)
+        private void EnBtn(bool bEnable = true)
         {
             button_Xnegtive.Enabled = bEnable;
             button_Xpositive.Enabled = bEnable;
@@ -1808,7 +1803,6 @@ namespace StationDemo
 
             button_Txnegtive.Enabled = bEnable;
             button_Txpositive.Enabled = bEnable;
-
 
             button_Typositive.Enabled = bEnable;
             button_Tynegtive.Enabled = bEnable;
@@ -1830,6 +1824,7 @@ namespace StationDemo
             button_stop.Enabled = bEnable;
             userBtnPanel_Output.Enabled = bEnable;
         }
+
         public void ChangedUserRight(User CurrentUser)
         {
             if (InvokeRequired)
@@ -1848,6 +1843,7 @@ namespace StationDemo
                         dataGridView_PointInfo.ReadOnly = true;
                         EnBtn(false);
                         break;
+
                     case (int)UserRight.调试工程师:
                         button_RecordPoint.Enabled = true;
                         button_Save.Enabled = true;
@@ -1859,6 +1855,7 @@ namespace StationDemo
                         dataGridView_PointInfo.Columns[0].ReadOnly = true;
                         EnBtn();
                         break;
+
                     case (int)UserRight.软件工程师:
                         button_RecordPoint.Enabled = true;
                         button_Save.Enabled = true;
@@ -1870,6 +1867,7 @@ namespace StationDemo
                         dataGridView_PointInfo.ReadOnly = false;
                         EnBtn();
                         break;
+
                     case (int)UserRight.超级管理员:
                         button_RecordPoint.Enabled = true;
                         button_Save.Enabled = true;
@@ -1891,9 +1889,7 @@ namespace StationDemo
                     EnBtn(false);
                 }
             }
-
         }
-
 
         private void OnSizeChanged(object sender, EventArgs e)
         {
@@ -1905,16 +1901,15 @@ namespace StationDemo
             if (m_Stationbase.AxisX == -1 && m_Stationbase.AxisY == -1 && m_Stationbase.AxisZ == -1 && m_Stationbase.AxisU == -1 && m_Stationbase.AxisTx == -1 && m_Stationbase.AxisTy == -1)
             {
                 userPanel_Input.Location = new Point(0, dataGridView_PointInfo.Location.Y);
-                userBtnPanel_Output.Location = new Point( userPanel_Input.Width + 5, dataGridView_PointInfo.Location.Y);
+                userBtnPanel_Output.Location = new Point(userPanel_Input.Width + 5, dataGridView_PointInfo.Location.Y);
             }
             else
             {
-                 userPanel_Input.Location = new Point(button_Save.Location.X + button_Save.Width + 5, dataGridView_PointInfo.Location.Y);
-                  userBtnPanel_Output.Location = new Point(button_Save.Location.X + button_Save.Width + userPanel_Input.Width + 5, dataGridView_PointInfo.Location.Y);
-
+                userPanel_Input.Location = new Point(button_Save.Location.X + button_Save.Width + 5, dataGridView_PointInfo.Location.Y);
+                userBtnPanel_Output.Location = new Point(button_Save.Location.X + button_Save.Width + userPanel_Input.Width + 5, dataGridView_PointInfo.Location.Y);
             }
-
         }
+
         private void btn_Del_Click(object sender, EventArgs e)
         {
             Dictionary<string, PointInfo> tempdic = StationMgr.GetInstance().GetStation(this.Name).GetStationPointDic();
@@ -1986,7 +1981,6 @@ namespace StationDemo
                         Img = CameraMgr.GetInstance().GetImg(camname);
                         return WaranResult.CheckAgain;
                     }
-
                 }, 3000
                 );
                 doWhile.doSomething(null, doWhile, true, null);
@@ -1998,8 +1992,6 @@ namespace StationDemo
                         Img.Dispose();
                     //}));
                 }
-
-
             }
             );
 

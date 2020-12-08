@@ -1,72 +1,77 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.IO.Ports;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using BaseDll;
+﻿using BaseDll;
 using log4net;
 using SerialDict;
+using System;
 using System.ComponentModel;
+using System.IO;
+using System.IO.Ports;
 using System.Runtime.CompilerServices;
+using System.Windows.Forms;
 
 namespace OtherDevice
 {
-
-
     public class SerialPortParam
     {
         #region 属性
+
         /// <summary>
-        ///串口号 
+        ///串口号
         /// </summary>
         public int m_nComNo = 7;
+
         /// <summary>
-        ///串口定义名称 
+        ///串口定义名称
         /// </summary>
         public string m_strName = "";
+
         /// <summary>
-        ///波特率 
+        ///波特率
         /// </summary>
         public int m_nBaudRate = 19200;
+
         /// <summary>
-        ///数据位 
+        ///数据位
         /// </summary>
         public int m_nDataBit = 8;
+
         /// <summary>
-        ///校验位 
+        ///校验位
         /// </summary>
         public string m_strPartiy = "None";
+
         /// <summary>
-        ///停止位 
+        ///停止位
         /// </summary>
         public string m_strStopBit = "1";
+
         /// <summary>
-        ///流控制 
+        ///流控制
         /// </summary>
         public string m_strFlowCtrl = "None";
+
         /// <summary>
-        ///超时时间 
+        ///超时时间
         /// </summary>
         public int m_nTime = 1000;
+
         /// <summary>
-        ///缓冲区大小 
+        ///缓冲区大小
         /// </summary>
         public int m_nBufferSzie = 4096;
+
         /// <summary>
-        ///命令分隔符标志 
+        ///命令分隔符标志
         /// </summary>
         public string m_strLineFlag = "CRLF";
+
         /// <summary>
-        ///命令分隔符 
+        ///命令分隔符
         /// </summary>
         private string m_strLine;
 
-        #endregion
+        #endregion 属性
     }
+
     public struct LightSet
     {
         public LightSet(int ch, int val)
@@ -74,6 +79,7 @@ namespace OtherDevice
             nCh = ch;
             lightval = val;
         }
+
         public int nCh;
         public int lightval;
     }
@@ -84,6 +90,7 @@ namespace OtherDevice
         public SerialDictionary<string, LightSet> itemlightdic = new SerialDictionary<string, LightSet>();
 
         public string LightName = "";
+
         public object ReadParam()
         {
             object obj = null;
@@ -93,7 +100,6 @@ namespace OtherDevice
                 obj = AccessXmlSerializer.XmlToObject(AppDomain.CurrentDomain.BaseDirectory + @"config\Light.xml", lightSerialPortParam.GetType());
                 if (obj != null)
                     lightSerialPortParam = (SerialPortParam)obj;
-
             }
             catch
             {
@@ -105,13 +111,13 @@ namespace OtherDevice
             }
             return obj;
         }
+
         public object ReadParam2()
         {
-
             object obj2 = null;
             try
             {
-               // obj = AccessXmlSerializer.XmlToObject(AppDomain.CurrentDomain.BaseDirectory + @"config\Light.xml", lightSerialPortParam.GetType());
+                // obj = AccessXmlSerializer.XmlToObject(AppDomain.CurrentDomain.BaseDirectory + @"config\Light.xml", lightSerialPortParam.GetType());
                 // if (obj != null)
                 //      lightSerialPortParam = (LightSerialPortParam)obj;
                 //obj2 = AccessXmlSerializer.XmlToObject(AppDomain.CurrentDomain.BaseDirectory + @"\config\Light" + ".xml", itemlightdic.GetType());
@@ -124,7 +130,6 @@ namespace OtherDevice
                         MessageBox.Show("lingt control  数据读取出错", "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         logger.Error("lingt control  数据读取出错");
                     }
-
                 }
                 else
                 {
@@ -141,17 +146,15 @@ namespace OtherDevice
             }
             return obj2;
         }
-        SerialPortParam lightSerialPortParam = new SerialPortParam();
 
-  
-   
-      
+        private SerialPortParam lightSerialPortParam = new SerialPortParam();
 
         public void Save()
         {
             string strPath = AppDomain.CurrentDomain.BaseDirectory + @"\config\Light.xml";
             AccessXmlSerializer.ObjectToXml(strPath, lightSerialPortParam);
         }
+
         public void SetItem(string itemName, int nCh, int val)
         {
             logger.Info("光源控制器：" + "设置" + itemName + string.Format(" 通道{0}：，亮度值{1}", nCh, val));
@@ -160,23 +163,25 @@ namespace OtherDevice
             else
                 itemlightdic[itemName] = new LightSet(nCh, val);
         }
+
         public void SaveItems()
         {
-
             string strPath = AppDomain.CurrentDomain.BaseDirectory + @"config\LightVal_" + LightName + ".xml";
             if (File.Exists(strPath))
                 File.Delete(strPath);
             AccessXmlSerializer.ObjectToXml(strPath, itemlightdic);
-
         }
 
-        SerialPort sp = new SerialPort();
-        bool CommConn; // 通訊是否連接
+        private SerialPort sp = new SerialPort();
+        private bool CommConn; // 通訊是否連接
+
         public LightControler()
         {
             //ResetReadBuffer();
         }
-        SerialPort _serialPort;
+
+        private SerialPort _serialPort;
+
         //初始化光源控制器串口
         public bool InitLightComport()
         {
@@ -216,6 +221,7 @@ namespace OtherDevice
         }
 
         #region Open / Close Procedures
+
         public bool Open(string portName, int baudRate, int databits, Parity parity, StopBits stopBits)
         {
             //Ensure port isn't already opened:
@@ -244,6 +250,7 @@ namespace OtherDevice
             }
             return false;
         }
+
         public bool Close()
         {
             //Ensure port is opened before attempting to close:
@@ -261,7 +268,8 @@ namespace OtherDevice
             }
             return false;
         }
-        #endregion
+
+        #endregion Open / Close Procedures
 
         //发送亮度指令
         public bool SerialSend(string command)
@@ -276,6 +284,7 @@ namespace OtherDevice
             }
             return true;
         }
+
         public bool SerialSend(byte[] command)
         {
             if (command == null || command.Length <= 0)
@@ -291,7 +300,8 @@ namespace OtherDevice
             return true;
         }
 
-        object objlock = new object();
+        private object objlock = new object();
+
         /// <summary>
         /// 设置亮度值
         /// </summary>
@@ -321,11 +331,8 @@ namespace OtherDevice
             senddata[7] = (byte)(sum & 0xff);
             lock (objlock)
             {
-
                 SerialSend(senddata);
-
             }
-
         }
 
         public void Light(string ItemName)
@@ -343,6 +350,7 @@ namespace OtherDevice
                 MessageBox.Show(ItemName + " :没有此项目 ", "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         public void CloseLight(string ItemName)
         {
             if (itemlightdic.ContainsKey(ItemName))
@@ -387,6 +395,7 @@ namespace OtherDevice
                 SerialSend(senddata);
             }
         }
+
         public void Light(int nChnum, int lightval)
         {
             if (nChnum < 0 || nChnum >= 7)
@@ -429,6 +438,7 @@ namespace OtherDevice
         private double positionLimitNegative;
         private int delayTime;
         private int order;
+
         /// <summary>
         /// 程序序号,必须设置
         /// </summary>
@@ -440,6 +450,7 @@ namespace OtherDevice
                 index = value; NotifyPropertyChanged("Index");
             }
         }
+
         /// <summary>
         /// 模式选择
         /// </summary>
@@ -463,6 +474,7 @@ namespace OtherDevice
                 movePosition = value; NotifyPropertyChanged("MovePosition");
             }
         }
+
         /// <summary>
         /// 速度（0802h（%））
         /// </summary>
@@ -474,6 +486,7 @@ namespace OtherDevice
                 speed = value; NotifyPropertyChanged("Speed");
             }
         }
+
         /// <summary>
         /// 扭力（*0.1%）
         /// </summary>
@@ -485,6 +498,7 @@ namespace OtherDevice
                 porque = value; NotifyPropertyChanged("Torque");
             }
         }
+
         /// <summary>
         /// 信号探测模式
         /// </summary>
@@ -496,6 +510,7 @@ namespace OtherDevice
                 sign = value; NotifyPropertyChanged("Sign");
             }
         }
+
         /// <summary>
         /// 行程下限
         /// </summary>
@@ -507,6 +522,7 @@ namespace OtherDevice
                 positionLimitNegative = value; NotifyPropertyChanged("PositionLimitNegative");
             }
         }
+
         /// <summary>
         /// 行程上限
         /// </summary>
@@ -530,6 +546,7 @@ namespace OtherDevice
                 delayTime = value; NotifyPropertyChanged("DelayTime");
             }
         }
+
         /// <summary>
         /// 次序，默认-1表示不执行其他Index序号的示教点，其他数字表示执行Index序号
         /// </summary>
@@ -541,10 +558,12 @@ namespace OtherDevice
                 order = value; NotifyPropertyChanged("Order");
             }
         }
+
         private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
         public event PropertyChangedEventHandler PropertyChanged;
     }
 
@@ -557,65 +576,79 @@ namespace OtherDevice
         /// 相對位置定位
         /// </summary>
         INC,
+
         /// <summary>
         /// 絕對位置定位
         /// </summary>
         ABS,
+
         /// <summary>
         /// 原點復歸
         /// </summary>
         ORG,
+
         /// <summary>
         /// + 向扭力極限探測
         /// </summary>
         TLSAdd,
+
         /// <summary>
         ///  - 向扭力極限探測 - 向扭力極限探測
         /// </summary>
         TLSSub,
+
         /// <summary>
         /// + 信號探測
         /// </summary>
         SIGAdd,
+
         /// <summary>
         /// - 信號探測
         /// </summary>
         SIGSub,
+
         /// <summary>
         ///  位置設置
         /// </summary>
         SET,
+
         /// <summary>
         /// CLR 清除偏差計數
         /// </summary>
         CLR,
+
         /// <summary>
         /// OUTI 通用輸出─即時
         /// </summary>
         OUTI,
+
         /// <summary>
         /// OUTB 通用輸出─座標比較(大 )
         /// </summary>
         OUTB,
+
         /// <summary>
         /// OUTS 通用輸出─座標比較(小 )
         /// </summary>
         OUTS,
+
         /// <summary>
         /// SETC 設定計次
         /// </summary>
         SETC,
+
         /// <summary>
         /// JNZ 將計次結果減 1 後，如為 0 則執行下一個步驟；如結果並非為 0，則會執行下一步驟中所指定編號之程式
         /// </summary>
         JNZ,
     }
+
     /// <summary>
     /// 运动模式，对应寄存器2015H中的值
     /// </summary>
     public enum MotionType
     {
-        Clear=0,//结束是寄存器状态复位
+        Clear = 0,//结束是寄存器状态复位
         Home = 1,//回零
         Open = 3,//打开抓手
         Close = 5,//关闭抓手
@@ -625,51 +658,62 @@ namespace OtherDevice
     public class SerialPortParamCommon
     {
         #region 属性
+
         /// <summary>
-        ///串口号 
+        ///串口号
         /// </summary>
         public int m_nComNo { get; set; }
+
         /// <summary>
-        ///串口定义名称 
+        ///串口定义名称
         /// </summary>
         public string m_strName { get; set; }
+
         /// <summary>
-        ///波特率 
+        ///波特率
         /// </summary>
         public int m_nBaudRate { get; set; }
+
         /// <summary>
-        ///数据位 
+        ///数据位
         /// </summary>
         public int m_nDataBit { get; set; }
+
         /// <summary>
-        ///校验位 
+        ///校验位
         /// </summary>
         public int m_strPartiy { get; set; }
+
         /// <summary>
-        ///停止位 
+        ///停止位
         /// </summary>
         public int m_strStopBit { get; set; }
+
         /// <summary>
-        ///流控制 
+        ///流控制
         /// </summary>
         public string m_strFlowCtrl { get; set; }
+
         /// <summary>
-        ///超时时间 
+        ///超时时间
         /// </summary>
         public int m_nTime { get; set; }
+
         /// <summary>
-        ///缓冲区大小 
+        ///缓冲区大小
         /// </summary>
         public int m_nBufferSzie { get; set; }
+
         /// <summary>
-        ///命令分隔符标志 
+        ///命令分隔符标志
         /// </summary>
         public string m_strLineFlag { get; set; }
+
         /// <summary>
-        ///命令分隔符 
+        ///命令分隔符
         /// </summary>
         private string m_strLine { get; set; }
 
-        #endregion
+        #endregion 属性
     }
 }

@@ -1,24 +1,19 @@
-﻿using System;
+﻿using BaseDll;
+using CommonTools;
+using log4net;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using CommonTools;
 using System.Xml;
-using System.Diagnostics;
-using BaseDll;
-using UserData;
-using log4net;
 
 namespace StationDemo
 {
-    public partial class Form_ParamSet : Form,IUserRightSwitch
+    public partial class Form_ParamSet : Form, IUserRightSwitch
     {
-        ILog logger = LogManager.GetLogger("Form_ParamSet");
+        private ILog logger = LogManager.GetLogger("Form_ParamSet");
+
         public Form_ParamSet()
         {
             InitializeComponent();
@@ -29,27 +24,26 @@ namespace StationDemo
             get;
             set;
         }
-        void UpdataParamDataGridView( User CurrentUser)
+
+        private void UpdataParamDataGridView(User CurrentUser)
         {
-         
             userRight = CurrentUser._userRight;
             dataGridView_Param.Rows.Clear();
             ParamSetMgr.GetInstance().ClearAllParamClassList();
             Dictionary<string, ParamSet> allparam = ParamSetMgr.GetInstance().GetAllParam();
             foreach (var temp in allparam)
             {
-                if(temp.Value._ParamClass!=null)
+                if (temp.Value._ParamClass != null)
                 {
                     ParamSetMgr.GetInstance().AddParamClass(temp.Value._ParamClass);
                 }
-               
             }
-            List<string> listParamList= ParamSetMgr.GetInstance().GetParamClassList();
+            List<string> listParamList = ParamSetMgr.GetInstance().GetParamClassList();
             DataGridViewComboBoxColumn combox = (DataGridViewComboBoxColumn)dataGridView_Param.Columns[6];
             combox.Items.Clear();
             foreach (var temp in listParamList)
             {
-                if(dataGridView_Param.Columns[6] is DataGridViewComboBoxColumn)
+                if (dataGridView_Param.Columns[6] is DataGridViewComboBoxColumn)
                 {
                     combox.Items.Add(temp);
                 }
@@ -61,11 +55,11 @@ namespace StationDemo
                 dataGridView_Param.Rows.Add(temp.Key, temp.Value._enuValType.ToString(),
                      temp.Value._strParamVal, temp.Value._strParamValMax, temp.Value._strParamValMin,
                      temp.Value._ParamRight.ToString(), temp.Value._ParamClass.ToString());
-                if((int)CurrentUser._userRight >= (int)UserRight.软件工程师)
+                if ((int)CurrentUser._userRight >= (int)UserRight.软件工程师)
                 {
                     dataGridView_Param.Rows[index].ReadOnly = false;
                 }
-                else if ((int)(UserRight)Enum.Parse(typeof(UserRight),dataGridView_Param.Rows[index].Cells[5].Value.ToString()) <= (int)CurrentUser._userRight)
+                else if ((int)(UserRight)Enum.Parse(typeof(UserRight), dataGridView_Param.Rows[index].Cells[5].Value.ToString()) <= (int)CurrentUser._userRight)
                 {
                     //dataGridView_Param.Rows[index].ReadOnly = false;
                     dataGridView_Param.Rows[index].Cells[0].ReadOnly = true;
@@ -75,7 +69,6 @@ namespace StationDemo
                     dataGridView_Param.Rows[index].Cells[4].ReadOnly = false;
                     dataGridView_Param.Rows[index].Cells[5].ReadOnly = true;
                     dataGridView_Param.Rows[index].Cells[6].ReadOnly = true;
-
                 }
                 else
                 {
@@ -87,18 +80,17 @@ namespace StationDemo
                     dataGridView_Param.Rows[index].Cells[5].ReadOnly = true;
                     dataGridView_Param.Rows[index].Cells[6].ReadOnly = true;
                 }
-                
+
                 index++;
             }
             if ((int)CurrentUser._userRight < (int)UserRight.软件工程师)
                 dataGridView_Param.AllowUserToAddRows = false;
             else
                 dataGridView_Param.AllowUserToAddRows = true;
-       
         }
+
         public void ChangedUserRight(User CurrentUser)
         {
-
             if (userRight == CurrentUser._userRight)
                 return;
             if (InvokeRequired)
@@ -107,7 +99,6 @@ namespace StationDemo
             }
             else
             {
-
                 UpdataParamDataGridView(CurrentUser);
                 //for (int i = 0; i < dataGridView_Param.Rows.Count; i++)
                 //    heith+= dataGridView_Param.Height = dataGridView_Param.Rows[i].Height;
@@ -115,7 +106,8 @@ namespace StationDemo
                 //dataGridView_Param.Height = heith;
             }
         }
-        void LoadProductFile(string strFile)
+
+        private void LoadProductFile(string strFile)
         {
             if (InvokeRequired)
             {
@@ -124,16 +116,17 @@ namespace StationDemo
             else
             {
                 System.Diagnostics.Debug.WriteLine("start LoadProductFile\n");
-              //  Console.WriteLine("start LoadProductFile\n");
+                //  Console.WriteLine("start LoadProductFile\n");
                 UpdataParamDataGridView(sys.g_User);
                 label_CurrentFile.Text = "当前产品:" + strFile;
-              //  Console.WriteLine("end LoadProductFile\n");
+                //  Console.WriteLine("end LoadProductFile\n");
                 System.Diagnostics.Debug.WriteLine("end LoadProductFilexx\n");
                 BtnLoad.Enabled = true;
                 System.Diagnostics.Debug.WriteLine("end LoadProductFile\n");
             }
         }
-        private void  UpdateProductList()
+
+        private void UpdateProductList()
         {
             treeView_ProdutFile.Nodes.Clear();
             treeView_ProdutFile.Nodes.Add("当前产品");
@@ -163,6 +156,7 @@ namespace StationDemo
             treeView_ProdutFile.Nodes[0].ExpandAll();
             treeView_ProdutFile.Nodes[1].Expand();
         }
+
         private void Form_ParamSet_Load(object sender, EventArgs e)
         {
             sys.g_eventRightChanged += ChangedUserRight;
@@ -181,7 +175,7 @@ namespace StationDemo
             string path = $"{ParamSetMgr.GetInstance().CurrentWorkDir}\\{ParamSetMgr.GetInstance().CurrentProductFile}\\Description.xml";
             DescriptionClass.paramValue = AccessXmlSerializer.XmlToObject<List<ParamValue>>(path);
         }
-     
+
         private void BtnSave_Click(object sender, EventArgs e)
         {
             if (!Check())
@@ -200,9 +194,9 @@ namespace StationDemo
             //    MessageBox.Show("没有载入产品文件，请载入", "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
             //    return ;
             //}
-            for ( int  i=0;i<  dataGridView_Param.RowCount;i++)
+            for (int i = 0; i < dataGridView_Param.RowCount; i++)
             {
-                if (dataGridView_Param.Rows[i].Cells[0].Value!=null && dataGridView_Param.Rows[i].Cells[0].Value.ToString()!="")
+                if (dataGridView_Param.Rows[i].Cells[0].Value != null && dataGridView_Param.Rows[i].Cells[0].Value.ToString() != "")
                 {
                     strParamName = dataGridView_Param.Rows[i].Cells[0].Value.ToString();
                     ParamSet paramSet = new ParamSet()
@@ -213,13 +207,13 @@ namespace StationDemo
                         _strParamValMin = dataGridView_Param.Rows[i].Cells[4].Value == null ? "0" : dataGridView_Param.Rows[i].Cells[4].Value.ToString(),
                         _ParamRight = dataGridView_Param.Rows[i].Cells[5].Value == null ? UserRight.客户操作员 : (UserRight)Enum.Parse(typeof(UserRight), dataGridView_Param.Rows[i].Cells[5].Value.ToString()),
                         _ParamClass = dataGridView_Param.Rows[i].Cells[6].Value == null ? "综合" : dataGridView_Param.Rows[i].Cells[6].Value.ToString(),
-                     } ;
+                    };
 
                     //if (ParamSetMgr.GetInstance().GetParam(strParamName) != paramSet._strParamVal)
                     //    logger.Info($"用户{sys.g_User._userName},修改参数：{strParamName} ，原来值：{ParamSetMgr.GetInstance().GetParam(strParamName)}，现在值：{ paramSet._strParamVal} ");
 
-                    ParamSetMgr.GetInstance().SetParam(strParamName, paramSet );
-                   
+                    ParamSetMgr.GetInstance().SetParam(strParamName, paramSet);
+
                     ParamSet ds = new ParamSet()
                     {
                         _enuValType = dataGridView_Param.Rows[i].Cells[0].Value == null ? ParamSetUnit.doubleUnit : (ParamSetUnit)Enum.Parse(typeof(ParamSetUnit), dataGridView_Param.Rows[i].Cells[1].Value.ToString()),
@@ -234,7 +228,8 @@ namespace StationDemo
             ParamSetMgr.GetInstance().SaveParam(currentProductFile);
         }
 
-        List<string> ItemName = new List<string>();
+        private List<string> ItemName = new List<string>();
+
         private bool Check()
         {
             try
@@ -270,7 +265,6 @@ namespace StationDemo
                     }
                     else if (type == "intUnit")
                     {
-
                         if (value.Contains("."))
                         {
                             MessageBox.Show($"类别:{sort}名称:{name}，value设置失败，有小数点", "Warn", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
@@ -353,11 +347,9 @@ namespace StationDemo
                             MessageBox.Show($"类别:{sort}名称:{name}，value设置失败，不在规格内", "Warn", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
                             return false;
                         }
-
                     }
                     else if (type == "stringUnit")
                     {
-
                     }
                     if (ItemName.Contains(name))
                     {
@@ -368,12 +360,12 @@ namespace StationDemo
                 }
                 return true;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return false;
             }
-           
         }
+
         private void btnNew_Click(object sender, EventArgs e)
         {
             bool bFind = Directory.Exists(ParamSetMgr.GetInstance().CurrentWorkDir);
@@ -382,13 +374,13 @@ namespace StationDemo
                 MessageBox.Show("没有产品文件，请设置", "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-               
+
             Form_Input form_Input = new Form_Input("产品名称");
-            if(DialogResult.OK ==form_Input.ShowDialog())
+            if (DialogResult.OK == form_Input.ShowDialog())
             {
-                if (form_Input.InputText!="")
+                if (form_Input.InputText != "")
                 {
-                    string str = ParamSetMgr.GetInstance().CurrentWorkDir + ("\\") + form_Input.InputText + ("\\")+ form_Input.InputText+(".xml");
+                    string str = ParamSetMgr.GetInstance().CurrentWorkDir + ("\\") + form_Input.InputText + ("\\") + form_Input.InputText + (".xml");
                     Directory.CreateDirectory(ParamSetMgr.GetInstance().CurrentWorkDir + ("\\") + form_Input.InputText);
                     XmlDocument document = new XmlDocument();
                     XmlDeclaration dec = document.CreateXmlDeclaration("1.0", "utf-8", "no");
@@ -401,11 +393,11 @@ namespace StationDemo
                     treeView_ProdutFile.Nodes[1].Nodes.Add(form_Input.InputText);
                     document.RemoveAll();
                     document = null;
-
-                }  
+                }
             }
             treeView_ProdutFile.Nodes[0].Expand();
         }
+
         private static bool CopyDirectory(string SourcePath, string DestinationPath, bool overwriteexisting)
         {
             bool ret = false;
@@ -439,6 +431,7 @@ namespace StationDemo
             }
             return ret;
         }
+
         private void BtnOtherSave_Click(object sender, EventArgs e)
         {
             bool bFind = Directory.Exists(ParamSetMgr.GetInstance().CurrentWorkDir);
@@ -482,11 +475,10 @@ namespace StationDemo
                 //        treeView_ProdutFile.ExpandAll();
                 //    }
 
-
-
                 //}
             }
         }
+
         public static void DeleteFolder(string dirPath)
         {
             if (Directory.Exists(dirPath))
@@ -500,6 +492,7 @@ namespace StationDemo
                 }
             }
         }
+
         //public static void DeleteFolder(string dirPath)
         //{
         //    if (Directory.Exists(dirPath))
@@ -516,14 +509,12 @@ namespace StationDemo
 
         private void BtnDel_Click(object sender, EventArgs e)
         {
-        
-            
             if (treeView_ProdutFile.SelectedNode == null)
             {
-                 MessageBox.Show("请选择要添加子节点的节点！", "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("请选择要添加子节点的节点！", "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            if(treeView_ProdutFile.SelectedNode== treeView_ProdutFile.Nodes[0])
+            if (treeView_ProdutFile.SelectedNode == treeView_ProdutFile.Nodes[0])
             {
                 MessageBox.Show("不能删除根结点！", "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -539,19 +530,18 @@ namespace StationDemo
                 MessageBox.Show("当前产品目录文件夹！", "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            if(treeView_ProdutFile.SelectedNode== treeView_ProdutFile.Nodes[0].Nodes[0])
+            if (treeView_ProdutFile.SelectedNode == treeView_ProdutFile.Nodes[0].Nodes[0])
             {
                 MessageBox.Show("当前产品文件不能删除，请先载入！", "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            string strdirPath = ParamSetMgr.GetInstance().CurrentWorkDir + ("\\")+treeView_ProdutFile.SelectedNode.Text;
+            string strdirPath = ParamSetMgr.GetInstance().CurrentWorkDir + ("\\") + treeView_ProdutFile.SelectedNode.Text;
             if (MessageBox.Show($"是否确定删除{treeView_ProdutFile.SelectedNode.Text}", "Info", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.No)
                 return;
             if (Directory.Exists(strdirPath))
             {
                 // DeleteFolder(strdirPath);
                 FileOpert.DeleteFolder(strdirPath);
-             
             }
             treeView_ProdutFile.SelectedNode.Remove();
         }
@@ -565,7 +555,7 @@ namespace StationDemo
             }
             if (treeView_ProdutFile.SelectedNode == treeView_ProdutFile.Nodes[0])
             {
-                MessageBox.Show("选择错误！","Err",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                MessageBox.Show("选择错误！", "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             if (ParamSetMgr.GetInstance().CurrentWorkDir == "")
@@ -581,19 +571,19 @@ namespace StationDemo
             }
             if (ParamSetMgr.GetInstance().CurrentProductFile == treeView_ProdutFile.SelectedNode.Text)
                 return;
-             string strOldFile = ParamSetMgr.GetInstance().CurrentProductFile;
+            string strOldFile = ParamSetMgr.GetInstance().CurrentProductFile;
             if (!File.Exists(ParamSetMgr.GetInstance().CurrentWorkDir + ("\\") + treeView_ProdutFile.SelectedNode.Text + ("\\") + treeView_ProdutFile.SelectedNode.Text + (".xml")))
-                 return;
-            if (ParamSetMgr.GetInstance().CurrentProductFile != treeView_ProdutFile.SelectedNode.Text  )
-            ParamSetMgr.GetInstance().CurrentProductFile = treeView_ProdutFile.SelectedNode.Text;
-         
+                return;
+            if (ParamSetMgr.GetInstance().CurrentProductFile != treeView_ProdutFile.SelectedNode.Text)
+                ParamSetMgr.GetInstance().CurrentProductFile = treeView_ProdutFile.SelectedNode.Text;
+
             ConfigToolMgr.GetInstance().SaveProductFile();
 
             //删除之前登陆产品文件名
-            if (treeView_ProdutFile.Nodes.Count>0&& treeView_ProdutFile.Nodes[0].GetNodeCount(true)>0)
+            if (treeView_ProdutFile.Nodes.Count > 0 && treeView_ProdutFile.Nodes[0].GetNodeCount(true) > 0)
                 treeView_ProdutFile.Nodes[0].Nodes[0].Remove();
             treeView_ProdutFile.Nodes[0].Nodes.Add(ParamSetMgr.GetInstance().CurrentProductFile);
-           
+
             //删除当前登陆产品文件名
             string strNewFile = ParamSetMgr.GetInstance().CurrentProductFile;
             for (int i = 0; i < treeView_ProdutFile.Nodes[1].Nodes.Count; i++)
@@ -621,8 +611,8 @@ namespace StationDemo
             treeView_ProdutFile.Nodes[0].ExpandAll();
             //增加之前登陆产品文件名
             treeView_ProdutFile.Nodes[1].Nodes.Add(strOldFile);
-           
         }
+
         protected void DeleteTreeNode2(TreeNode node)
         {
             //后序遍历
@@ -636,7 +626,7 @@ namespace StationDemo
         private void AddNewClass_Click(object sender, EventArgs e)
         {
             Form_Input form_Input = new Form_Input("产品名称");
-            if (treeView_ProdutFile.Nodes[0].Name == null|| treeView_ProdutFile.Nodes[0].FirstNode==null || treeView_ProdutFile.Nodes[0].FirstNode.Text == "")
+            if (treeView_ProdutFile.Nodes[0].Name == null || treeView_ProdutFile.Nodes[0].FirstNode == null || treeView_ProdutFile.Nodes[0].FirstNode.Text == "")
                 return;
             if (DialogResult.OK == form_Input.ShowDialog())
             {
@@ -645,91 +635,86 @@ namespace StationDemo
                     if (form_Input.InputText == "all")
                         return;
                     DataGridViewComboBoxColumn combox = (DataGridViewComboBoxColumn)dataGridView_Param.Columns[6];
-                    if(!combox.Items.Contains(form_Input.InputText))
+                    if (!combox.Items.Contains(form_Input.InputText))
                     {
                         combox.Items.Add(form_Input.InputText);
                         treeView_ProdutFile.Nodes[0].Nodes[0].Nodes.Add(form_Input.InputText);
                     }
-                    
                 }
             }
         }
 
         private void treeView_ProdutFile_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            if (treeView_ProdutFile.Nodes[0] == null || treeView_ProdutFile.Nodes[0].Nodes.Count==0 ||treeView_ProdutFile.Nodes[0].Nodes[0] == null)
+            if (treeView_ProdutFile.Nodes[0] == null || treeView_ProdutFile.Nodes[0].Nodes.Count == 0 || treeView_ProdutFile.Nodes[0].Nodes[0] == null)
                 return;
             if (e.Node == null || e.Node.Parent == null)
                 return;
-            if( e.Node.Parent.Text== treeView_ProdutFile.Nodes[0].Nodes[0].Text)
+            if (e.Node.Parent.Text == treeView_ProdutFile.Nodes[0].Nodes[0].Text)
             {
                 //  e.Node.Text
                 FlushParamToScreen(sys.g_User, e.Node.Text);
             }
-            if(e.Node.Parent.Text == "当前产品")
+            if (e.Node.Parent.Text == "当前产品")
             {
                 FlushParamToScreen(sys.g_User, "all");
             }
         }
+
         public void FlushParamToScreen(User CurrentUser, string strParmClass)
         {
-           
-                System.Diagnostics.Debug.WriteLine("start updata\n");
-                // Console.WriteLine("start updata\n");
-                userRight = CurrentUser._userRight;
-                dataGridView_Param.Rows.Clear();
-                ParamSetMgr.GetInstance().ClearAllParamClassList();
-                Dictionary<string, ParamSet> allparam = ParamSetMgr.GetInstance().GetAllParam();
-              
+            System.Diagnostics.Debug.WriteLine("start updata\n");
+            // Console.WriteLine("start updata\n");
+            userRight = CurrentUser._userRight;
+            dataGridView_Param.Rows.Clear();
+            ParamSetMgr.GetInstance().ClearAllParamClassList();
+            Dictionary<string, ParamSet> allparam = ParamSetMgr.GetInstance().GetAllParam();
 
-                int index = 0;
-                foreach (var temp in allparam)
+            int index = 0;
+            foreach (var temp in allparam)
+            {
+                if (strParmClass != "all")
+                    if (temp.Value._ParamClass != strParmClass)
+                        continue;
+                dataGridView_Param.Rows.Add(temp.Key, temp.Value._enuValType.ToString(),
+                     temp.Value._strParamVal, temp.Value._strParamValMax, temp.Value._strParamValMin,
+                     temp.Value._ParamRight.ToString(), temp.Value._ParamClass.ToString());
+                if ((int)CurrentUser._userRight >= (int)UserRight.软件工程师)
                 {
-                  if(strParmClass!= "all")
-                      if (temp.Value._ParamClass != strParmClass)
-                         continue;
-                    dataGridView_Param.Rows.Add(temp.Key, temp.Value._enuValType.ToString(),
-                         temp.Value._strParamVal, temp.Value._strParamValMax, temp.Value._strParamValMin,
-                         temp.Value._ParamRight.ToString(), temp.Value._ParamClass.ToString());
-                    if ((int)CurrentUser._userRight >= (int)UserRight.软件工程师)
-                    {
-                        dataGridView_Param.Rows[index].ReadOnly = false;
-                    }
-                    else if ((int)(UserRight)Enum.Parse(typeof(UserRight), dataGridView_Param.Rows[index].Cells[5].Value.ToString()) <= (int)CurrentUser._userRight)
-                    {
-                        //dataGridView_Param.Rows[index].ReadOnly = false;
-                        dataGridView_Param.Rows[index].Cells[0].ReadOnly = true;
-                        dataGridView_Param.Rows[index].Cells[1].ReadOnly = true;
-                        dataGridView_Param.Rows[index].Cells[2].ReadOnly = false;
-                        dataGridView_Param.Rows[index].Cells[3].ReadOnly = false;
-                        dataGridView_Param.Rows[index].Cells[4].ReadOnly = false;
-                        dataGridView_Param.Rows[index].Cells[5].ReadOnly = true;
-                        dataGridView_Param.Rows[index].Cells[6].ReadOnly = true;
-
-                    }
-                    else
-                    {
-                        dataGridView_Param.Rows[index].Cells[0].ReadOnly = true;
-                        dataGridView_Param.Rows[index].Cells[1].ReadOnly = true;
-                        dataGridView_Param.Rows[index].Cells[2].ReadOnly = true;
-                        dataGridView_Param.Rows[index].Cells[3].ReadOnly = true;
-                        dataGridView_Param.Rows[index].Cells[4].ReadOnly = true;
-                        dataGridView_Param.Rows[index].Cells[5].ReadOnly = true;
-                        dataGridView_Param.Rows[index].Cells[6].ReadOnly = true;
-                    }
-
-                    index++;
+                    dataGridView_Param.Rows[index].ReadOnly = false;
                 }
-                if ((int)CurrentUser._userRight < (int)UserRight.软件工程师)
-                    dataGridView_Param.AllowUserToAddRows = false;
+                else if ((int)(UserRight)Enum.Parse(typeof(UserRight), dataGridView_Param.Rows[index].Cells[5].Value.ToString()) <= (int)CurrentUser._userRight)
+                {
+                    //dataGridView_Param.Rows[index].ReadOnly = false;
+                    dataGridView_Param.Rows[index].Cells[0].ReadOnly = true;
+                    dataGridView_Param.Rows[index].Cells[1].ReadOnly = true;
+                    dataGridView_Param.Rows[index].Cells[2].ReadOnly = false;
+                    dataGridView_Param.Rows[index].Cells[3].ReadOnly = false;
+                    dataGridView_Param.Rows[index].Cells[4].ReadOnly = false;
+                    dataGridView_Param.Rows[index].Cells[5].ReadOnly = true;
+                    dataGridView_Param.Rows[index].Cells[6].ReadOnly = true;
+                }
                 else
-                    dataGridView_Param.AllowUserToAddRows = true;
-                System.Diagnostics.Debug.WriteLine("end updata\n");
-                // Console.WriteLine("end updata\n");
-            }
+                {
+                    dataGridView_Param.Rows[index].Cells[0].ReadOnly = true;
+                    dataGridView_Param.Rows[index].Cells[1].ReadOnly = true;
+                    dataGridView_Param.Rows[index].Cells[2].ReadOnly = true;
+                    dataGridView_Param.Rows[index].Cells[3].ReadOnly = true;
+                    dataGridView_Param.Rows[index].Cells[4].ReadOnly = true;
+                    dataGridView_Param.Rows[index].Cells[5].ReadOnly = true;
+                    dataGridView_Param.Rows[index].Cells[6].ReadOnly = true;
+                }
 
-        
-      
+                index++;
+            }
+            if ((int)CurrentUser._userRight < (int)UserRight.软件工程师)
+                dataGridView_Param.AllowUserToAddRows = false;
+            else
+                dataGridView_Param.AllowUserToAddRows = true;
+            System.Diagnostics.Debug.WriteLine("end updata\n");
+            // Console.WriteLine("end updata\n");
+        }
+
         private void dataGridView_Param_Click(object sender, EventArgs e)
         {
             try
@@ -755,12 +740,12 @@ namespace StationDemo
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return;
             }
-           
         }
+
         private static void CopyDir(string srcPath, string aimPath, string productName, string newName)
         {
             try
@@ -789,12 +774,10 @@ namespace StationDemo
                             {
                                 File.Copy(file, $"{aimPath}\\{newName}.xml", true);
                             }
-                           
                             else
                             {
                                 File.Copy(file, fileFullName, true);
                             }
-
                         }
                         catch { }
                     }
@@ -804,13 +787,14 @@ namespace StationDemo
             {
             }
         }
-
     }
+
     //描述文件
     public class DescriptionClass
     {
         public static List<ParamValue> paramValue { get; set; } = new List<ParamValue>();
     }
+
     public class ParamValue
     {
         public string ParamName { get; set; }

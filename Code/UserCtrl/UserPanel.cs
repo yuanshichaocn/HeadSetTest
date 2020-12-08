@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace UserCtrl
@@ -16,6 +11,7 @@ namespace UserCtrl
         {
             InitializeComponent();
         }
+
         private List<string> m_lebeal = new List<string>();
         public int m_page { set; get; } = 0;
         public int m_nNumPerRow { set; get; } = 3;
@@ -23,41 +19,42 @@ namespace UserCtrl
         public int m_splitHigh { set; get; } = 30;
         public int m_splitWidth { set; get; } = 170;
 
-        List<UserLabel> m_labelControl_IoInput = new List<UserLabel>();
+        private List<UserLabel> m_labelControl_IoInput = new List<UserLabel>();
+
         public void AddFlag(string strlebeal)
         {
-            if(!m_lebeal.Contains(strlebeal))
+            if (!m_lebeal.Contains(strlebeal))
             {
                 m_lebeal.Add(strlebeal);
                 m_labelControl_IoInput.Add(new UserLabel());
             }
-           
         }
+
         public List<string> GetLebealNams()
         {
             return m_lebeal;
         }
 
-        public void  SetLebalState(string strkey,bool bState)
+        public void SetLebalState(string strkey, bool bState)
         {
-           int index = m_lebeal.FindIndex((t) => t == strkey);
-            if(index!=-1 &&index< m_labelControl_IoInput.Count)
+            int index = m_lebeal.FindIndex((t) => t == strkey);
+            if (index != -1 && index < m_labelControl_IoInput.Count)
             {
                 UserLabel tem = m_labelControl_IoInput[index];
                 tem.State = bState;
             }
             else
             {
-              //  MessageBox.Show("SetLebalState:Btns集合中没有没有：" + strkey, "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //  MessageBox.Show("SetLebalState:Btns集合中没有没有：" + strkey, "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-      new  public  void Update()
+        new public void Update()
         {
             // m_labelControl_IoInput = new UserLabel[inputNum];
             // m_labelControl_IoOutput = new UserButton[outputNum];
             // Dictionary<string, IOMgr.IoDefine> dicInput = IOMgr.GetInstace().GetInputDic();
-           
+
             int Row = 0; int splitHigh = m_splitHigh;
             int Col = 0; int splitWidth = m_splitWidth;
             int page = 0;
@@ -86,14 +83,13 @@ namespace UserCtrl
                 if (index <= m_nNumPerRow * m_nNumPerPage)
                 {
                     labelControl.Visible = true;
-                   // labelControl.State = true;
+                    // labelControl.State = true;
                 }
                 else
                 {
                     labelControl.Visible = false;
-                  //  labelControl.State = false;
+                    //  labelControl.State = false;
                 }
-
             }
             if (m_lebeal.Count <= 0)
             {
@@ -107,7 +103,6 @@ namespace UserCtrl
             else if (m_lebeal.Count > 0)
             {
                 panel1.Width = m_labelControl_IoInput[m_lebeal.Count - 1].Width + m_labelControl_IoInput[m_lebeal.Count - 1].Location.X;
-
             }
             else
             {
@@ -118,7 +113,6 @@ namespace UserCtrl
             panel1.Height = m_labelControl_IoInput[m_lebeal.Count - 1].Location.Y + m_labelControl_IoInput[m_lebeal.Count - 1].Height;
 
             GC.Collect();
-
         }
 
         private void UserPanel_Load(object sender, EventArgs e)

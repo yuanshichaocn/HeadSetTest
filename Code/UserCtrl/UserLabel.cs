@@ -1,45 +1,46 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace UserCtrl
 {
     [DefaultProperty("Text")]
-    public partial class UserLabel: UserControl
+    public partial class UserLabel : UserControl
     {
         public UserLabel()
         {
             InitializeComponent();
-          
+
             label_State.Invalidate();
         }
+
         public string Name
         {
             set { label_Name.Text = value; }
             get { return label_Name.Text; }
         }
-        bool m_bOldState=false;
-        [Description("TEXT"),Category("Label_Text")]
+
+        private bool m_bOldState = false;
+
+        [Description("TEXT"), Category("Label_Text")]
         public string Text
         {
             set { label_Name.Text = value; }
             get { return label_Name.Text; }
         }
+
         public bool State
         {
-            set {
-                if(m_bOldState!= value  )
+            set
+            {
+                if (m_bOldState != value)
                 {
-                    label_State.Text = value? "ON":"OFF";
+                    label_State.Text = value ? "ON" : "OFF";
                     label_State.BackColor = value ? Color.LightGreen : Color.LightBlue;
                     Update();
                 }
-                if(!value && label_State.BackColor != Color.LightBlue)
+                if (!value && label_State.BackColor != Color.LightBlue)
                 {
                     label_State.BackColor = value ? Color.LightGreen : Color.LightBlue;
                     Update();
@@ -56,15 +57,10 @@ namespace UserCtrl
             {
                 return m_bOldState;
             }
-
-
         }
-     
-
 
         private void UserLabel_Load(object sender, EventArgs e)
         {
-
             //State = false;
             label_State.Text = "OFF";
             label_State.BackColor = Color.LightBlue;

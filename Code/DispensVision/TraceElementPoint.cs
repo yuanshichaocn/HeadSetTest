@@ -1,14 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using HalconDotNet;
+using System;
 using UserCtrl;
-using HalconDotNet;
 
 namespace XYZDispensVision
 {
@@ -18,8 +10,9 @@ namespace XYZDispensVision
         {
             InitializeComponent();
         }
-        DispTraceBaseElementPoint PonitElement = null;
-        
+
+        private DispTraceBaseElementPoint PonitElement = null;
+
         public void FlushToDlg(DispTraceBaseElement dispTraceBaseElement, VisionControl visionControl, bool bIsModfiy)
         {
             if (visionControl != null)
@@ -40,17 +33,17 @@ namespace XYZDispensVision
         {
             comPartSet1.ReUpdateCoordinateHandler += pointValSet.SwitchCoordinat;
         }
+
         public void ShowObj()
         {
             if (vc != null && PonitElement != null && !PonitElement.bIsAllPointMachine && vc.Img != null && vc.Img.IsInitialized())
             {
-                HTuple RowOut= new HTuple(), ColOut = new HTuple();
+                HTuple RowOut = new HTuple(), ColOut = new HTuple();
                 vc.DrawPointMod(PonitElement.PointCoordinate.dVy,
-                    PonitElement.PointCoordinate.dVx, out RowOut, out ColOut );
+                    PonitElement.PointCoordinate.dVx, out RowOut, out ColOut);
 
                 pointValSet.dVx = ColOut.D;
                 pointValSet.dVy = RowOut.D;
-
             }
         }
     }

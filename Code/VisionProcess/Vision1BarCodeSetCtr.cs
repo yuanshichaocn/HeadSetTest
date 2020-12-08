@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using HalconDotNet;
+using System;
 using System.Windows.Forms;
-using HalconDotNet;
 using UserCtrl;
 
 namespace VisionProcess
@@ -18,6 +11,7 @@ namespace VisionProcess
         {
             InitializeComponent();
         }
+
         public override void FlushToDlg(VisionSetpBase visionSetp, VisionControl visionControl, Control Farther = null)
         {
             if (visionSetp == null)
@@ -29,7 +23,7 @@ namespace VisionProcess
             if (m_vision1dCode == null)
                 return;
             m_vision1dCode = (Vision1dCode)visionSetp;
-           
+
             //  comboBox_CodeSystem.Text = m_vision1dCode.vision2dCodeParam.Code2dSystem;
             //  comboBox_ContrastTolerance.Text = m_vision1dCode.vision2dCodeParam.ContrastTolerance;
         }
@@ -42,12 +36,13 @@ namespace VisionProcess
                 m_vision1dCode?.Save();
             else
                 m_vision1dCode?.Save(strPath);
-            
         }
+
         public HObject m_imgObj = null;
-       
-        Vision1dCode m_vision1dCode = null;
+
+        private Vision1dCode m_vision1dCode = null;
         public string strPath { set; get; } = "";
+
         private void roundButton_Create_Click(object sender, EventArgs e)
         {
             if (m_vision1dCode == null)
@@ -63,8 +58,8 @@ namespace VisionProcess
                 return;
             }
             SaveParm(m_vision1dCode);
-            if(strPath=="")
-               m_vision1dCode?.Save();
+            if (strPath == "")
+                m_vision1dCode?.Save();
             else
                 m_vision1dCode?.Save(strPath);
             m_vision1dCode.GenObj(m_imgObj, m_visionControl);
@@ -72,7 +67,6 @@ namespace VisionProcess
 
         private void Vision1BarCodeSetCtr_Load(object sender, EventArgs e)
         {
-
         }
     }
 }

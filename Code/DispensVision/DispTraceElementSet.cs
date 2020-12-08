@@ -1,13 +1,6 @@
 ﻿using CameraLib;
 using HalconDotNet;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace XYZDispensVision
@@ -21,7 +14,6 @@ namespace XYZDispensVision
 
         private void ReadImg_Click(object sender, EventArgs e)
         {
-
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
                 //openFileDialog.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory;//注意这里写路径时要用c:\\而不是c:\
@@ -40,7 +32,6 @@ namespace XYZDispensVision
                     visionControl1.DispImageFull(img);
                 }
             }
-
         }
 
         private void BtnSanp_Click(object sender, EventArgs e)
@@ -79,26 +70,26 @@ namespace XYZDispensVision
             cameraBase.BindWindow(visionControl1);
             cameraBase.SetAcquisitionMode();
             cameraBase.StartGrab();
-
         }
+
         private void Show(string NameOfCtrl)
         {
-           
-
         }
-        DispTraceBaseElement baseElement = null;
-        InterfaceDispTraceElementModeOnDebugDlg ctrSel = null;
-        public void UpdateData(DispTraceBaseElement dispTraceBaseElement,bool bShow=false)
+
+        private DispTraceBaseElement baseElement = null;
+        private InterfaceDispTraceElementModeOnDebugDlg ctrSel = null;
+
+        public void UpdateData(DispTraceBaseElement dispTraceBaseElement, bool bShow = false)
         {
             if (dispTraceBaseElement == null)
                 return;
             baseElement = dispTraceBaseElement;
-   
+
             foreach (Control tem in panelForElementCtrl.Controls)
                 tem.Visible = false;
             if (dispTraceBaseElement.strType.Contains("Line"))
             {
-               traceElementLine.Visible = true;
+                traceElementLine.Visible = true;
                 ctrSel = traceElementLine;
             }
             if (dispTraceBaseElement.strType.Contains("Point"))
@@ -113,7 +104,6 @@ namespace XYZDispensVision
             }
             ctrSel.FlushToDlg(baseElement, this.visionControl1, bShow);
 
-
             bModify = bShow;
             this.TopLevel = true;
             this.Show();
@@ -125,7 +115,9 @@ namespace XYZDispensVision
                 ctrSel.ShowObj();
             this.Focus();
         }
-        bool bModify = false;
+
+        private bool bModify = false;
+
         private void DispTraceElementSet_Load(object sender, EventArgs e)
         {
             visionControl1.InitWindow();
@@ -137,7 +129,7 @@ namespace XYZDispensVision
                 ctrSel.SaveParm();
             if (baseElement != null)
             {
-                if( baseElement.ItemName=="")
+                if (baseElement.ItemName == "")
                 {
                     MessageBox.Show($"项目无名 检查后重新输入 该项名称", "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
@@ -155,7 +147,7 @@ namespace XYZDispensVision
                         return;
                     }
                     DispTraceMgr.GetInstance().AddItemToList(baseElement);
-                } 
+                }
             }
             this.Hide();
         }

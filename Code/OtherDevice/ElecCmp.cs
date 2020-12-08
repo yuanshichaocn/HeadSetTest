@@ -1,40 +1,36 @@
-﻿using System;
+﻿using BaseDll;
+using log4net;
+using Modbus.Device;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
-using System.IO;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using BaseDll;
-using log4net;
-using SerialDict;
-using Modbus.Device;
-
-using System.Xml.Serialization;
 using System.Threading;
-using System.ComponentModel;
-using System.Collections.ObjectModel;
+using System.Windows.Forms;
 
 namespace OtherDevice
 {
-
     public class ElecCmp
     {
         [NonSerialized]
         private static SerialPort _serialPort = null;
+
         [NonSerialized]
         private readonly ILog _logger = LogManager.GetLogger(nameof(ElecCmp));
+
         [NonSerialized]
         private readonly object _disposingLock = new object();
+
         [NonSerialized]
         private static readonly object _syncRoot = new object();
+
         [NonSerialized]
         private IModbusSerialMaster _master;
 
-        SerialPortParam serialPortParam = new SerialPortParam();
-
+        private SerialPortParam serialPortParam = new SerialPortParam();
 
         public object ReadParam()
         {
@@ -57,6 +53,7 @@ namespace OtherDevice
             }
             return obj;
         }
+
         public void Save()
         {
             string strPath = AppDomain.CurrentDomain.BaseDirectory + @"\config\ElecCmp.xml";
@@ -86,9 +83,6 @@ namespace OtherDevice
                 _serialPort.WriteTimeout = 3000;
                 if (!_serialPort.IsOpen)
                     _serialPort.Open();
-
-
-
             }
             catch (Exception ex)
             {
@@ -117,6 +111,7 @@ namespace OtherDevice
             }
             return obj;
         }
+
         public bool SaveTechingPara(List<GripperTeachingPara> para)
         {
             string gripperTeachingPath = AppDomain.CurrentDomain.BaseDirectory + @"\config\Teaching.xml";
@@ -131,8 +126,9 @@ namespace OtherDevice
             }
             return result;
         }
+
         /// <summary>
-        ///释放IO卡 
+        ///释放IO卡
         /// </summary>
         public void DeInit()
         {
@@ -141,11 +137,11 @@ namespace OtherDevice
                 _serialPort.Close();
             }
         }
+
         public void WriteRegRTU(byte slaveAddress, long Address, int val)
         {
             try
             {
-
                 byte[] CMD = new byte[8];
                 CMD[0] = slaveAddress;
                 CMD[1] = 0X06;
@@ -164,8 +160,8 @@ namespace OtherDevice
             {
                 MessageBox.Show("电抓  串口 写入数据异常 " + e.Message, "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
+
         public bool WaitCMDCompete(int Index, int nTimeout = 3000)
         {
             Stopwatch stopwatch = new Stopwatch();
@@ -189,6 +185,7 @@ namespace OtherDevice
             }
             while (true);
         }
+
         public double ReadRegRTU(byte slaveAddress, long Address, int nTimeout = 1000)
         {
             try
@@ -234,7 +231,6 @@ namespace OtherDevice
                         data |= recvBytes[4];
                         return data;
                     }
-
                 }
                 while (true);
             }
@@ -243,8 +239,8 @@ namespace OtherDevice
                 MessageBox.Show("电抓  串口 读取数据异常 " + e.Message, "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return double.NaN;
             }
-
         }
+
         public double ReadRegRTU2(byte slaveAddress, long Address, int nTimeout = 1000)
         {
             try
@@ -292,7 +288,6 @@ namespace OtherDevice
                         data |= recvBytes[6];
                         return data;
                     }
-
                 }
                 while (true);
             }
@@ -301,12 +296,10 @@ namespace OtherDevice
                 MessageBox.Show("电抓  串口 读取数据异常 " + e.Message, "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return double.NaN;
             }
-
         }
 
         public double ReadRegAscii(byte slaveAddress, long Address, int nTimeout = 1000)
         {
-
             Byte[] recvBytes = new Byte[1024];
             int recvSize = 0;
             byte[] CMD = new byte[17];
@@ -380,12 +373,10 @@ namespace OtherDevice
                     data = Convert.ToInt32(result, 16);
                     return data;
                 }
-
             }
             while (true);
-
-
         }
+
         /// <summary>
         /// 三种状态 回原点 松开 夹紧
         /// </summary>
@@ -401,15 +392,18 @@ namespace OtherDevice
                 case "回原点":
                     result = CommonRun(MotionType.Home, 1, ref err);
                     break;
+
                 case "松开":
                     result = CommonRun(MotionType.Open, 2, ref err);
                     break;
+
                 case "夹紧":
                     result = CommonRun(MotionType.Close, 4, ref err);
                     break;
             }
             return result;
         }
+
         public bool SavePostionToExceCmpP(BindingList<GripperTeachingPara> grippers)
         {
             for (int index = 0; index <= 5; index++)
@@ -428,6 +422,7 @@ namespace OtherDevice
             OtherDevices.elecCmp.WriteRegRTU(1, Convert.ToUInt16($"9999", 16), 1); Thread.Sleep(10);
             return false;
         }
+
         /// <summary>
         /// 回原点，对应程序0 1
         /// </summary>
@@ -446,11 +441,9 @@ namespace OtherDevice
 
         //public double ReadRegAscii2(byte slaveAddress, long Address, int nTimeout = 1000)
         //{
-
         //    Byte[] recvBytes = new Byte[1024];
         //    int recvSize = 0;
         //    byte[] CMD = new byte[17];
-
 
         //    byte[] bytesAscii = new Byte[6];
         //    bytesAscii[0] = slaveAddress;
@@ -498,12 +491,6 @@ namespace OtherDevice
         //    }
         //    while (true);
 
-
         //}
-
-
-
     }
-
-
 }

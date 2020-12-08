@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Threading;
 using HalconDotNet;
+
 //using HalconLib;
 using CameraLib;
 using CommonTools;
@@ -26,30 +27,32 @@ namespace StationDemo
 {
     public partial class Form_Auto : Form
     {
-        public Form_Auto() 
+        public Form_Auto()
         {
             InitializeComponent();
         }
+
         public delegate void ShowSomeOnAutoScreenHander( string dealtype, params object[] osbjs);
+
         public static ShowSomeOnAutoScreenHander ShowEventOnAutoScreen;
 
-        List<string> m_listFlag = new List<string>();
-        List<string> m_listInt = new List<string>();
-        List<string> m_listDouble = new List<string>();
-       public  void AddFlag(string strFlagName ,bool bInitState)
+        private List<string> m_listFlag = new List<string>();
+        private List<string> m_listInt = new List<string>();
+        private List<string> m_listDouble = new List<string>();
+
+        public void AddFlag(string strFlagName ,bool bInitState)
         {
             m_listFlag.Add(strFlagName);
             userPanel_Flag.AddFlag(strFlagName);
             userPanel_Flag.SetLebalState(strFlagName, bInitState);
-      
-
         }
-        void AddDoubleRtn(string strDoubleName, double  dVal)
+
+        private void AddDoubleRtn(string strDoubleName, double dVal)
         {
             m_listDouble.Add(strDoubleName);
-           Rectangle  rc= dataGridView_Sum.GetColumnDisplayRectangle(2, true);
-            
-            dataGridView_Sum.Width = dataGridView_Sum.Columns[0].Width + dataGridView_Sum.Columns[1].Width+ rc.Width+15;
+            Rectangle rc = dataGridView_Sum.GetColumnDisplayRectangle(2, true);
+
+            dataGridView_Sum.Width = dataGridView_Sum.Columns[0].Width + dataGridView_Sum.Columns[1].Width + rc.Width + 15;
             dataGridView_Sum.Rows.Add(strDoubleName, dVal.ToString());
             dataGridView_Sum.Rows[dataGridView_Sum.Rows.Count - 1].Cells[1].Value = dVal.ToString();
             int height = 0;
@@ -57,9 +60,10 @@ namespace StationDemo
                 height += dataGridView_Sum.Rows[dataGridView_Sum.Rows.Count - 1].Height;
             dataGridView_Sum.Height = height + dataGridView_Sum.ColumnHeadersHeight + 2;
             //groupBox_Sum.Width = dataGridView_Sum.Width;
-           // groupBox_Sum.Height = dataGridView_Sum.Height + 10;
+            // groupBox_Sum.Height = dataGridView_Sum.Height + 10;
         }
-        void LoadProductFile(string strFile)
+
+        private void LoadProductFile(string strFile)
         {
             if (InvokeRequired)
             {
@@ -75,27 +79,23 @@ namespace StationDemo
                 {
                     ConfigToolMgr.GetInstance().ReadPoint(tem, out dicPonit);
                     StationMgr.GetInstance().GetStation(tem).SetStationPointDic(dicPonit);
-             
                 }
                 ConfigToolMgr.GetInstance().UpdataMoveparamconfigPath();
-              
+
                 ConfigToolMgr.GetInstance().ReadMoveParamConfig();
                 ConfigToolMgr.GetInstance().ReadHomeParamConfig();
 
-                VisionMgr.GetInstance().CurrentVisionProcessDir =ParamSetMgr.GetInstance().CurrentWorkDir+"\\" + ParamSetMgr.GetInstance().CurrentProductFile+"\\"+ @"Config\Vision\";
+                VisionMgr.GetInstance().CurrentVisionProcessDir = ParamSetMgr.GetInstance().CurrentWorkDir + "\\" + ParamSetMgr.GetInstance().CurrentProductFile + "\\" + @"Config\Vision\";
                 VisionMgr.GetInstance().Read();
 
-              
-
-
                 ParamSetMgr.GetInstance().m_eventLoadProductFileUpadata?.Invoke();
-               
+
                 //VisionMgr.GetInstance().PrItemChangedEvent
                 GC.Collect();
             }
-
         }
-        void StationStateChangedHandler(StationState currState)
+
+        private void StationStateChangedHandler(StationState currState)
         {
             if (InvokeRequired)
             {
@@ -103,7 +103,6 @@ namespace StationDemo
             }
             else
             {
-
                 switch (currState)
                 {
                     case StationState.StationStatePause:
@@ -112,18 +111,21 @@ namespace StationDemo
                         MachineStateAuto.State = false;
                         MachineStatePause.State = true;
                         break;
+
                     case StationState.StationStateRun:
                         MachineStateEmg.State = false;
                         MachineStateStop.State = false;
                         MachineStateAuto.State = true;
                         MachineStatePause.State = false;
                         break;
+
                     case StationState.StationStateStop:
                         MachineStateEmg.State = false;
                         MachineStateStop.State = true;
                         MachineStateAuto.State = false;
                         MachineStatePause.State = false;
                         break;
+
                     case StationState.StationStateEmg:
                         MachineStateEmg.State = true;
                         MachineStateStop.State = false;
@@ -133,26 +135,26 @@ namespace StationDemo
                 }
             }
         }
-        object objlock = new object();
-        const int nCount = 2000;
-        void ShowStationMsg(ListLog listlog,string msg )
+
+        private object objlock = new object();
+        private const int nCount = 2000;
+
+        private void ShowStationMsg(ListLog listlog, string msg)
         {
             if (listlog == null)
                 return;
             if (InvokeRequired)
             {
-              BeginInvoke(new Action(()=>  ShowStationMsg(listlog, msg)));
+                BeginInvoke(new Action(() => ShowStationMsg(listlog, msg)));
             }
             else
             {
                 listlog.AddMsg(msg);
                 listlog.TopIndex = listlog.Items.Count - (int)(listlog.Height / listlog.ItemHeight);
             }
-           
         }
-      
 
-        void ShowStationMsgOnRichTxtBox(RichTxtBoxLog richTextBox , string msg)
+        private void ShowStationMsgOnRichTxtBox(RichTxtBoxLog richTextBox, string msg)
         {
             if (richTextBox == null)
                 return;
@@ -163,11 +165,11 @@ namespace StationDemo
             else
             {
                 richTextBox.AddMsg(msg);
-             //   richTextBox.TopIndex = richTextBox.Items.Count - (int)(richTextBox.Height / richTextBox.ItemHeight);
+                //   richTextBox.TopIndex = richTextBox.Items.Count - (int)(richTextBox.Height / richTextBox.ItemHeight);
             }
-
         }
-        public  void FlushWeightVal(int num,int[] WeightVal)
+
+        public void FlushWeightVal(int num,int[] WeightVal)
         {
             if (InvokeRequired)
             {
@@ -177,16 +179,17 @@ namespace StationDemo
             {
                 if (WeightVal == null || WeightVal.Length != 4)
                     return;
-                
             }
-            
         }
+
         public class  objtest
         {
             public int a;
             public int b;
         }
-        objtest sdf = new objtest();
+
+        private objtest sdf = new objtest();
+
         private void Form_Auto_Load(object sender, EventArgs e)
         {
             GlobalVariable.g_eventStationStateChanged += StationStateChangedHandler;
@@ -206,7 +209,6 @@ namespace StationDemo
                 //listLog.Size = new Size(tabControl_Log.Size.Width - 20, tabControl_Log.Size.Height - 20);
                 //control= (Control)listLog;
 
-
                 richTextBox.Size = new Size(tabControl_Log.Size.Width - 30, tabControl_Log.Size.Height - 30);
                 richTextBox.ScrollBars = RichTextBoxScrollBars.Both;
 
@@ -222,14 +224,14 @@ namespace StationDemo
                 TabPage tabStaion = new TabPage();
                 tabStaion.Name = tem;
                 tabStaion.Text = tem;
-              
+
                 tabStaion.Controls.Add((Control)control);
                 tabControl_Log.TabPages.Add(tabStaion);
 
                 // StationMgr.GetInstance().GetStation(tem).SetShowListBox(listLog);
                 // StationMgr.GetInstance().GetStation(tem).m_eventListBoxShow += ShowStationMsg;
                 richTextBox.Multiline = true;
-                
+
                 StationMgr.GetInstance().GetStation(tem).SetShowRichTextBox(richTextBox);
                 StationMgr.GetInstance().GetStation(tem).m_eventRichBoxShow += ShowStationMsgOnRichTxtBox;
 ;
@@ -241,8 +243,6 @@ namespace StationDemo
                 //    StationMgr.GetInstance().GetStation(tem).Err(tem + $"加载成功err{i}");
                 //}
             }
-            
-
 
             MachineStateEmg.Name = "急停";
             MachineStateStop.Name = "停止";
@@ -254,30 +254,24 @@ namespace StationDemo
             if (m_listFlag.Count > 0)
                 userPanel_Flag.Visible = true;
             userPanel_Flag.Update();
-           
+
             //添加 ------- 标志--------///
             //添加 ------- double param--------///
             AddDoubleRtn("产品计数",0);
             ParamSetMgr.GetInstance().SetDoubleParam("产品计数", 0);
-            
+
             AddDoubleRtn("CT", 0);
             ParamSetMgr.GetInstance().SetDoubleParam("CT", 0);
 
             AddDoubleRtn("UPH", 0);
             ParamSetMgr.GetInstance().SetDoubleParam("UPH", 0);
 
-
-
             UserConfig.InitHalconWindow(this);
             UserConfig.BandStationWithVisionCtr(this);
             UserConfig.InitCam(this);
 
-
-
-
             //默认用户登陆
             sys.g_User = sys.g_listUser.Find(t => t._userName == "admin");
-
 
             UserConfig.InitEpson4Robot();
             UserConfig.InitHardWare();
@@ -285,14 +279,10 @@ namespace StationDemo
             UserConfig.ReadVisionData();
             UserConfig.UpdataTrayData();
             UserConfig.ReadAndUpdatStatisticaldata(this);
-
-       
-
         }
 
         private void Form_Auto_m_eventChangedDoubleSysVal(string key, double val)
         {
-            
             if (InvokeRequired)
             {
                 this.BeginInvoke(new Action(() => Form_Auto_m_eventChangedDoubleSysVal(key, val)));
@@ -327,7 +317,6 @@ namespace StationDemo
                         userPanel_Flag.SetLebalState(key, val);
                         if (val)
                         {
-                          
                            // dataGridView_Flag.Rows[index].Cells[1].Value = "ON";
                           //  dataGridView_Flag.Rows[index].Cells[1].Style.BackColor = Color.LightGreen;
                         }
@@ -335,14 +324,10 @@ namespace StationDemo
                         {
                           //  dataGridView_Flag.Rows[index].Cells[1].Value = "OFF";
                           //  dataGridView_Flag.Rows[index].Cells[1].Style.BackColor = Color.LightBlue;
-
                         }
-                           
                     }
                 }
-
             }
-         
         }
 
         private void ShowImg(object sender, EventArgs e)
@@ -359,28 +344,29 @@ namespace StationDemo
 
         private void CloseMainForm(object sender, FormClosedEventArgs e)
         {
-            
-      
         }
+
         public void ChangeBtnClearAllProductState()
         {
             BtnClearAllProduct.Text = "清料";
         }
+
         private void BtnClearAllProduct_Click(object sender, EventArgs e)
         {
             //BtnClearAllProduct.Text = "清料中。。。";
             ParamSetMgr.GetInstance().SetBoolParam("启动清料", true);
-
-
         }
     }
+
     public class TolNum
     {
         private TolNum()
             {
             }
+
         private static TolNum tol= new TolNum();
         private static object lockobj = new object();
+
         public static TolNum GetIntance()
         {
             if(tol==null)
@@ -392,6 +378,7 @@ namespace StationDemo
             }
             return tol;
         }
+
         public double nSumProduct = 0;
         public double nLeftProduct = 0;
         public double nRightProduct = 0;
@@ -399,6 +386,7 @@ namespace StationDemo
         public double nUnLoadNozzleWorkNum = 0;
         public double nLeftNozzleWorkNum = 0;
         public double nRightNozzleWorkNum = 0;
+
         public void Save()
         {
            tol.nSumProduct =  ParamSetMgr.GetInstance().GetDoubleParam("产品计数");
@@ -410,6 +398,7 @@ namespace StationDemo
             tol.nRightNozzleWorkNum = ParamSetMgr.GetInstance().GetDoubleParam("右贴装吸嘴数");
             AccessXmlSerializer.ObjectToXml("d:\\Sum.xml", this);
         }
+
         public TolNum Read()
         {
             TolNum tol1 =(TolNum) AccessXmlSerializer.XmlToObject("d:\\Sum.xml", typeof(TolNum));
@@ -429,7 +418,5 @@ namespace StationDemo
             ParamSetMgr.GetInstance().SetDoubleParam("右贴装吸嘴数", tol.nRightNozzleWorkNum);
             return tol;
         }
-
     }
-
 }

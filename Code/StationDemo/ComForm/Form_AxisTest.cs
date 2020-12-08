@@ -1,38 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using BaseDll;
+﻿using BaseDll;
 using CommonTools;
+using log4net;
 using MotionIoLib;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using log4net;
-using System.IO;
+using System.Windows.Forms;
 
 namespace StationDemo
 {
-
     public partial class Form_AxisTest : Form, IUserRightSwitch
     {
-        ILog logger = LogManager.GetLogger("电机测试");
+        private ILog logger = LogManager.GetLogger("电机测试");
+
         public Form_AxisTest()
         {
             userRight = UserRight.调试工程师;
             InitializeComponent();
         }
+
         public UserRight userRight
         {
-             set;
-             get;
+            set;
+            get;
         }
+
         public void ChangedUserRight(User CurrntUser)
         {
-            if(InvokeRequired)
+            if (InvokeRequired)
             {
                 BeginInvoke(new Action(() => ChangedUserRight(CurrntUser)));
             }
@@ -44,7 +42,7 @@ namespace StationDemo
                     dataGridView_AxisParamSet.Enabled = bEable;
                     dataGridView_HomeSet.Enabled = bEable;
                     SaveMotorParam.Enabled = bEable;
-                    if((int)CurrntUser._userRight< (int)UserRight.软件工程师 )
+                    if ((int)CurrntUser._userRight < (int)UserRight.软件工程师)
                     {
                         dataGridView_AxisParamSet.Columns[0].ReadOnly = true;//轴号
                         dataGridView_AxisParamSet.Columns[1].ReadOnly = true;//轴名
@@ -72,15 +70,13 @@ namespace StationDemo
                     dataGridView_HomeSet.Enabled = bEable;
                     SaveMotorParam.Enabled = bEable;
                 }
-
             }
-           
         }
 
         private void SaveMotorParam_Click(object sender, EventArgs e)
         {
             if (!Directory.Exists(ParamSetMgr.GetInstance().CurrentWorkDir + ("\\") + ParamSetMgr.GetInstance().CurrentProductFile)
-                || ParamSetMgr.GetInstance().CurrentProductFile==null || ParamSetMgr.GetInstance().CurrentProductFile=="")
+                || ParamSetMgr.GetInstance().CurrentProductFile == null || ParamSetMgr.GetInstance().CurrentProductFile == "")
             {
                 MessageBox.Show("当前产品文件夹不存在，请创建载入或者创建当前产品", "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -88,10 +84,10 @@ namespace StationDemo
             TMovePrm prm = new TMovePrm();
             THomePrm homePrm = new THomePrm();
             int indexCell = 0;
-            for ( int index=0;index< dataGridView_AxisParamSet.RowCount;index++)
+            for (int index = 0; index < dataGridView_AxisParamSet.RowCount; index++)
             {
                 int nAxisNo = Convert.ToInt32(dataGridView_AxisParamSet.Rows[index].Cells[0].Value);
-                
+
                 prm.VelH = Convert.ToDouble(dataGridView_AxisParamSet.Rows[index].Cells[3].Value);
                 prm.AccH = Convert.ToDouble(dataGridView_AxisParamSet.Rows[index].Cells[4].Value);
                 prm.DccH = Convert.ToDouble(dataGridView_AxisParamSet.Rows[index].Cells[5].Value);
@@ -105,17 +101,16 @@ namespace StationDemo
                 prm.DccL = Convert.ToDouble(dataGridView_AxisParamSet.Rows[index].Cells[11].Value);
                 prm.PlusePerRote = Convert.ToDouble(dataGridView_AxisParamSet.Rows[index].Cells[12].Value);
                 prm.AxisLeadRange = Convert.ToDouble(dataGridView_AxisParamSet.Rows[index].Cells[13].Value);
-                MotionMgr.GetInstace().SetAxisMoveParam(nAxisNo,prm);
-                MotionMgr.GetInstace().SetAxisName(nAxisNo,dataGridView_AxisParamSet.Rows[index].Cells[1].Value==null?"NoNamedAxis":dataGridView_AxisParamSet.Rows[index].Cells[1].Value.ToString());
+                MotionMgr.GetInstace().SetAxisMoveParam(nAxisNo, prm);
+                MotionMgr.GetInstace().SetAxisName(nAxisNo, dataGridView_AxisParamSet.Rows[index].Cells[1].Value == null ? "NoNamedAxis" : dataGridView_AxisParamSet.Rows[index].Cells[1].Value.ToString());
                 string strAxisType = dataGridView_AxisParamSet.Rows[index].Cells[2].Value == null ? MotorType.SEVER.ToString() : dataGridView_AxisParamSet.Rows[index].Cells[2].Value.ToString();
 
-                MotionMgr.GetInstace().SetMotorType(nAxisNo,  (MotorType)Enum.Parse(typeof(MotorType), strAxisType));
-             
+                MotionMgr.GetInstace().SetMotorType(nAxisNo, (MotorType)Enum.Parse(typeof(MotorType), strAxisType));
 
                 indexCell = 2;
-                homePrm._nHomeMode =Convert.ToInt32(dataGridView_HomeSet.Rows[index].Cells[indexCell++].Value);
+                homePrm._nHomeMode = Convert.ToInt32(dataGridView_HomeSet.Rows[index].Cells[indexCell++].Value);
                 homePrm._bHomeDir = Convert.ToBoolean(dataGridView_HomeSet.Rows[index].Cells[indexCell++].Value);
-                homePrm.VelH= Convert.ToDouble(dataGridView_HomeSet.Rows[index].Cells[indexCell++].Value);
+                homePrm.VelH = Convert.ToDouble(dataGridView_HomeSet.Rows[index].Cells[indexCell++].Value);
                 homePrm.AccH = Convert.ToDouble(dataGridView_HomeSet.Rows[index].Cells[indexCell++].Value);
                 homePrm.DccH = Convert.ToDouble(dataGridView_HomeSet.Rows[index].Cells[indexCell++].Value);
                 homePrm.VelL = Convert.ToDouble(dataGridView_HomeSet.Rows[index].Cells[indexCell++].Value);
@@ -123,22 +118,23 @@ namespace StationDemo
                 homePrm.DccL = Convert.ToDouble(dataGridView_HomeSet.Rows[index].Cells[indexCell++].Value);
                 homePrm._iSeachOffstPluse = Convert.ToDouble(dataGridView_HomeSet.Rows[index].Cells[indexCell++].Value);
                 MotionMgr.GetInstace().SetAxisHomeParam(nAxisNo, homePrm);
-              
             }
             ConfigToolMgr.GetInstance().SaveMoveParam();
             ConfigToolMgr.GetInstance().SaveHomeParam();
         }
+
         public void UpdataMotonType()
         {
             DataGridViewComboBoxColumn dataColumnCollection = (DataGridViewComboBoxColumn)dataGridView_AxisParamSet.Columns[2];
             dataColumnCollection.Items.Clear();
             Array strItems = Enum.GetValues(typeof(MotorType));
-            foreach( var temp  in strItems)
+            foreach (var temp in strItems)
             {
                 dataColumnCollection.Items.Add(temp.ToString());
             }
         }
-        void updatadataGridView()
+
+        private void updatadataGridView()
         {
             dataGridView_AxisParamSet.Rows.Clear();
 
@@ -158,8 +154,8 @@ namespace StationDemo
                         movePrm.VelH.ToString(), movePrm.AccH.ToString(), movePrm.DccH.ToString(),
                         movePrm.VelM.ToString(), movePrm.AccM.ToString(), movePrm.DccM.ToString(),
                         movePrm.VelL.ToString(), movePrm.AccL.ToString(), movePrm.DccL.ToString(),
-                        movePrm.PlusePerRote.ToString(), movePrm.AxisLeadRange.ToString() );
-                       
+                        movePrm.PlusePerRote.ToString(), movePrm.AxisLeadRange.ToString());
+
                     homePrm = MotionMgr.GetInstace().GetAxisHomePrm(index);
                     dataGridView_HomeSet.Rows.Add(
                         index.ToString(),
@@ -170,7 +166,6 @@ namespace StationDemo
                         homePrm.VelL.ToString(), homePrm.AccL.ToString(), homePrm.DccL.ToString(),
                         homePrm._iSeachOffstPluse.ToString());
                 }
-
             }
         }
 
@@ -180,12 +175,11 @@ namespace StationDemo
             updatadataGridView();
             ParamSetMgr.GetInstance().m_eventLoadProductFileUpadata += updatadataGridView;
             sys.g_eventRightChanged += ChangedUserRight;
-           sys.g_User = sys.g_User;
+            sys.g_User = sys.g_User;
         }
 
         private async void Test_Click(object sender, EventArgs e)
         {
-            
             int nAxisNo = textBox_AxisNo.Text.ToInt();
             double dLen = textBox_MoveDistance.Text.ToDouble();
             int nCount = textBox_Count.Text.ToInt();
@@ -196,12 +190,13 @@ namespace StationDemo
                 speedType = SpeedType.High;
                 speedSel = 1;
             }
-                
+
             if (radioButton_MidSpeed.Checked)
-            { speedSel = 2;
+            {
+                speedSel = 2;
                 speedType = SpeedType.Mid;
             }
-               
+
             if (radioButton_LowSpeed.Checked)
             {
                 speedSel = 3;
@@ -209,7 +204,8 @@ namespace StationDemo
             }
             if (speedSel == 0)
                 return;
-            Task task = Task.Run(() => {
+            Task task = Task.Run(() =>
+            {
                 try
                 {
                     DoWhile.ResetCirculate();
@@ -226,9 +222,8 @@ namespace StationDemo
                             else
                             {
                                 logger.Warn(string.Format("{0}轴状态:{1}", nAxisNo, axisState));
-                                throw new Exception("电机测试报警停止"+ string.Format("{0}轴状态:{1}", nAxisNo, axisState));
+                                throw new Exception("电机测试报警停止" + string.Format("{0}轴状态:{1}", nAxisNo, axisState));
                             }
-                                
                         }, 3000000);
 
                         doWhile.doSomething(null, doWhile, true, null);
@@ -248,23 +243,20 @@ namespace StationDemo
                                 logger.Warn(string.Format("{0}轴状态:{1}", nAxisNo, axisState));
                                 throw new Exception("电机测试报警停止" + string.Format("{0}轴状态:{1}", nAxisNo, axisState));
                             }
-                                
                         }, 3000000);
 
                         doWhile2.doSomething(null, doWhile2, true, null);
                         Thread.Sleep(textBox_InPosDelay.Text.ToInt());
                     }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     MotionMgr.GetInstace().StopAxis(nAxisNo);
                     MessageBox.Show(ex.Message, "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return ;
+                    return;
                 }
-               
             });
             await task;
-          
         }
 
         private void Btn_TestStop_Click(object sender, EventArgs e)
@@ -273,6 +265,7 @@ namespace StationDemo
             int nAxisNo = textBox_AxisNo.Text.ToInt();
             MotionMgr.GetInstace().StopAxis(nAxisNo);
         }
+
         public void Move(int nAxisNo, double distance, int speedtype)
         {
             MotionMgr.GetInstace().AbsMove(nAxisNo, distance, speedtype);
@@ -288,20 +281,18 @@ namespace StationDemo
                     logger.Warn(string.Format("{0}轴状态:{1}", nAxisNo, axisState));
                     throw new Exception("电机测试报警停止" + string.Format("{0}轴状态:{1}", nAxisNo, axisState));
                 }
-
             }, 3000000);
             doWhile.doSomething(null, doWhile, true, null);
         }
-        private  async void BtnXDLaserTest_Click(object sender, EventArgs e)
+
+        private async void BtnXDLaserTest_Click(object sender, EventArgs e)
         {
-
-
-            double dEndPos=   txtEndPos.Text.ToDouble();
+            double dEndPos = txtEndPos.Text.ToDouble();
             double dStartPos = txtStartPos.Text.ToDouble();
-            double nStepDistace = Math.Abs(txtStepDistance.Text.ToDouble()); 
-            int nSteps =(int)( Math.Abs((dEndPos - dStartPos) / nStepDistace));
-            nStepDistace = dEndPos > dStartPos ? nStepDistace :- nStepDistace;
-            double dRlsDistance =Math.Abs( txtRlsDistance.Text.ToDouble());
+            double nStepDistace = Math.Abs(txtStepDistance.Text.ToDouble());
+            int nSteps = (int)(Math.Abs((dEndPos - dStartPos) / nStepDistace));
+            nStepDistace = dEndPos > dStartPos ? nStepDistace : -nStepDistace;
+            double dRlsDistance = Math.Abs(txtRlsDistance.Text.ToDouble());
             int nAxisNo = textBox_AxisNo.Text.ToInt();
             double dLen = textBox_MoveDistance.Text.ToDouble();
             int nCount = textBox_Count.Text.ToInt();
@@ -329,14 +320,15 @@ namespace StationDemo
             dRlsDistance = dEndPos > dStartPos ? dRlsDistance : -dRlsDistance;
             int nSleep = textBox_InPosDelay.Text.ToInt();
             DoWhile.ResetCirculate();
-            Task task = Task.Run(() => {
+            Task task = Task.Run(() =>
+            {
                 try
                 {
                     for (int i = 0; i < nCount; i++)
                     {
                         for (int n = 0; n <= nSteps; n++)
                         {
-                            Move(nAxisNo, dStartPos + nStepDistace * n,(int)speedType);
+                            Move(nAxisNo, dStartPos + nStepDistace * n, (int)speedType);
                             Thread.Sleep(nSleep);
                         }
 

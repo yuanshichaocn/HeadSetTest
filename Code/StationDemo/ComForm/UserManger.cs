@@ -1,18 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using CommonTools;
-using System.Windows.Forms.Design;
-using System.Design;
-using BaseDll;
+﻿using BaseDll;
 using CommonDlg;
-using MotionIoLib;
-using MachineSafe;
+using CommonTools;
+using System;
+using System.Windows.Forms;
 
 namespace StationDemo
 {
@@ -23,15 +13,15 @@ namespace StationDemo
             InitializeComponent();
         }
 
-        public UserRight userRight {
+        public UserRight userRight
+        {
             get;
             set;
         }
 
         public void ChangedUserRight(User CurrentUser)
         {
-
-            if(userRight == CurrentUser._userRight)
+            if (userRight == CurrentUser._userRight)
                 return;
             if (InvokeRequired)
             {
@@ -57,7 +47,7 @@ namespace StationDemo
                 dataGridView_UserList.Rows.Clear();
                 foreach (var temp in sys.g_listUser)
                 {
-                    if((int)temp._userRight  <= (int)userRight)
+                    if ((int)temp._userRight <= (int)userRight)
                     {
                         dataGridView_UserList.Rows.Add(temp._userName,
                           temp._userRight.ToString());
@@ -76,7 +66,7 @@ namespace StationDemo
                         groupBox_SystemSet.Controls[i].Enabled = true;
                     groupBox_SystemSet.Enabled = true;
                 }
-                    
+
                 //int heith = 0;
                 //for (int i = 0; i < dataGridView_UserList.Rows.Count; i++)
                 //    heith +=  dataGridView_UserList.Rows[i].Height;
@@ -87,18 +77,17 @@ namespace StationDemo
 
         private void button_AddUser_Click(object sender, EventArgs e)
         {
-            if(textBox_UserName.Text=="" || textBox_PassWord.Text=="")
+            if (textBox_UserName.Text == "" || textBox_PassWord.Text == "")
             {
                 AlarmMgr.GetIntance().Warn("用户名和密码不能为空 ");
                 return;
             }
             string str = ((UserRight)comboBox_SelRight.SelectedIndex).ToString();
             int userIndex = sys.g_listUser.FindIndex(t => t._userName == textBox_UserName.Text);
-            if(userIndex != -1)
+            if (userIndex != -1)
             {
                 AlarmMgr.GetIntance().Warn("用户名已存在 ");
                 return;
-                
             }
 
             dataGridView_UserList.Rows.Add(textBox_UserName.Text, str);
@@ -109,7 +98,6 @@ namespace StationDemo
                 _userRight = (UserRight)comboBox_SelRight.SelectedIndex
             });
             ConfigToolMgr.GetInstance().SaveUserConfig();
-
         }
 
         private void UserManger_Load(object sender, EventArgs e)
@@ -124,37 +112,32 @@ namespace StationDemo
             sys.g_User = sys.g_User;
             checkBox_UseSafeDoor.Checked = true;
             checkBox_UseSafeGate.Checked = true;
-
         }
 
         private void button_DelUser_Click(object sender, EventArgs e)
         {
-
-           if( dataGridView_UserList.SelectedRows.Count>0)
+            if (dataGridView_UserList.SelectedRows.Count > 0)
             {
                 /*    DataGridViewSelectedRowCollection r0 =*/
                 bool bDel = false;
-               string  str = dataGridView_UserList.SelectedRows[0].Cells[0].Value.ToString();
-                User delobj= new User();
-               foreach(var temp in  sys.g_listUser)
+                string str = dataGridView_UserList.SelectedRows[0].Cells[0].Value.ToString();
+                User delobj = new User();
+                foreach (var temp in sys.g_listUser)
                 {
-                    if(temp._userName == str)
+                    if (temp._userName == str)
                     {
                         delobj = temp;
-                         bDel = true;
+                        bDel = true;
                     }
-                        
                 }
                 DataGridViewRow row = dataGridView_UserList.SelectedRows[0];
                 dataGridView_UserList.Rows.Remove(row);
-               if (bDel)
+                if (bDel)
                 {
                     sys.g_listUser.Remove(delobj);
                     ConfigToolMgr.GetInstance().SaveUserConfig();
                 }
-                
             }
-           
         }
 
         private void BtnScarnProductDir_Click(object sender, EventArgs e)
@@ -165,11 +148,9 @@ namespace StationDemo
                 textBox_ProductDir.Text = openFolder.Path.ToString();
                 ParamSetMgr.GetInstance().CurrentWorkDir = textBox_ProductDir.Text;
                 ConfigToolMgr.GetInstance().SaveProductDir();
-
             }
             else
                 textBox_ProductDir.Text = "你没有选择目录";
-
         }
 
         private void checkBox_UseSafeDoor_CheckedChanged(object sender, EventArgs e)
@@ -178,12 +159,10 @@ namespace StationDemo
                 ParamSetMgr.GetInstance().SetBoolParam("启用安全门", true);
             else
                 ParamSetMgr.GetInstance().SetBoolParam("启用安全门", false);
-
         }
 
         private void checkBox_UseSafeGate_CheckedChanged(object sender, EventArgs e)
         {
-            
             if (checkBox_UseSafeGate.Checked)
                 ParamSetMgr.GetInstance().SetBoolParam("启用安全光栅", true);
             else
@@ -192,37 +171,28 @@ namespace StationDemo
 
         private void checkBox_ModeAirRun_CheckedChanged(object sender, EventArgs e)
         {
-           
-           if(checkBox_ModeAirRun.Checked )
-            checkBox_ModeRun.Checked = false;
-            sys.g_AppMode = checkBox_ModeAirRun.Checked ? AppMode.AirRun: AppMode.Run;
+            if (checkBox_ModeAirRun.Checked)
+                checkBox_ModeRun.Checked = false;
+            sys.g_AppMode = checkBox_ModeAirRun.Checked ? AppMode.AirRun : AppMode.Run;
             ParamSetMgr.GetInstance().SetBoolParam("系统空跑", sys.g_AppMode == AppMode.AirRun);
-           
         }
 
         private void checkBox_ModeRun_CheckedChanged(object sender, EventArgs e)
         {
-          
             if (checkBox_ModeRun.Checked)
                 checkBox_ModeAirRun.Checked = false;
             sys.g_AppMode = checkBox_ModeAirRun.Checked ? AppMode.AirRun : AppMode.Run;
-
         }
 
         private void check_CloseSafeProtect_CheckedChanged(object sender, EventArgs e)
         {
-            if( sys.g_User._userRight <= UserRight.调试工程师)
+            if (sys.g_User._userRight <= UserRight.调试工程师)
             {
                 MessageBox.Show($"当前用户:{sys.g_User._userName}  权限不够，不能屏蔽安全防护");
             }
-            
-              
 
-            if(check_CloseSafeProtect.Checked)
+            if (check_CloseSafeProtect.Checked)
             {
-               
-
-
             }
             else
             {
@@ -238,7 +208,6 @@ namespace StationDemo
                 //    MotionMgr.GetInstace().m_eventIsSafeWhenAxisMove += Safe.IsSafeWhenDispXMove;
                 //if (!MotionMgr.GetInstace().IsSafeFunRegister(Safe.IsSafeWhenTrayYMove))
                 //    MotionMgr.GetInstace().m_eventIsSafeWhenAxisMove += Safe.IsSafeWhenTrayYMove;
-
             }
         }
     }

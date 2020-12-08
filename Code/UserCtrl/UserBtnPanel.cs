@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace UserCtrl
@@ -16,6 +11,7 @@ namespace UserCtrl
         {
             InitializeComponent();
         }
+
         private List<string> m_Btns = new List<string>();
         public int m_page { set; get; } = 0;
         public int m_nNumPerRow { set; get; } = 3;
@@ -23,23 +19,27 @@ namespace UserCtrl
         public int m_splitHigh { set; get; } = 30;
         public int m_splitWidth { set; get; } = 170;
 
-        List<UserButton> m_labelControl_IoOutput = new List<UserButton>();
+        private List<UserButton> m_labelControl_IoOutput = new List<UserButton>();
+
         public void AddFlag(string strBtns)
         {
-            if(!m_Btns.Contains(strBtns))
+            if (!m_Btns.Contains(strBtns))
             {
                 m_Btns.Add(strBtns);
                 m_labelControl_IoOutput.Add(new UserButton());
             }
-           
         }
+
         public List<string> GetBtnsNams()
         {
             return m_Btns;
         }
-        public int  Count{
+
+        public int Count
+        {
             get => m_Btns.Count;
-         }
+        }
+
         private object lockobj = new object();
 
         public void SetBtnState(string strkey, bool bState)
@@ -47,18 +47,18 @@ namespace UserCtrl
             int index = m_Btns.FindIndex((t) => t == strkey);
             if (index != -1 && index < m_labelControl_IoOutput.Count)
             {
-                lock(lockobj)
+                lock (lockobj)
                 {
                     UserButton tem = m_labelControl_IoOutput[index];
                     tem.State = bState;
                 }
-                
             }
             else
             {
                 //MessageBox.Show("SetBtnState:Btns集合中没有没有：" + strkey, "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         public void SetBtnClickEvent(string strkey, UserButton.ClickFunHandler Tem_m_eventClick)
         {
             int index = m_Btns.FindIndex((t) => t == strkey);
@@ -69,9 +69,10 @@ namespace UserCtrl
             }
             else
             {
-               // MessageBox.Show("SetBtnClickEvent:Btns集合中没有没有：" + strkey, "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                // MessageBox.Show("SetBtnClickEvent:Btns集合中没有没有：" + strkey, "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         public void SetBtnClickDownEvent(string strkey, UserButton.ClickDownFunHandler Tem_m_eventClickDown)
         {
             int index = m_Btns.FindIndex((t) => t == strkey);
@@ -85,6 +86,7 @@ namespace UserCtrl
                 // MessageBox.Show("SetBtnClickEvent:Btns集合中没有没有：" + strkey, "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         public void SetBtnClickUpEvent(string strkey, UserButton.ClickUpFunHandler Tem_m_eventClickup)
         {
             int index = m_Btns.FindIndex((t) => t == strkey);
@@ -99,14 +101,11 @@ namespace UserCtrl
             }
         }
 
-
-
         private void UserBtnPanel_Load(object sender, EventArgs e)
         {
             panel1.Size = this.Size;
             if (m_nNumPerRow <= 0)
                 m_nNumPerRow = 1;
-       
         }
 
         public void Update()
@@ -152,7 +151,6 @@ namespace UserCtrl
                     BtnControl.Visible = false;
                     //  labelControl.State = false;
                 }
-
             }
             if (m_labelControl_IoOutput.Count <= 0)
             {
@@ -166,7 +164,6 @@ namespace UserCtrl
             else if (m_labelControl_IoOutput.Count > 0)
             {
                 panel1.Width = m_labelControl_IoOutput[m_labelControl_IoOutput.Count - 1].Width + m_labelControl_IoOutput[m_labelControl_IoOutput.Count - 1].Location.X;
-
             }
             else
             {

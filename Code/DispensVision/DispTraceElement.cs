@@ -1,17 +1,10 @@
-﻿
-
-
+﻿using BaseDll;
+using MotionIoLib;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using BaseDll;
-using MotionIoLib;
-using Newtonsoft.Json;
-using SerialDict;
 
 namespace XYZDispensVision
 {
@@ -24,14 +17,14 @@ namespace XYZDispensVision
         public bool bIsAllPointMachine = false;//是否全是机械点
         public bool bIsDespense = true;//是否点胶
         public string ItemName = "DispTraceBaseElement";
-      
+
         public string strType = "";
+
         public DispTraceBaseElement()
         {
             strType = this.GetType().ToString();
         }
     }
-
 
     public class DispEveryTraceMoveParam
     {
@@ -40,6 +33,7 @@ namespace XYZDispensVision
         public double Acc;
         public double Dec;
     }
+
     public struct DispAllTraceMoveParam
     {
         public double SpeedHigh;
@@ -54,6 +48,7 @@ namespace XYZDispensVision
     {
         public int delay = 0;
     }
+
     public class DispTraceBaseElementIo : DispTraceBaseElement
     {
         public int nCardIndex;
@@ -75,6 +70,7 @@ namespace XYZDispensVision
         }
 
         public bool bDispIoState = true;
+
         public void Parse()
         {
             if (strIoName != null && strIoName != "")
@@ -85,14 +81,14 @@ namespace XYZDispensVision
                     nIoIndex = IOMgr.GetInstace().GetOutputDic()[strIoName]._IoIndex;
                 }
         }
-
     }
+
     public class DispTraceBaseElementEnd : DispTraceBaseElement
     {
     }
+
     public class PointCoordinateElement
     {
-
         public double dMx = 0;
         public double dMy = 0;
         public double dMz = 0;
@@ -105,15 +101,15 @@ namespace XYZDispensVision
     {
         public PointCoordinateElement PointCoordinate = new PointCoordinateElement();
         public DispEveryTraceMoveParam TraceMoveParam = new DispEveryTraceMoveParam();
-
     }
-  
+
     public class DispTraceBaseElementLine : DispTraceBaseElement
     {
         public PointCoordinateElement cStartPoint = new PointCoordinateElement();
         public PointCoordinateElement cEndPoint = new PointCoordinateElement();
         public DispEveryTraceMoveParam TraceMoveParam = new DispEveryTraceMoveParam();
     }
+
     /// <summary>
     ///  S代表圆弧的起点
     ///  C代表圆弧的中心
@@ -126,7 +122,7 @@ namespace XYZDispensVision
     //    public DispTraceBaseElementPoint cCenterPoint = new DispTraceBaseElementPoint();
     //    public DispTraceBaseElementPoint cStartPoint = new DispTraceBaseElementPoint();
     //    public DispTraceBaseElementPoint cEndPoint = new DispTraceBaseElementPoint();
-    //    public DispEveryTraceMoveParam TraceMoveParam = new DispEveryTraceMoveParam();  
+    //    public DispEveryTraceMoveParam TraceMoveParam = new DispEveryTraceMoveParam();
     //}
     //public class DispTraceBaseElementArc_SER : DispTraceBaseElement
     //{
@@ -158,21 +154,21 @@ namespace XYZDispensVision
         public bool bIsArcDir = true; //逆时针为正
         public bool bIsArc = false;// 是否为圆弧
     }
+
     // <summary>
     /// 点胶轨迹的基本元素组合的形状集合
     /// </summary>
     public class DispTraceBaseShape : DispTraceBaseElement
     {
-
-
         public List<DispTraceBaseElement> dispTraceBaseElements = new List<DispTraceBaseElement>();
+
         /// <summary>
         /// 对形状进行解析
         /// </summary>
         public virtual void Parse()
         {
-
         }
+
         public List<DispTraceBaseElement> AddTo(List<DispTraceBaseElement> Dst)
         {
             if (Dst == null)
@@ -187,21 +183,19 @@ namespace XYZDispensVision
 
     public class DispTraceRect : DispTraceBaseShape
     {
-
         public DispTraceBaseElementPoint cStart = new DispTraceBaseElementPoint();
         public DispTraceBaseElementPoint cEnd = new DispTraceBaseElementPoint();
-
 
         public DispTraceBaseElementPoint cVRow1 = new DispTraceBaseElementPoint();
         public DispTraceBaseElementPoint cVCol1 = new DispTraceBaseElementPoint();
         public DispTraceBaseElementPoint cVRow2 = new DispTraceBaseElementPoint();
         public DispTraceBaseElementPoint cVCol2 = new DispTraceBaseElementPoint();
 
-
         public DispTraceBaseElementPoint cMX1 = new DispTraceBaseElementPoint();
         public DispTraceBaseElementPoint cMY1 = new DispTraceBaseElementPoint();
         public DispTraceBaseElementPoint cMX2 = new DispTraceBaseElementPoint();
         public DispTraceBaseElementPoint cMY2 = new DispTraceBaseElementPoint();
+
         public override void Parse()
         {
             //foreach (System.Reflection.PropertyInfo info in this.GetType().GetProperties())
@@ -214,13 +208,15 @@ namespace XYZDispensVision
         }
     }
 
-
     public class DispTraceMgr
     {
+        private DispTraceMgr()
+        {
+        }
 
-        private DispTraceMgr() { }
         private static DispTraceMgr dispTraceElementsMgr = null;
         private static object objectlock = new object();
+
         public static DispTraceMgr GetInstance()
         {
             if (dispTraceElementsMgr == null)
@@ -236,7 +232,9 @@ namespace XYZDispensVision
             }
             return dispTraceElementsMgr;
         }
-        public delegate void UpdatDataGridViewHandler(string OperateName,object obj);
+
+        public delegate void UpdatDataGridViewHandler(string OperateName, object obj);
+
         public event UpdatDataGridViewHandler eventUpdataGridView;
 
         public XY_UR_Calib XYUR_Pin = null;
@@ -246,12 +244,11 @@ namespace XYZDispensVision
 
         public void Save(string Path)
         {
-           // dispTraces.Add("SecondTrace", new List<DispTraceBaseElement>() { dispTraces["FiristTrace"][0], dispTraces["FiristTrace"][1] });
+            // dispTraces.Add("SecondTrace", new List<DispTraceBaseElement>() { dispTraces["FiristTrace"][0], dispTraces["FiristTrace"][1] });
             AccessJosnSerializer.ObjectToJson("D:\\123.json", dispTraces);
-
-
         }
-        List<string> ParseJsonString_List(string strobjs)
+
+        private List<string> ParseJsonString_List(string strobjs)
         {
             Stack<char> stk = new Stack<char>();
             List<string> JsonItems = new List<string>();
@@ -300,17 +297,14 @@ namespace XYZDispensVision
                             s = s.Substring(1);
                         JsonItems.Add(s);
                     }
-
                 }
             }
             return JsonItems;
         }
 
-
         //Dictionary<string, List<string>> dic = new Dictionary<string, List<string>>();
-        void ParseJsonString_DicList(string strobjs, Dictionary<string, List<string>> dics)
+        private void ParseJsonString_DicList(string strobjs, Dictionary<string, List<string>> dics)
         {
-
             int index = strobjs.IndexOf("]");
             if (index == -1)
                 return;
@@ -322,7 +316,6 @@ namespace XYZDispensVision
                 {
                     string itemstr = strobjs.Substring(indexfront, index - indexfront + 1);
                     ParseJsonString_List(itemstr);
-
                 }
                 else if (indexfront > 0 && strSub[indexfront - 1] == ':')
                 {
@@ -332,7 +325,6 @@ namespace XYZDispensVision
                     string itemstr = strobjs.Substring(indexfront, index - indexfront + 1);
                     dics.Add(keystr, ParseJsonString_List(itemstr));
                     ParseJsonString_DicList(strobjs.Substring(index + 1), dics);
-
                 }
                 else if (indexfront > 0 && strSub[indexfront - 1] == '{')
                 {
@@ -340,9 +332,9 @@ namespace XYZDispensVision
                     ParseJsonString_DicList(itemstr, dics);
                 }
             }
-
         }
-        void ParsejsonToTraces(string jsonString, Dictionary<string, List<DispTraceBaseElement>> DispTraces)
+
+        private void ParsejsonToTraces(string jsonString, Dictionary<string, List<DispTraceBaseElement>> DispTraces)
         {
             Dictionary<string, List<object>> ds = JsonConvert.DeserializeObject<Dictionary<string, List<object>>>(jsonString);
             //Dictionary<string, List<DispTraceBaseElement>> DispTraces = new Dictionary<string, List<DispTraceBaseElement>>();
@@ -356,12 +348,10 @@ namespace XYZDispensVision
                     string TypeElement = (JsonConvert.DeserializeObject<DispTraceBaseElement>(strItemElement) as DispTraceBaseElement).strType;
                     Assembly assembly = Assembly.GetAssembly(typeof(DispTraceBaseElement));
                     Type type = assembly.GetType(TypeElement);
-                   
+
                     DispTraceBaseElement dispTraceBaseElement = JsonConvert.DeserializeObject(strItemElement, type) as DispTraceBaseElement;
                     // TraceElements.Add(Activator.CreateInstance(type, null) as DispTraceBaseElement);
                     TraceElements.Add(dispTraceBaseElement);
-
-
                 }
                 DispTraces.Add(tem.Key, TraceElements);
             }
@@ -369,36 +359,35 @@ namespace XYZDispensVision
 
         public void Read(string Path)
         {
-
             string txt = File.ReadAllText(Path);
             ParsejsonToTraces(txt, dispTraces);
         }
-        public void SetItem(int nIndex,DispTraceBaseElement dispTraceBaseElement, string DispTraceName = "FiristTrace")
+
+        public void SetItem(int nIndex, DispTraceBaseElement dispTraceBaseElement, string DispTraceName = "FiristTrace")
         {
             if (dispTraces.ContainsKey(DispTraceName))
             {
                 if (dispTraces[DispTraceName].Count > nIndex)
-                dispTraces[DispTraceName][nIndex] = dispTraceBaseElement;
-                
+                    dispTraces[DispTraceName][nIndex] = dispTraceBaseElement;
             }
-            
         }
-    
+
         public void AddItemToList(DispTraceBaseElement dispTraceBaseElement, string DispTraceName = "FiristTrace")
         {
             //  dispTraceBaseElements.Add(dispTraceBaseElement);
             if (dispTraces.ContainsKey(DispTraceName))
             {
                 dispTraces[DispTraceName].Add(dispTraceBaseElement);
-               if(eventUpdataGridView != null)
-                   eventUpdataGridView("Add", dispTraceBaseElement);
-            } 
+                if (eventUpdataGridView != null)
+                    eventUpdataGridView("Add", dispTraceBaseElement);
+            }
             else
             {
                 dispTraces.Add(DispTraceName, new List<DispTraceBaseElement>() { dispTraceBaseElement });
             }
         }
-       public bool CheckReName(string ItemNmae, string DispTraceName = "FiristTrace")
+
+        public bool CheckReName(string ItemNmae, string DispTraceName = "FiristTrace")
         {
             if (dispTraces.ContainsKey(DispTraceName))
             {
@@ -421,13 +410,13 @@ namespace XYZDispensVision
                 if (index != -1)
                 {
                     dispTraces[DispTraceName].RemoveAt(index);
-                    if(eventUpdataGridView!=null)
+                    if (eventUpdataGridView != null)
                         eventUpdataGridView("Del", index);
                 }
-                   
             }
         }
-        public DispTraceBaseElement GetItem( int index, string DispTraceName = "FiristTrace")
+
+        public DispTraceBaseElement GetItem(int index, string DispTraceName = "FiristTrace")
         {
             DispTraceBaseElement dispTraceBaseElement = null;
             if (dispTraces.ContainsKey(DispTraceName))
@@ -439,7 +428,8 @@ namespace XYZDispensVision
             }
             return dispTraceBaseElement;
         }
-        public DispTraceBaseElement GetItem(string  ItemName, string DispTraceName = "FiristTrace")
+
+        public DispTraceBaseElement GetItem(string ItemName, string DispTraceName = "FiristTrace")
         {
             DispTraceBaseElement dispTraceBaseElement = null;
             if (dispTraces.ContainsKey(DispTraceName))
@@ -448,11 +438,11 @@ namespace XYZDispensVision
                 if (index == -1)
                     return null;
                 return dispTraces[DispTraceName][index];
-
             }
             return dispTraceBaseElement;
         }
-        public void DelItemFromList(int  row, string DispTraceName = "FiristTrace")
+
+        public void DelItemFromList(int row, string DispTraceName = "FiristTrace")
         {
             if (dispTraces.ContainsKey(DispTraceName))
             {
@@ -462,10 +452,8 @@ namespace XYZDispensVision
                     if (eventUpdataGridView != null)
                         eventUpdataGridView("Del", row);
                 }
-
             }
         }
-
 
         public void Clear(string DispTraceName = "FiristTrace")
         {
@@ -476,6 +464,7 @@ namespace XYZDispensVision
                     eventUpdataGridView("Clr", 0);
             }
         }
+
         public string GpName = "";
 
         public void Parse(string DispTraceName)
@@ -485,7 +474,6 @@ namespace XYZDispensVision
             List<DispTraceBaseElement> dispTraceBaseElements = dispTraces[DispTraceName];
             foreach (var tem in dispTraceBaseElements)
             {
-
                 if (tem.GetType() == typeof(DispTraceBaseElementDelay))
                 {
                     MotionMgr.GetInstace().AddBufDelay(GpName, ((DispTraceBaseElementDelay)tem).delay);
@@ -528,12 +516,10 @@ namespace XYZDispensVision
                         MotionMgr.GetInstace().AddBufMove(GpName, BufMotionType.buf_Arc2dAbsCCW, 0, 2, velhigh, vellow, CenterPoint, EndPoint);
                     else
                         MotionMgr.GetInstace().AddBufMove(GpName, BufMotionType.buf_Arc2dAbsCW, 0, 2, velhigh, vellow, CenterPoint, EndPoint);
-
                 }
-
             }
-
         }
+
         /// <summary>
         /// 仿射变化后的图像上的线段上各点 转换成机械点
         /// </summary>
@@ -571,14 +557,10 @@ namespace XYZDispensVision
 
                         ((DispTraceBaseElementLine)tem).cEndPoint.dMx = XYUR_Pin.GetDstPonit(StatrtEPonit, SnapPoint).x + OffsetX;
                         ((DispTraceBaseElementLine)tem).cEndPoint.dMy = XYUR_Pin.GetDstPonit(StatrtEPonit, SnapPoint).y + OffsetY;
-
                     }
-
                 }
             }
-
         }
-
 
         /// <summary>
         /// 仿射变化后的图像上的圆弧上各点 转换成机械点
@@ -624,8 +606,8 @@ namespace XYZDispensVision
                     }
                 }
             }
-
         }
+
         /// <summary>
         /// 仿射变化后的图像上的点 转换成机械点
         /// </summary>
@@ -660,10 +642,5 @@ namespace XYZDispensVision
                 }
             }
         }
-
-
     }
-
-
-
 }
