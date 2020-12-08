@@ -678,3 +678,10 @@ G:\StationDemoX64V2.0\Code\MotionLib\obj\Debug\MotionLib.csproj.CopyComplete
 G:\StationDemoX64V2.0\Code\MotionLib\obj\Debug\MotionLib.dll
 G:\StationDemoX64V2.0\Code\MotionLib\obj\Debug\MotionLib.pdb
 G:\StationDemoX64V2.0\Code\MotionLib\obj\Debug\MotionLib.csprojAssemblyReference.cache
+E:\WorkSpace\HeadSetTest\Machine\MotionLib.dll
+E:\WorkSpace\HeadSetTest\Machine\MotionLib.pdb
+E:\WorkSpace\HeadSetTest\Code\MotionLib\obj\Debug\MotionLib.csprojAssemblyReference.cache
+E:\WorkSpace\HeadSetTest\Code\MotionLib\obj\Debug\MotionLib.csproj.CoreCompileInputs.cache
+E:\WorkSpace\HeadSetTest\Code\MotionLib\obj\Debug\MotionLib.csproj.CopyComplete
+E:\WorkSpace\HeadSetTest\Code\MotionLib\obj\Debug\MotionLib.dll
+E:\WorkSpace\HeadSetTest\Code\MotionLib\obj\Debug\MotionLib.pdb

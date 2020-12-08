@@ -62,3 +62,10 @@ G:\StationDemoX64V2.0\Code\SmallMesClients\obj\Debug\SmallMesClients.csproj.Core
 G:\StationDemoX64V2.0\Code\SmallMesClients\obj\Debug\SmallMesClients.csproj.CopyComplete
 G:\StationDemoX64V2.0\Code\SmallMesClients\obj\Debug\SmallMesClients.dll
 G:\StationDemoX64V2.0\Code\SmallMesClients\obj\Debug\SmallMesClients.pdb
+E:\WorkSpace\HeadSetTest\Machine\SmallMesClients.dll
+E:\WorkSpace\HeadSetTest\Machine\SmallMesClients.pdb
+E:\WorkSpace\HeadSetTest\Code\SmallMesClients\obj\Debug\SmallMesClients.csprojAssemblyReference.cache
+E:\WorkSpace\HeadSetTest\Code\SmallMesClients\obj\Debug\SmallMesClients.csproj.CoreCompileInputs.cache
+E:\WorkSpace\HeadSetTest\Code\SmallMesClients\obj\Debug\SmallMesClients.csproj.CopyComplete
+E:\WorkSpace\HeadSetTest\Code\SmallMesClients\obj\Debug\SmallMesClients.dll
+E:\WorkSpace\HeadSetTest\Code\SmallMesClients\obj\Debug\SmallMesClients.pdb

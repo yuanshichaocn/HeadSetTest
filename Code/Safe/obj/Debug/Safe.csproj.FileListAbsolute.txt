@@ -447,3 +447,10 @@ G:\StationDemoX64V2.0\Code\Safe\obj\Debug\Safe.csproj.CopyComplete
 G:\StationDemoX64V2.0\Code\Safe\obj\Debug\Safe.dll
 G:\StationDemoX64V2.0\Code\Safe\obj\Debug\Safe.pdb
 G:\StationDemoX64V2.0\Code\Safe\obj\Debug\Safe.csprojAssemblyReference.cache
+E:\WorkSpace\HeadSetTest\Machine\Safe.dll
+E:\WorkSpace\HeadSetTest\Machine\Safe.pdb
+E:\WorkSpace\HeadSetTest\Code\Safe\obj\Debug\Safe.csprojAssemblyReference.cache
+E:\WorkSpace\HeadSetTest\Code\Safe\obj\Debug\Safe.csproj.CoreCompileInputs.cache
+E:\WorkSpace\HeadSetTest\Code\Safe\obj\Debug\Safe.csproj.CopyComplete
+E:\WorkSpace\HeadSetTest\Code\Safe\obj\Debug\Safe.dll
+E:\WorkSpace\HeadSetTest\Code\Safe\obj\Debug\Safe.pdb

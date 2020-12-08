@@ -545,3 +545,10 @@ G:\StationDemoX64V2.0\Code\UserData\obj\Debug\UserData.csproj.CopyComplete
 G:\StationDemoX64V2.0\Code\UserData\obj\Debug\UserData.dll
 G:\StationDemoX64V2.0\Code\UserData\obj\Debug\UserData.pdb
 G:\StationDemoX64V2.0\Code\UserData\obj\Debug\UserData.csprojAssemblyReference.cache
+E:\WorkSpace\HeadSetTest\Machine\UserData.dll
+E:\WorkSpace\HeadSetTest\Machine\UserData.pdb
+E:\WorkSpace\HeadSetTest\Code\UserData\obj\Debug\UserData.csprojAssemblyReference.cache
+E:\WorkSpace\HeadSetTest\Code\UserData\obj\Debug\UserData.csproj.CoreCompileInputs.cache
+E:\WorkSpace\HeadSetTest\Code\UserData\obj\Debug\UserData.csproj.CopyComplete
+E:\WorkSpace\HeadSetTest\Code\UserData\obj\Debug\UserData.dll
+E:\WorkSpace\HeadSetTest\Code\UserData\obj\Debug\UserData.pdb

@@ -397,3 +397,11 @@ D:\StationDemoX64V2.0小MesSever\Code\Communicate\obj\Debug\Communicate.csproj.C
 D:\StationDemoX64V2.0小MesSever\Code\Communicate\obj\Debug\Communicate.csproj.CopyComplete
 D:\StationDemoX64V2.0小MesSever\Code\Communicate\obj\Debug\Communicate.dll
 D:\StationDemoX64V2.0小MesSever\Code\Communicate\obj\Debug\Communicate.pdb
+E:\WorkSpace\HeadSetTest\Machine\Communicate.dll
+E:\WorkSpace\HeadSetTest\Machine\Communicate.pdb
+E:\WorkSpace\HeadSetTest\Machine\Communicate.xml
+E:\WorkSpace\HeadSetTest\Code\Communicate\obj\Debug\Communicate.csprojAssemblyReference.cache
+E:\WorkSpace\HeadSetTest\Code\Communicate\obj\Debug\Communicate.csproj.CoreCompileInputs.cache
+E:\WorkSpace\HeadSetTest\Code\Communicate\obj\Debug\Communicate.csproj.CopyComplete
+E:\WorkSpace\HeadSetTest\Code\Communicate\obj\Debug\Communicate.dll
+E:\WorkSpace\HeadSetTest\Code\Communicate\obj\Debug\Communicate.pdb

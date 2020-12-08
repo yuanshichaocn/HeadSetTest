@@ -309,3 +309,10 @@ G:\StationDemoX64V2.0\Machine\OtherDevice.pdb
 G:\StationDemoX64V2.0\Code\OtherDevice\obj\Debug\OtherDevice.csproj.CopyComplete
 G:\StationDemoX64V2.0\Code\OtherDevice\obj\Debug\OtherDevice.dll
 G:\StationDemoX64V2.0\Code\OtherDevice\obj\Debug\OtherDevice.pdb
+E:\WorkSpace\HeadSetTest\Machine\OtherDevice.dll
+E:\WorkSpace\HeadSetTest\Machine\OtherDevice.pdb
+E:\WorkSpace\HeadSetTest\Code\OtherDevice\obj\Debug\OtherDevice.csprojAssemblyReference.cache
+E:\WorkSpace\HeadSetTest\Code\OtherDevice\obj\Debug\OtherDevice.csproj.CoreCompileInputs.cache
+E:\WorkSpace\HeadSetTest\Code\OtherDevice\obj\Debug\OtherDevice.csproj.CopyComplete
+E:\WorkSpace\HeadSetTest\Code\OtherDevice\obj\Debug\OtherDevice.dll
+E:\WorkSpace\HeadSetTest\Code\OtherDevice\obj\Debug\OtherDevice.pdb
