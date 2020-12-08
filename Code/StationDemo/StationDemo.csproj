@@ -159,6 +159,10 @@
     <Compile Include="ComForm\ItemAdd.Designer.cs">
       <DependentUpon>ItemAdd.cs</DependentUpon>
     </Compile>
+    <Compile Include="Station\FeedStation.cs" />
+    <Compile Include="Station\FootStation.cs" />
+    <Compile Include="Station\RobotStation.cs" />
+    <Compile Include="Station\SPBStation.cs" />
     <Compile Include="Station\流水线\IPipeline.cs" />
     <Compile Include="Station\流水线\LineExction.cs" />
     <Compile Include="Station\流水线\LineOperateNG.cs" />
