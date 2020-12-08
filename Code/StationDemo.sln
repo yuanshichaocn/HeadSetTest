@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.168
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30717.126
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StationDemo", "StationDemo\StationDemo.csproj", "{59FF8FE8-7D83-4D0C-AAEA-6CAA6A2B869E}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -27,6 +27,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmallMesClients", "SmallMesClients\SmallMesClients.csproj", "{A818DEC9-CB89-42C9-8797-B1388D2DD65F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseDll", "BaseDll\BaseDll.csproj", "{AD3B743D-2E9D-4227-9F63-8828AE2483FA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CameraLib", "..\..\弘景AA\Standard Machine_HY10X-CA 20201022-2\CameraLib\CameraLib.csproj", "{88443CDA-6C62-4783-AFC1-CFA3471F5FBB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -214,6 +216,22 @@ Global
 		{AD3B743D-2E9D-4227-9F63-8828AE2483FA}.Release|x64.Build.0 = Release|Any CPU
 		{AD3B743D-2E9D-4227-9F63-8828AE2483FA}.Release|x86.ActiveCfg = Release|Any CPU
 		{AD3B743D-2E9D-4227-9F63-8828AE2483FA}.Release|x86.Build.0 = Release|Any CPU
+		{88443CDA-6C62-4783-AFC1-CFA3471F5FBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88443CDA-6C62-4783-AFC1-CFA3471F5FBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88443CDA-6C62-4783-AFC1-CFA3471F5FBB}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{88443CDA-6C62-4783-AFC1-CFA3471F5FBB}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{88443CDA-6C62-4783-AFC1-CFA3471F5FBB}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{88443CDA-6C62-4783-AFC1-CFA3471F5FBB}.Debug|x64.Build.0 = Debug|Any CPU
+		{88443CDA-6C62-4783-AFC1-CFA3471F5FBB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{88443CDA-6C62-4783-AFC1-CFA3471F5FBB}.Debug|x86.Build.0 = Debug|Any CPU
+		{88443CDA-6C62-4783-AFC1-CFA3471F5FBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88443CDA-6C62-4783-AFC1-CFA3471F5FBB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88443CDA-6C62-4783-AFC1-CFA3471F5FBB}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{88443CDA-6C62-4783-AFC1-CFA3471F5FBB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{88443CDA-6C62-4783-AFC1-CFA3471F5FBB}.Release|x64.ActiveCfg = Release|Any CPU
+		{88443CDA-6C62-4783-AFC1-CFA3471F5FBB}.Release|x64.Build.0 = Release|Any CPU
+		{88443CDA-6C62-4783-AFC1-CFA3471F5FBB}.Release|x86.ActiveCfg = Release|Any CPU
+		{88443CDA-6C62-4783-AFC1-CFA3471F5FBB}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
