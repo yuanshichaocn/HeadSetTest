@@ -1,27 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using gts;
-using System.Diagnostics;
-using Advantech.Motion;
-using System.Windows.Forms;
-using log4net;
+﻿using Advantech.Motion;
 using PCI_M314;
+using System;
+using System.Diagnostics;
+using System.Threading;
+using System.Windows.Forms;
 
 namespace MotionIoLib
 {
-
-
     public class Motion_Delta314 : MotionCardBase
     {
-
         public Motion_Delta314(ulong indexCard, string strName, int nMinAxisNo, int nMaxAxisNo)
             : base(indexCard, strName, nMinAxisNo, nMaxAxisNo)
         {
-
         }
+
         //public override int GetAxisNo(int IndexAxis)
         //{
         //    return AxisInRang(IndexAxis) ? (IndexAxis - GetMinAxisNo() ) : int.MaxValue;
@@ -73,28 +65,33 @@ namespace MotionIoLib
             m_bOpen = true;
             return (rtn == 0);
         }
+
         public override bool IsOpen()
         {
             return m_bOpen;
         }
+
         public override bool Close()
         {
             short rtn = 0;
             rtn = CPCI_M314.CS_m314_close((ushort)m_nCardIndex);
             return (rtn == 0);
         }
+
         public override bool ServoOn(short nAxisNo)
         {
             short rtn = 0;
             rtn = CPCI_M314.CS_m314_set_servo((ushort)m_nCardIndex, (ushort)nAxisNo, 1);
             return (rtn == 0);
         }
+
         public override bool ServoOff(short nAxisNo)
         {
             short rtn = 0;
             rtn = CPCI_M314.CS_m314_set_servo((ushort)m_nCardIndex, (ushort)nAxisNo, 0);
             return (rtn == 0);
         }
+
         public bool ClearAlarm(short nAxisNo)
         {
             short rtn = 0;
@@ -103,6 +100,7 @@ namespace MotionIoLib
             rtn |= CPCI_M314.CS_m314_set_servo((ushort)m_nCardIndex, (ushort)nAxisNo, 1);
             return (rtn == 0);
         }
+
         public override bool AbsMove(int nAxisNo, double nPos, double nSpeed)
         {
             short rtn = 0;
@@ -116,17 +114,18 @@ namespace MotionIoLib
                     Dcc = m_MovePrm[nAxisNo].DccH;
                     speed = m_MovePrm[nAxisNo].VelH;
                     break;
+
                 case (double)SpeedType.Mid:
                     Acc = m_MovePrm[nAxisNo].AccM;
                     Dcc = m_MovePrm[nAxisNo].DccM;
                     speed = m_MovePrm[nAxisNo].VelM;
                     break;
+
                 case (double)SpeedType.Low:
                     Acc = m_MovePrm[nAxisNo].AccL;
                     Dcc = m_MovePrm[nAxisNo].DccL;
                     speed = m_MovePrm[nAxisNo].VelL;
                     break;
-
             }
             double Tacc = (speed - 0) / Acc;
             double Tdec = (speed - 0) / Dcc;
@@ -140,6 +139,7 @@ namespace MotionIoLib
             }
             return (rtn == 0);
         }
+
         public override bool RelativeMove(int nAxisNo, double nPos, double nSpeed)
         {
             short rtn = 0;
@@ -153,17 +153,18 @@ namespace MotionIoLib
                     Dcc = m_MovePrm[nAxisNo].DccH;
                     speed = m_MovePrm[nAxisNo].VelH;
                     break;
+
                 case (double)SpeedType.Mid:
                     Acc = m_MovePrm[nAxisNo].AccM;
                     Dcc = m_MovePrm[nAxisNo].DccM;
                     speed = m_MovePrm[nAxisNo].VelM;
                     break;
+
                 case (double)SpeedType.Low:
                     Acc = m_MovePrm[nAxisNo].AccL;
                     Dcc = m_MovePrm[nAxisNo].DccL;
                     speed = m_MovePrm[nAxisNo].VelL;
                     break;
-
             }
             double Tacc = (speed - 0) / Acc;
             double Tdec = (speed - 0) / Dcc;
@@ -176,8 +177,8 @@ namespace MotionIoLib
                 rtn |= CPCI_M314.CS_m314_start_tr_move((ushort)m_nCardIndex, (ushort)nAxisNo, (int)nPos, 0, (int)speed, Tacc, Tdec);
             }
             return (rtn == 0);
-
         }
+
         public override bool JogMove(int nAxisNo, bool bPositive, int bStart, double nSpeed)
         {
             short rtn = 0;
@@ -191,17 +192,18 @@ namespace MotionIoLib
                     Dcc = m_MovePrm[nAxisNo].DccH;
                     speed = m_MovePrm[nAxisNo].VelH;
                     break;
+
                 case (double)SpeedType.Mid:
                     Acc = m_MovePrm[nAxisNo].AccM;
                     Dcc = m_MovePrm[nAxisNo].DccM;
                     speed = m_MovePrm[nAxisNo].VelM;
                     break;
+
                 case (double)SpeedType.Low:
                     Acc = m_MovePrm[nAxisNo].AccL;
                     Dcc = m_MovePrm[nAxisNo].DccL;
                     speed = m_MovePrm[nAxisNo].VelL;
                     break;
-
             }
             double Tacc = (speed - 0) / Acc;
             double Tdec = (speed - 0) / Dcc;
@@ -217,7 +219,9 @@ namespace MotionIoLib
             }
             return (rtn == 0);
         }
+
         public bool Istop = false;
+
         public override bool StopAxis(int nAxisNo)
         {
             Istop = true;
@@ -225,12 +229,14 @@ namespace MotionIoLib
             short rtn = 0;
             return (rtn == CPCI_M314.CS_m314_sd_stop((ushort)m_nCardIndex, (ushort)nAxisNo, dccTime));
         }
+
         public override bool StopEmg(int nAxisNo)
         {
             short rtn = 0;
             rtn |= CPCI_M314.CS_m314_emg_stop((ushort)m_nCardIndex, (ushort)nAxisNo);
             return (rtn == 0);
         }
+
         public override bool Home(int nAxisNo, int nParam)
         {
             Istop = false;
@@ -279,6 +285,7 @@ namespace MotionIoLib
             while (MoSt == 0);
             return (rtn == 0);
         }
+
         public override bool ReasetAxis(int nAxisNo)
         {
             short rtn = 0;
@@ -286,6 +293,7 @@ namespace MotionIoLib
             rtn |= CPCI_M314.CS_m314_set_position((ushort)m_nCardIndex, (ushort)nAxisNo, 0.0);
             return (rtn == 0);
         }
+
         public override long GetMotionIoState(int nAxisNo)
         {
             short rtn = 0;
@@ -322,15 +330,16 @@ namespace MotionIoLib
                     lStandardIo |= (0x01 << 7); //电机使能标志存在第8位
                 }
                 return lStandardIo;
-
             }
 
             return -1;
         }
+
         public override bool GetServoState(int nAxisNo)
         {
             return false;
         }
+
         public override AxisState IsAxisNormalStop(int nAxisNo)
         {
             short rtn = 0;
@@ -347,8 +356,6 @@ namespace MotionIoLib
             }
         }
 
-
-
         public override bool SetActutalPos(int nAxisNo, double pos)
         {
             logger.Info(string.Format("{0}卡{1}轴设置实际位置", m_nCardIndex, nAxisNo));
@@ -364,6 +371,7 @@ namespace MotionIoLib
             rtn |= CPCI_M314.CS_m314_set_command((ushort)m_nCardIndex, (ushort)nAxisNo, (int)pos);
             return (rtn == 0);
         }
+
         public override AxisState IsHomeNormalStop(int nAxisNo)
         {
             short rtn = 0;
@@ -383,6 +391,7 @@ namespace MotionIoLib
                 return AxisState.ErrAlarm;
             }
         }
+
         public override int GetAxisActPos(int nAxisNo)
         {
             short rtn = 0;
@@ -405,6 +414,7 @@ namespace MotionIoLib
             else
                 return 0;
         }
+
         public override int GetAxisCmdPos(int nAxisNo)
         {
             short rtn = 0;
@@ -419,8 +429,8 @@ namespace MotionIoLib
                 return (int)post;
             else
                 return 0;
-
         }
+
         public override int GetAxisPos(int nAxisNo)
         {
             int pos = 0;
@@ -431,16 +441,17 @@ namespace MotionIoLib
             return pos;
         }
 
-
         public override bool isOrgTrig(int nAxisNo)
         {
             //  throw new NotImplementedException();
             return true;
         }
+
         public override bool AddAxisToGroup(int[] nAxisArr, ref object group)
         {
             return true;
         }
+
         //public override bool CloseAxisGroup(ref IntPtr group)
         //{
         //    uint reslut = 0;
@@ -451,7 +462,6 @@ namespace MotionIoLib
         //    uint reslut = 0;
         //    ushort groupstate = 0;
         //    logger.Info("获取群组状态异常（GetGpState）");
-
 
         //    return GpState.GpErrStop;
 
@@ -470,7 +480,6 @@ namespace MotionIoLib
         //}
         public override bool Line2Axisabs(IntPtr group, int xAxis, int yAxis, double xpos, double ypos, double acc, double dec, double velrun, double velori = 0)
         {
-
             try
             {
                 uint reslut = 0;
@@ -483,8 +492,8 @@ namespace MotionIoLib
                 return false;
             }
             return false;
-
         }
+
         /// <summary>
         /// 与其他的控制卡不兼容，因为这个M314没有buf'运动
         /// </summary>
@@ -502,7 +511,7 @@ namespace MotionIoLib
             if (mode == 1)
             {
                 short rtn = 0;
-                ushort[] array = new ushort[3] { (ushort)nAxisNum, (ushort)(nAxisNum + 1),(ushort)(nAxisNum-1)};
+                ushort[] array = new ushort[3] { (ushort)nAxisNum, (ushort)(nAxisNum + 1), (ushort)(nAxisNum - 1) };
 
                 double speed = velHigh;
                 double Acc = m_MovePrm[2].AccH;
@@ -514,30 +523,30 @@ namespace MotionIoLib
                         Dcc = m_MovePrm[2].DccH;
                         speed = m_MovePrm[2].VelH;
                         break;
+
                     case (int)SpeedType.Mid:
                         Acc = m_MovePrm[2].AccM;
                         Dcc = m_MovePrm[2].DccM;
                         speed = m_MovePrm[2].VelM;
                         break;
+
                     case (int)SpeedType.Low:
                         Acc = m_MovePrm[2].AccL;
                         Dcc = m_MovePrm[2].DccL;
                         speed = m_MovePrm[2].VelL;
                         break;
-
                 }
                 double Tacc = (speed - 0) / Acc;
                 double Tdec = (speed - 0) / Dcc;
-         
-              //  rtn |= CPCI_M314.CS_m314_start_ta_arc_xy((ushort)m_nCardIndex, ref array[0], (int)Point1[0], (int)(Point1[1]/10.0), Point2[0], 0, (int)speed, Tacc, Tdec);
-                rtn |= CPCI_M314.CS_m314_start_tr_heli_xy((ushort)m_nCardIndex, ref array[0], (int)Point1[0], (int)(Point1[1] / 10.0),(int)10, 9, 0,0, (int)speed, Tacc, Tdec);
+
+                //  rtn |= CPCI_M314.CS_m314_start_ta_arc_xy((ushort)m_nCardIndex, ref array[0], (int)Point1[0], (int)(Point1[1]/10.0), Point2[0], 0, (int)speed, Tacc, Tdec);
+                rtn |= CPCI_M314.CS_m314_start_tr_heli_xy((ushort)m_nCardIndex, ref array[0], (int)Point1[0], (int)(Point1[1] / 10.0), (int)10, 9, 0, 0, (int)speed, Tacc, Tdec);
                 return rtn == 0;
             }
 
-
-
             return false;
         }
+
         public override bool AddBufIo(object objGroup, string strIoName, bool bVal, int nAxisIndexInGroup)
         {
             return true;
@@ -548,6 +557,7 @@ namespace MotionIoLib
             uint reslut = 0;
             return reslut == (uint)ErrorCode.SUCCESS;
         }
+
         public override bool ClearBufMove(object objGroup)
         {
             return false;
@@ -558,6 +568,7 @@ namespace MotionIoLib
             uint reslut = 0;
             return reslut == (uint)ErrorCode.SUCCESS;
         }
+
         public override bool SetBufMoveParam(object objGroup, double velhigh, double vellow, double acc, double dec)
         {
             uint reslut = 0;
@@ -567,8 +578,8 @@ namespace MotionIoLib
         public override bool IsInpos(int nAxisNo)
         {
             return IsAxisNormalStop(nAxisNo) == AxisState.NormalStop;
-
         }
+
         private double GetTdec(int nAxisNo, int type)
         {
             double dcc = 1.0;
@@ -592,6 +603,7 @@ namespace MotionIoLib
                 return (vel - 0) / dcc;
             }
         }
+
         private double GetTAcc(int nAxisNo, int type)
         {
             double acc = 1.0;
@@ -614,7 +626,6 @@ namespace MotionIoLib
                 vel = m_MovePrm[nAxisNo].VelL;
                 return (vel - 0) / acc;
             }
-
         }
 
         public override bool TranMMToPluse(int nAxisNo, ref double dSpeed, ref double acc, ref double dec)
@@ -629,11 +640,13 @@ namespace MotionIoLib
                     Dcc = m_MovePrm[nAxisNo].DccH;
                     speed = m_MovePrm[nAxisNo].VelH;
                     break;
+
                 case (int)SpeedType.Mid:
                     Acc = m_MovePrm[nAxisNo].AccM;
                     Dcc = m_MovePrm[nAxisNo].DccM;
                     speed = m_MovePrm[nAxisNo].VelM;
                     break;
+
                 case (int)SpeedType.Low:
                     Acc = m_MovePrm[nAxisNo].AccL;
                     Dcc = m_MovePrm[nAxisNo].DccL;
@@ -645,7 +658,6 @@ namespace MotionIoLib
             acc = Acc = (1 * Acc / m_MovePrm[nAxisNo].AxisLeadRange) * m_MovePrm[nAxisNo].PlusePerRote / 1;
             dec = Dcc = (1 * Dcc / m_MovePrm[nAxisNo].AxisLeadRange) * m_MovePrm[nAxisNo].PlusePerRote / 1;
             return true;
-
         }
 
         public override bool TransMMToPluseForHomeParam(int nAxisNo, ref double dVelH, ref double dVelL, ref double dAccH, ref double dAccL, ref double dDecH, ref double dDecL)
@@ -654,7 +666,6 @@ namespace MotionIoLib
 
             dVelL = (1 * m_HomePrm[nAxisNo].VelL / m_MovePrm[nAxisNo].AxisLeadRange) * m_MovePrm[nAxisNo].PlusePerRote / 1;
 
-
             dAccH = (1 * m_HomePrm[nAxisNo].AccH / m_MovePrm[nAxisNo].AxisLeadRange) * m_MovePrm[nAxisNo].PlusePerRote / 1;
             dAccL = (1 * m_HomePrm[nAxisNo].AccL / m_MovePrm[nAxisNo].AxisLeadRange) * m_MovePrm[nAxisNo].PlusePerRote / 1;
 
@@ -662,7 +673,6 @@ namespace MotionIoLib
             dDecL = (1 * m_HomePrm[nAxisNo].DccL / m_MovePrm[nAxisNo].AxisLeadRange) * m_MovePrm[nAxisNo].PlusePerRote / 1;
 
             return true;
-
         }
     }
 }

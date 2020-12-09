@@ -370,60 +370,60 @@
             <returns></returns>
         </member>
         <member name="T:Communicate.SocketAcceptDelegate">
-            <summary> 
-            服务器接受客户端连接请求代理 
-            </summary> 
-            <param name="sender"></param> 
-            <param name="e"></param> 
+            <summary>
+            服务器接受客户端连接请求代理
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
         </member>
         <member name="T:Communicate.RecvFileMessageDelegate">
-            <summary> 
-            SOCKET接收非字符串数据代理 
-            </summary> 
-            <param name="sender"></param> 
-            <param name="e"></param> 
+            <summary>
+            SOCKET接收非字符串数据代理
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
         </member>
         <member name="T:Communicate.RecvStringMessageDelegate">
-            <summary> 
-            SOCKET接收到字符串数据代理 
-            </summary> 
-            <param name="sender"></param> 
-            <param name="e"></param> 
+            <summary>
+            SOCKET接收到字符串数据代理
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
         </member>
         <member name="T:Communicate.SocketErrorDelegate">
-            <summary> 
-            SOCKET错误函数代理 
-            </summary> 
-            <param name="sender"></param> 
-            <param name="e"></param> 
+            <summary>
+            SOCKET错误函数代理
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
         </member>
         <member name="T:Communicate.BeginRecvBufferDelegate">
-            <summary> 
-            开始准备接收数据代理 
-            </summary> 
-            <param name="sender"></param> 
-            <param name="e"></param> 
+            <summary>
+            开始准备接收数据代理
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
         </member>
         <member name="T:Communicate.RecvBufferDelegate">
-            <summary> 
-            正在接收数据代理 
-            </summary> 
-            <param name="sender"></param> 
-            <param name="e"></param> 
+            <summary>
+            正在接收数据代理
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
         </member>
         <member name="T:Communicate.BeginSendBufferDelegate">
-            <summary> 
-            准备发送函数代理 
-            </summary> 
-            <param name="sender"></param> 
-            <param name="e"></param> 
+            <summary>
+            准备发送函数代理
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
         </member>
         <member name="T:Communicate.SendBufferDelegate">
-            <summary> 
-            正在发送函数代理 
-            </summary> 
-            <param name="sender"></param> 
-            <param name="e"></param> 
+            <summary>
+            正在发送函数代理
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
         </member>
         <member name="T:Communicate.TcpLink">
             <summary>
@@ -432,67 +432,67 @@
         </member>
         <member name="F:Communicate.TcpLink.m_nIndex">
              <summary>
-            网口号 
+            网口号
              </summary>
         </member>
         <member name="F:Communicate.TcpLink.m_strName">
              <summary>
-            网口定义 
+            网口定义
              </summary>
         </member>
         <member name="F:Communicate.TcpLink.m_strIP">
              <summary>
-            对方IP地址 
+            对方IP地址
              </summary>
         </member>
         <member name="F:Communicate.TcpLink.m_nPort">
              <summary>
-            端口号 
+            端口号
              </summary>
         </member>
         <member name="F:Communicate.TcpLink.m_nTime">
              <summary>
-            超时时间 
+            超时时间
              </summary>
         </member>
         <member name="F:Communicate.TcpLink.m_count">
              <summary>
-            命令分隔 
+            命令分隔
              </summary>
         </member>
         <member name="F:Communicate.TcpLink.m_recvBuffer">
-            <summary> 
-            内部接受数据数组 
-            </summary> 
+            <summary>
+            内部接受数据数组
+            </summary>
         </member>
         <member name="F:Communicate.TcpLink.m_recvLength">
-            <summary> 
-            已经接收到数据的大小 
-            </summary> 
+            <summary>
+            已经接收到数据的大小
+            </summary>
         </member>
         <member name="F:Communicate.TcpLink.m_recvString">
-            <summary> 
-            接收到字符串缓冲 
-            </summary> 
+            <summary>
+            接收到字符串缓冲
+            </summary>
         </member>
         <member name="F:Communicate.TcpLink.m_isRecvHeadMessage">
-            <summary> 
-            判断当前是否已经接收到消息的头部 
-            </summary> 
+            <summary>
+            判断当前是否已经接收到消息的头部
+            </summary>
         </member>
         <member name="F:Communicate.TcpLink.m_sendEvent">
-            <summary> 
-            控制发送线程信号量 
-            </summary> 
+            <summary>
+            控制发送线程信号量
+            </summary>
         </member>
         <member name="F:Communicate.TcpLink.m_path">
-            <summary> 
-            文件保存的地址 
-            </summary> 
+            <summary>
+            文件保存的地址
+            </summary>
         </member>
         <member name="F:Communicate.TcpLink.m_strLine">
              <summary>
-            命令分隔符 
+            命令分隔符
              </summary>
         </member>
         <member name="T:Communicate.TcpLink.StateChangedHandler">
@@ -507,44 +507,44 @@
             </summary>
         </member>
         <member name="E:Communicate.TcpLink.RecvFileMessageEvent">
-            <summary> 
-            接受到非字符消息触发事件 
-            </summary> 
+            <summary>
+            接受到非字符消息触发事件
+            </summary>
         </member>
         <member name="E:Communicate.TcpLink.RecvStringMessageEvent">
-            <summary> 
-            接收到字符串消息触发事件 
-            </summary> 
+            <summary>
+            接收到字符串消息触发事件
+            </summary>
         </member>
         <member name="E:Communicate.TcpLink.SocketErrorEvent">
-            <summary> 
-            当SOCKET发生异常的时候触发事件 
-            </summary> 
+            <summary>
+            当SOCKET发生异常的时候触发事件
+            </summary>
         </member>
         <member name="E:Communicate.TcpLink.BeginRecvBufferEvent">
-            <summary> 
-            开始准备接收数据触发事件 
-            </summary> 
+            <summary>
+            开始准备接收数据触发事件
+            </summary>
         </member>
         <member name="E:Communicate.TcpLink.RecvBufferEvent">
-            <summary> 
-            接收到数据触发事件 
-            </summary> 
+            <summary>
+            接收到数据触发事件
+            </summary>
         </member>
         <member name="E:Communicate.TcpLink.BeginSendBufferEvent">
-            <summary> 
-            准备发送数据触发事件 
-            </summary> 
+            <summary>
+            准备发送数据触发事件
+            </summary>
         </member>
         <member name="E:Communicate.TcpLink.SendBufferEvent">
-            <summary> 
-            每次发送一个数据块的触发事件 
-            </summary> 
+            <summary>
+            每次发送一个数据块的触发事件
+            </summary>
         </member>
         <member name="M:Communicate.TcpLink.RaiseDataReceived(System.Byte[])">
-            <summary>  
-            接收到数据事件  
-            </summary>  
+            <summary>
+            接收到数据事件
+            </summary>
         </member>
         <member name="M:Communicate.TcpLink.#ctor(System.Int32,System.String,System.String,System.Int32,System.Int32,System.String)">
             <summary>
@@ -569,9 +569,9 @@
             <returns></returns>
         </member>
         <member name="M:Communicate.TcpLink.Disconnect">
-            <summary> 
-            关闭远程服务器连接 
-            </summary> 
+            <summary>
+            关闭远程服务器连接
+            </summary>
         </member>
         <member name="M:Communicate.TcpLink.ReceiveProess(System.Int32)">
             <summary>
@@ -580,20 +580,20 @@
             <param name="count"></param>
         </member>
         <member name="M:Communicate.TcpLink.RecvCallBack(System.IAsyncResult)">
-            <summary> 
-            接收数据操作回调函数 
-            </summary> 
-            <param name="ar"></param> 
+            <summary>
+            接收数据操作回调函数
+            </summary>
+            <param name="ar"></param>
         </member>
         <member name="M:Communicate.TcpLink.CallBackConnect(System.IAsyncResult)">
              <summary>
-            网口打开时通过回调检测是否连接超时。 5秒种 
+            网口打开时通过回调检测是否连接超时。 5秒种
              </summary>
              <param name="asyncResult"></param>
         </member>
         <member name="M:Communicate.TcpLink.Open">
              <summary>
-            打开网口 
+            打开网口
              </summary>
              <returns></returns>
         </member>
@@ -605,7 +605,7 @@
         </member>
         <member name="M:Communicate.TcpLink.WriteData(System.Byte[],System.Int32)">
              <summary>
-            向网口写入数据 
+            向网口写入数据
              </summary>
              <param name="sendBytes"></param>
              <param name="nLen"></param>
@@ -613,21 +613,21 @@
         </member>
         <member name="M:Communicate.TcpLink.WriteString(System.String)">
              <summary>
-            向网口写入字符串 
+            向网口写入字符串
              </summary>
              <param name="strData"></param>
              <returns></returns>
         </member>
         <member name="M:Communicate.TcpLink.WriteLine(System.String)">
              <summary>
-            向网口写入一行字符 
+            向网口写入一行字符
              </summary>
              <param name="strData"></param>
              <returns></returns>
         </member>
         <member name="M:Communicate.TcpLink.ReadData(System.Byte[],System.Int32)">
              <summary>
-            从网口读取数据 
+            从网口读取数据
              </summary>
              <param name="bytes"></param>
              <param name="nLen"></param>
@@ -635,14 +635,14 @@
         </member>
         <member name="M:Communicate.TcpLink.ReadLine(System.String@)">
              <summary>
-            从网口读取一行数据 
+            从网口读取一行数据
              </summary>
              <param name="strData"></param>
              <returns></returns>
         </member>
         <member name="M:Communicate.TcpLink.Close">
              <summary>
-            关闭网口 
+            关闭网口
              </summary>
         </member>
         <member name="M:Communicate.TcpLink.ClearBuffer">

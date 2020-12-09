@@ -1,26 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using System.Threading;
-using HalconDotNet;
+﻿using BaseDll;
 
 //using HalconLib;
-using CameraLib;
 using CommonTools;
-using UserCtrl;
 using MotionIoLib;
-using Communicate;
-using System.Threading.Tasks;
-using System.Diagnostics;
-using BaseDll;
-using UserData;
-using log4net;
-using System.IO;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Windows.Forms;
+using UserCtrl;
 using VisionProcess;
 
 namespace StationDemo
@@ -32,7 +19,7 @@ namespace StationDemo
             InitializeComponent();
         }
 
-        public delegate void ShowSomeOnAutoScreenHander( string dealtype, params object[] osbjs);
+        public delegate void ShowSomeOnAutoScreenHander(string dealtype, params object[] osbjs);
 
         public static ShowSomeOnAutoScreenHander ShowEventOnAutoScreen;
 
@@ -40,7 +27,7 @@ namespace StationDemo
         private List<string> m_listInt = new List<string>();
         private List<string> m_listDouble = new List<string>();
 
-        public void AddFlag(string strFlagName ,bool bInitState)
+        public void AddFlag(string strFlagName, bool bInitState)
         {
             m_listFlag.Add(strFlagName);
             userPanel_Flag.AddFlag(strFlagName);
@@ -169,11 +156,11 @@ namespace StationDemo
             }
         }
 
-        public void FlushWeightVal(int num,int[] WeightVal)
+        public void FlushWeightVal(int num, int[] WeightVal)
         {
             if (InvokeRequired)
             {
-                this.BeginInvoke(new Action(() => { FlushWeightVal( num,  WeightVal); }));
+                this.BeginInvoke(new Action(() => { FlushWeightVal(num, WeightVal); }));
             }
             else
             {
@@ -182,7 +169,7 @@ namespace StationDemo
             }
         }
 
-        public class  objtest
+        public class objtest
         {
             public int a;
             public int b;
@@ -198,7 +185,7 @@ namespace StationDemo
             ParamSetMgr.GetInstance().m_eventChangedDoubleSysVal += Form_Auto_m_eventChangedDoubleSysVal;
             ParamSetMgr.GetInstance().m_eventLoadProductFile += LoadProductFile;
             label_CurrentFile.Text = "当前产品:" + ParamSetMgr.GetInstance().CurrentProductFile;
-            foreach ( var tem in StationMgr.GetInstance().GetAllStationName())
+            foreach (var tem in StationMgr.GetInstance().GetAllStationName())
             {
                 RichTxtBoxLog richTextBox = new RichTxtBoxLog();
                 Control control = null;
@@ -234,9 +221,9 @@ namespace StationDemo
 
                 StationMgr.GetInstance().GetStation(tem).SetShowRichTextBox(richTextBox);
                 StationMgr.GetInstance().GetStation(tem).m_eventRichBoxShow += ShowStationMsgOnRichTxtBox;
-;
+                ;
 
-               StationMgr.GetInstance().GetStation(tem).Info(tem + $" sd加载成功");
+                StationMgr.GetInstance().GetStation(tem).Info(tem + $" sd加载成功");
                 //for (int i = 0; i < 300; i++)
                 //{
                 //    StationMgr.GetInstance().GetStation(tem).Info(tem + $"加载成功{i}");
@@ -257,7 +244,7 @@ namespace StationDemo
 
             //添加 ------- 标志--------///
             //添加 ------- double param--------///
-            AddDoubleRtn("产品计数",0);
+            AddDoubleRtn("产品计数", 0);
             ParamSetMgr.GetInstance().SetDoubleParam("产品计数", 0);
 
             AddDoubleRtn("CT", 0);
@@ -292,10 +279,10 @@ namespace StationDemo
                 int index = m_listDouble.FindIndex(t => t == key);
                 if (index != -1)
                 {
-                    double dval=0;
+                    double dval = 0;
                     if (index < dataGridView_Sum.Rows.Count)
                     {
-                         dataGridView_Sum.Rows[index].Cells[1].Value = val.ToString();
+                        dataGridView_Sum.Rows[index].Cells[1].Value = val.ToString();
                     }
                 }
             }
@@ -303,7 +290,7 @@ namespace StationDemo
 
         private void Form_Auto_m_eventChangedBoolSysVal(string key, bool val)
         {
-            if(InvokeRequired)
+            if (InvokeRequired)
             {
                 this.BeginInvoke(new Action(() => Form_Auto_m_eventChangedBoolSysVal(key, val)));
             }
@@ -317,13 +304,13 @@ namespace StationDemo
                         userPanel_Flag.SetLebalState(key, val);
                         if (val)
                         {
-                           // dataGridView_Flag.Rows[index].Cells[1].Value = "ON";
-                          //  dataGridView_Flag.Rows[index].Cells[1].Style.BackColor = Color.LightGreen;
+                            // dataGridView_Flag.Rows[index].Cells[1].Value = "ON";
+                            //  dataGridView_Flag.Rows[index].Cells[1].Style.BackColor = Color.LightGreen;
                         }
                         else
                         {
-                          //  dataGridView_Flag.Rows[index].Cells[1].Value = "OFF";
-                          //  dataGridView_Flag.Rows[index].Cells[1].Style.BackColor = Color.LightBlue;
+                            //  dataGridView_Flag.Rows[index].Cells[1].Value = "OFF";
+                            //  dataGridView_Flag.Rows[index].Cells[1].Style.BackColor = Color.LightBlue;
                         }
                     }
                 }
@@ -332,8 +319,8 @@ namespace StationDemo
 
         private void ShowImg(object sender, EventArgs e)
         {
-         //   HObject img = CameraMgr.GetInstance().GetCamera("CHP").GetImage();
-        //    HOperatorSet.DispObj(img, (HTuple)CameraMgr.GetInstance().GetCamera("CHP").wnd);
+            //   HObject img = CameraMgr.GetInstance().GetCamera("CHP").GetImage();
+            //    HOperatorSet.DispObj(img, (HTuple)CameraMgr.GetInstance().GetCamera("CHP").wnd);
         }
 
         private void BtnReset_Click(object sender, EventArgs e)
@@ -361,17 +348,17 @@ namespace StationDemo
     public class TolNum
     {
         private TolNum()
-            {
-            }
+        {
+        }
 
-        private static TolNum tol= new TolNum();
+        private static TolNum tol = new TolNum();
         private static object lockobj = new object();
 
         public static TolNum GetIntance()
         {
-            if(tol==null)
+            if (tol == null)
             {
-                lock(lockobj)
+                lock (lockobj)
                 {
                     tol = new TolNum();
                 }
@@ -389,11 +376,11 @@ namespace StationDemo
 
         public void Save()
         {
-           tol.nSumProduct =  ParamSetMgr.GetInstance().GetDoubleParam("产品计数");
-           tol.nLeftProduct =  ParamSetMgr.GetInstance().GetDoubleParam("左废纸数");
-           tol.nRightProduct=  ParamSetMgr.GetInstance().GetDoubleParam("右废纸数");
-           tol.nLoadNozzleWorkNum= ParamSetMgr.GetInstance().GetDoubleParam("上料吸嘴数");
-           tol.nUnLoadNozzleWorkNum = ParamSetMgr.GetInstance().GetDoubleParam("下料吸嘴数");
+            tol.nSumProduct = ParamSetMgr.GetInstance().GetDoubleParam("产品计数");
+            tol.nLeftProduct = ParamSetMgr.GetInstance().GetDoubleParam("左废纸数");
+            tol.nRightProduct = ParamSetMgr.GetInstance().GetDoubleParam("右废纸数");
+            tol.nLoadNozzleWorkNum = ParamSetMgr.GetInstance().GetDoubleParam("上料吸嘴数");
+            tol.nUnLoadNozzleWorkNum = ParamSetMgr.GetInstance().GetDoubleParam("下料吸嘴数");
             tol.nLeftNozzleWorkNum = ParamSetMgr.GetInstance().GetDoubleParam("左贴装吸嘴数");
             tol.nRightNozzleWorkNum = ParamSetMgr.GetInstance().GetDoubleParam("右贴装吸嘴数");
             AccessXmlSerializer.ObjectToXml("d:\\Sum.xml", this);
@@ -401,7 +388,7 @@ namespace StationDemo
 
         public TolNum Read()
         {
-            TolNum tol1 =(TolNum) AccessXmlSerializer.XmlToObject("d:\\Sum.xml", typeof(TolNum));
+            TolNum tol1 = (TolNum)AccessXmlSerializer.XmlToObject("d:\\Sum.xml", typeof(TolNum));
             if (tol1 == null)
             {
                 tol.Save();

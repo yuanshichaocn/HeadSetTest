@@ -1,85 +1,100 @@
-﻿using System;
+﻿using BaseDll;
 using log4net;
-using System.IO.Ports;
-using BaseDll;
-using System.Windows.Forms;
-using Modbus;
 using Modbus.Device;
+using System;
+using System.IO.Ports;
+using System.Windows.Forms;
 
 namespace MotionIoLib
 {
     public class AnicetSerialPortParam
     {
-#region 属性
+        #region 属性
+
         /// <summary>
-        ///串口号 
+        ///串口号
         /// </summary>
         public int m_nComNo = 7;
+
         /// <summary>
-        ///串口定义名称 
+        ///串口定义名称
         /// </summary>
         public string m_strName = "";
+
         /// <summary>
-        ///波特率 
+        ///波特率
         /// </summary>
         public int m_nBaudRate = 19200;
+
         /// <summary>
-        ///数据位 
+        ///数据位
         /// </summary>
         public int m_nDataBit = 8;
+
         /// <summary>
-        ///校验位 
+        ///校验位
         /// </summary>
         public string m_strPartiy = "None";
+
         /// <summary>
-        ///停止位 
+        ///停止位
         /// </summary>
         public string m_strStopBit = "2";
+
         /// <summary>
-        ///流控制 
+        ///流控制
         /// </summary>
         public string m_strFlowCtrl = "None";
+
         /// <summary>
-        ///超时时间 
+        ///超时时间
         /// </summary>
         public int m_nTime = 1000;
+
         /// <summary>
-        ///缓冲区大小 
+        ///缓冲区大小
         /// </summary>
         public int m_nBufferSzie = 4096;
+
         /// <summary>
-        ///命令分隔符标志 
+        ///命令分隔符标志
         /// </summary>
         public string m_strLineFlag = "CRLF";
+
         /// <summary>
-        ///命令分隔符 
+        ///命令分隔符
         /// </summary>
         private string m_strLine;
-#endregion
 
+        #endregion 属性
     }
 
     public class IoCtrl_Anicet : IoCtrl
     {
         [NonSerialized]
         private static SerialPort _serialPort = null;
+
         [NonSerialized]
         private readonly ILog _logger = LogManager.GetLogger(nameof(IoCtrl_Anicet));
+
         [NonSerialized]
         private readonly object _disposingLock = new object();
+
         [NonSerialized]
         private static readonly object _syncRoot = new object();
+
         [NonSerialized]
         private IModbusSerialMaster _master;
 
-        static AnicetSerialPortParam anicetParam = new AnicetSerialPortParam();
+        private static AnicetSerialPortParam anicetParam = new AnicetSerialPortParam();
 
         public IoCtrl_Anicet(int nIndex, ulong nCardNo)
             : base(nIndex, nCardNo)
         {
             m_strCardName = "IoCtrl_Anicet";
         }
-        object ReadParam()
+
+        private object ReadParam()
         {
             object obj = null;
             try
@@ -97,7 +112,8 @@ namespace MotionIoLib
             }
             return obj;
         }
-        void Save()
+
+        private void Save()
         {
             string strPath = AppDomain.CurrentDomain.BaseDirectory + @"\config\Anicet.xml";
             AccessXmlSerializer.ObjectToXml(strPath, anicetParam);
@@ -141,7 +157,7 @@ namespace MotionIoLib
         }
 
         /// <summary>
-        ///释放IO卡 
+        ///释放IO卡
         /// </summary>
         public override void DeInit()
         {
@@ -149,12 +165,10 @@ namespace MotionIoLib
             {
                 _serialPort.Close();
             }
-               
-
         }
 
         /// <summary>
-        ///获取卡所有的输入信号 
+        ///获取卡所有的输入信号
         /// </summary>
         /// <param name="nData"></param>
         /// <returns></returns>
@@ -164,18 +178,17 @@ namespace MotionIoLib
         }
 
         /// <summary>
-        ///获取卡所有的输出信号 
+        ///获取卡所有的输出信号
         /// </summary>
         /// <param name="nData"></param>
         /// <returns></returns>
         public override bool ReadIOOut(ref int nData)
         {
-
             return true;
         }
 
         /// <summary>
-        ///按位获取输入信号 
+        ///按位获取输入信号
         /// </summary>
         /// <param name="nIndex"></param>
         /// <returns></returns>
@@ -192,9 +205,9 @@ namespace MotionIoLib
             {
                 lock (_syncRoot)
                 {
-                    brtn= _master.ReadCoils(slaveAddress, coilAddress, 1)[0];
+                    brtn = _master.ReadCoils(slaveAddress, coilAddress, 1)[0];
                 }
-                return brtn;   
+                return brtn;
             }
             catch (Exception ex)
             {
@@ -210,7 +223,7 @@ namespace MotionIoLib
         }
 
         /// <summary>
-        ///按位获取输出信号 
+        ///按位获取输出信号
         /// </summary>
         /// <param name="nIndex"></param>
         /// <returns></returns>
@@ -232,20 +245,17 @@ namespace MotionIoLib
             {
                 if (_serialPort.IsOpen)
                     _serialPort.Close();
-                if(!_serialPort.IsOpen)
-                _serialPort.Open();
+                if (!_serialPort.IsOpen)
+                    _serialPort.Open();
                 _master.Dispose();
-                _master= ModbusSerialMaster.CreateRtu(_serialPort);
+                _master = ModbusSerialMaster.CreateRtu(_serialPort);
                 _logger.Warn(ex.Message);
                 return false;
             }
-            
-
         }
 
-
         /// <summary>
-        /// 按位输出信号 
+        /// 按位输出信号
         /// </summary>
         /// <param name="nIndex"></param>
         /// <param name="bBit"></param>
@@ -278,6 +288,7 @@ namespace MotionIoLib
                 return false;
             }
         }
+
         public override bool WriteIo(int nData)
         {
             return true;
@@ -287,16 +298,13 @@ namespace MotionIoLib
         {
             return true;
         }
+
         public override bool InStopDisenable(int nIndex)
         {
             return true;
         }
     }
-
-
-
 }
-
 
 //public bool ReadIO(string address)
 //{

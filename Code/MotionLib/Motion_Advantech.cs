@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using gts;
-using System.Diagnostics;
-using Advantech.Motion;
+﻿using Advantech.Motion;
+using System;
 using System.Windows.Forms;
-using log4net;
+
 namespace MotionIoLib
 {
     public enum SpeedType
@@ -15,19 +9,18 @@ namespace MotionIoLib
         High,
         Mid,
         Low,
-
     }
 
     public class Motion_Advantech : MotionCardBase
     {
-        IntPtr[] m_Axishand = null;
-        IntPtr m_devPtr = new IntPtr();
+        private IntPtr[] m_Axishand = null;
+        private IntPtr m_devPtr = new IntPtr();
 
         public Motion_Advantech(ulong indexCard, string strName, int nMinAxisNo, int nMaxAxisNo)
             : base(indexCard, strName, nMinAxisNo, nMaxAxisNo)
         {
-
         }
+
         //public override int GetAxisNo(int IndexAxis)
         //{
         //    return AxisInRang(IndexAxis) ? (IndexAxis - GetMinAxisNo() ) : int.MaxValue;
@@ -70,32 +63,34 @@ namespace MotionIoLib
                 return true;
             }
         }
+
         public override bool IsOpen()
         {
             return m_bOpen;
         }
+
         public override bool Close()
         {
-
             short rtn = 0;
-            if(m_bOpen)
+            if (m_bOpen)
             {
-                uint Result = Motion.mAcm_DevClose( ref m_devPtr);
+                uint Result = Motion.mAcm_DevClose(ref m_devPtr);
                 if (Result != (uint)ErrorCode.SUCCESS)
                     return false;
-
             }
             return (uint)ErrorCode.SUCCESS == rtn;
         }
+
         public override bool ServoOn(short nAxisNo)
         {
             if (m_Axishand == null || m_Axishand[nAxisNo] == null)
                 return false;
             uint rtn = 0;
             uint svOn = 1;
-            rtn=Motion.mAcm_AxSetSvOn( m_Axishand[nAxisNo], svOn);
+            rtn = Motion.mAcm_AxSetSvOn(m_Axishand[nAxisNo], svOn);
             return (uint)ErrorCode.SUCCESS == rtn;
         }
+
         public override bool ServoOff(short nAxisNo)
         {
             if (m_Axishand == null || m_Axishand[nAxisNo] == null)
@@ -105,6 +100,7 @@ namespace MotionIoLib
             rtn = Motion.mAcm_AxSetSvOn(m_Axishand[nAxisNo], svOn);
             return (uint)ErrorCode.SUCCESS == rtn;
         }
+
         public bool ClearAlarm(short nAxisNo)
         {
             if (m_Axishand == null || m_Axishand[nAxisNo] == null)
@@ -114,22 +110,23 @@ namespace MotionIoLib
             rtn = Motion.mAcm_AxResetAlm(m_Axishand[nAxisNo], rsAlarm);
             return (uint)ErrorCode.SUCCESS == rtn;
         }
+
         public override bool AbsMove(int nAxisNo, double nPos, double nSpeed)
         {
             if (m_Axishand == null || m_Axishand[nAxisNo] == null)
                 return false;
-          
+
             uint Result = 0;
             double speed = nSpeed;
             double Acc = m_MovePrm[nAxisNo].AccH;
             double Dcc = m_MovePrm[nAxisNo].DccH;
             TranMMToPluse(nAxisNo, ref speed, ref Acc, ref Dcc);
-            Result |= Motion.mAcm_SetF64Property(m_Axishand[nAxisNo], (uint)PropertyID.PAR_AxVelLow, 0.0*speed);
+            Result |= Motion.mAcm_SetF64Property(m_Axishand[nAxisNo], (uint)PropertyID.PAR_AxVelLow, 0.0 * speed);
             if (Result != (uint)ErrorCode.SUCCESS)
             {
                 return false;
             }
-      
+
             Result |= Motion.mAcm_SetF64Property(m_Axishand[nAxisNo], (uint)PropertyID.PAR_AxVelHigh, speed);
             if (Result != (uint)ErrorCode.SUCCESS)
             {
@@ -140,11 +137,11 @@ namespace MotionIoLib
             {
                 return false;
             }
-            
+
             Result |= Motion.mAcm_SetF64Property(m_Axishand[nAxisNo], (uint)PropertyID.PAR_AxDec, Dcc);
             if (Result != (uint)ErrorCode.SUCCESS)
             {
-                return false; 
+                return false;
             }
             double AxJerk = 0;
             Result |= Motion.mAcm_SetF64Property(m_Axishand[nAxisNo], (uint)PropertyID.PAR_AxJerk, AxJerk);
@@ -154,20 +151,20 @@ namespace MotionIoLib
             }
             Result |= Motion.mAcm_AxResetError(m_Axishand[nAxisNo]);
             Result |= Motion.mAcm_AxMoveAbs(m_Axishand[nAxisNo], nPos);
-           
+
             return (Result == (uint)ErrorCode.SUCCESS);
-    
         }
+
         public override bool RelativeMove(int nAxisNo, double nPos, double nSpeed)
         {
             if (m_Axishand == null || m_Axishand[nAxisNo] == null)
                 return false;
-           
+
             uint Result = 0;
             double speed = nSpeed;
-            double Acc = m_MovePrm[nAxisNo ].AccH;
+            double Acc = m_MovePrm[nAxisNo].AccH;
             double Dcc = m_MovePrm[nAxisNo].AccL;
-    
+
             TranMMToPluse(nAxisNo, ref speed, ref Acc, ref Dcc);
             Result |= Motion.mAcm_SetF64Property(m_Axishand[nAxisNo], (uint)PropertyID.PAR_AxVelLow, 0.0 * speed);
             if (Result != (uint)ErrorCode.SUCCESS)
@@ -186,14 +183,13 @@ namespace MotionIoLib
             Result |= Motion.mAcm_SetF64Property(m_Axishand[nAxisNo], (uint)PropertyID.PAR_AxJerk, AxJerk);
             if (Result != (uint)ErrorCode.SUCCESS)
                 return false;
-            Result |=Motion.mAcm_AxResetError(m_Axishand[nAxisNo]);
+            Result |= Motion.mAcm_AxResetError(m_Axishand[nAxisNo]);
             Result |= Motion.mAcm_AxMoveRel(m_Axishand[nAxisNo], nPos);
-            return Result== (uint)ErrorCode.SUCCESS;
+            return Result == (uint)ErrorCode.SUCCESS;
         }
 
         public override bool TranMMToPluse(int nAxisNo, ref double dSpeed, ref double acc, ref double dec)
         {
-
             double speed = dSpeed;
             double Acc = m_MovePrm[nAxisNo].AccH;
             double Dcc = m_MovePrm[nAxisNo].AccL;
@@ -204,11 +200,13 @@ namespace MotionIoLib
                     Dcc = m_MovePrm[nAxisNo].DccH;
                     speed = m_MovePrm[nAxisNo].VelH;
                     break;
+
                 case (int)SpeedType.Mid:
                     Acc = m_MovePrm[nAxisNo].AccM;
                     Dcc = m_MovePrm[nAxisNo].DccM;
                     speed = m_MovePrm[nAxisNo].VelM;
                     break;
+
                 case (int)SpeedType.Low:
                     Acc = m_MovePrm[nAxisNo].AccL;
                     Dcc = m_MovePrm[nAxisNo].DccL;
@@ -216,21 +214,18 @@ namespace MotionIoLib
                     break;
             }
             //新添转换
-            dSpeed= speed = (1 * speed / m_MovePrm[nAxisNo].AxisLeadRange) * m_MovePrm[nAxisNo].PlusePerRote/1 ;//- 1- 1
-            acc= Acc = (1 * Acc / m_MovePrm[nAxisNo].AxisLeadRange) * m_MovePrm[nAxisNo].PlusePerRote/1 ;
-            dec= Dcc = (1 * Dcc / m_MovePrm[nAxisNo].AxisLeadRange) * m_MovePrm[nAxisNo].PlusePerRote/1 ;
+            dSpeed = speed = (1 * speed / m_MovePrm[nAxisNo].AxisLeadRange) * m_MovePrm[nAxisNo].PlusePerRote / 1;//- 1- 1
+            acc = Acc = (1 * Acc / m_MovePrm[nAxisNo].AxisLeadRange) * m_MovePrm[nAxisNo].PlusePerRote / 1;
+            dec = Dcc = (1 * Dcc / m_MovePrm[nAxisNo].AxisLeadRange) * m_MovePrm[nAxisNo].PlusePerRote / 1;
             return true;
-
         }
 
         public override bool TransMMToPluseForHomeParam(int nAxisNo, ref double dVelH, ref double dVelL, ref double dAccH, ref double dAccL, ref double dDecH, ref double dDecL)
         {
-
             dVelH = (1 * m_HomePrm[nAxisNo].VelH / m_MovePrm[nAxisNo].AxisLeadRange) * m_MovePrm[nAxisNo].PlusePerRote / 1;
 
             dVelL = (1 * m_HomePrm[nAxisNo].VelL / m_MovePrm[nAxisNo].AxisLeadRange) * m_MovePrm[nAxisNo].PlusePerRote / 1;
 
-         
             dAccH = (1 * m_HomePrm[nAxisNo].AccH / m_MovePrm[nAxisNo].AxisLeadRange) * m_MovePrm[nAxisNo].PlusePerRote / 1;
             dAccL = (1 * m_HomePrm[nAxisNo].AccL / m_MovePrm[nAxisNo].AxisLeadRange) * m_MovePrm[nAxisNo].PlusePerRote / 1;
 
@@ -270,34 +265,36 @@ namespace MotionIoLib
                 return false;
             rtn |= Motion.mAcm_AxResetError(m_Axishand[nAxisNo]);
             rtn |= Motion.mAcm_AxMoveVel(m_Axishand[nAxisNo], bPositive ? (ushort)0 : (ushort)1);
-            return rtn ==0;
+            return rtn == 0;
         }
+
         public override bool StopAxis(int nAxisNo)
         {
-
             if (m_Axishand == null || m_Axishand[nAxisNo] == null)
                 return false;
             return (uint)ErrorCode.SUCCESS == Motion.mAcm_AxStopDec(m_Axishand[nAxisNo]);
         }
+
         public override bool StopEmg(int nAxisNo)
         {
             if (m_Axishand == null || m_Axishand[nAxisNo] == null)
                 return false;
-                return (uint)ErrorCode.SUCCESS == Motion.mAcm_AxStopEmg(m_Axishand[nAxisNo]); 
+            return (uint)ErrorCode.SUCCESS == Motion.mAcm_AxStopEmg(m_Axishand[nAxisNo]);
         }
+
         public override bool ReasetAxis(int nAxisNo)
         {
             if (m_Axishand == null || m_Axishand[nAxisNo] == null)
                 return false;
-            return (uint)ErrorCode.SUCCESS == Motion.mAcm_AxResetError(m_Axishand[nAxisNo]); 
+            return (uint)ErrorCode.SUCCESS == Motion.mAcm_AxResetError(m_Axishand[nAxisNo]);
         }
+
         public override long GetMotionIoState(int nAxisNo)
         {
-
             if (m_Axishand == null || m_Axishand[nAxisNo] == null)
                 return -1;
             long lStandardIo = 0;
-            uint Reslut = 0;uint IOStatus = 0;
+            uint Reslut = 0; uint IOStatus = 0;
             Reslut |= Motion.mAcm_AxGetMotionIO(m_Axishand[nAxisNo], ref IOStatus);
 
             if (0 == Reslut)
@@ -322,10 +319,8 @@ namespace MotionIoLib
             {
                 return -1;
             }
-
-           
-
         }
+
         public override bool GetServoState(int nAxisNo)
         {
             if (m_Axishand == null || m_Axishand[nAxisNo] == null)
@@ -341,21 +336,22 @@ namespace MotionIoLib
                     return false;
             }
             else
-                 return false;
+                return false;
         }
+
         public override AxisState IsAxisNormalStop(int nAxisNo)
         {
             if (m_Axishand == null || m_Axishand[nAxisNo] == null)
                 return 0;
-            ushort state=0;
-            if ((uint)ErrorCode.SUCCESS == Motion.mAcm_AxGetState(m_Axishand[nAxisNo],ref state))
+            ushort state = 0;
+            if ((uint)ErrorCode.SUCCESS == Motion.mAcm_AxGetState(m_Axishand[nAxisNo], ref state))
             {
-               // logger.Info(string.Format("{0}卡{1}轴当前状态为{2}", m_nCardIndex, nAxisNo, (Advantech.Motion.AxisState)Enum.Parse(typeof(Advantech.Motion.AxisState), state.ToString())));
+                // logger.Info(string.Format("{0}卡{1}轴当前状态为{2}", m_nCardIndex, nAxisNo, (Advantech.Motion.AxisState)Enum.Parse(typeof(Advantech.Motion.AxisState), state.ToString())));
                 if ((ushort)Advantech.Motion.AxisState.STA_AX_DISABLE == state)
                 {
                     return AxisState.DriveAlarm;   //驱动器异常报警
                 }
-                else if ((ushort)Advantech.Motion.AxisState.STA_AX_ERROR_STOP== state)
+                else if ((ushort)Advantech.Motion.AxisState.STA_AX_ERROR_STOP == state)
                 {
                     return AxisState.ErrAlarm;   //轴错误停止
                 }
@@ -365,19 +361,17 @@ namespace MotionIoLib
                 }
                 if ((ushort)Advantech.Motion.AxisState.STA_AX_HOMING == state)
                 {
-
                     return AxisState.Homeing;  //正在运动中
                 }
-          
+
                 return AxisState.Moving;  //正在运动中
             }
             else
                 return AxisState.ErrAlarm;
         }
-      
+
         public override bool Home(int nAxisNo, int nParam)
         {
-
             if (m_Axishand == null || m_Axishand[nAxisNo] == null)
                 return false;
             logger.Info(string.Format("{0}卡{1}轴回原点", m_nCardIndex, nAxisNo));
@@ -405,13 +399,13 @@ namespace MotionIoLib
             if (Result != (uint)ErrorCode.SUCCESS)
                 return false;
             uint nDir = 0;
-            if(m_HomePrm[nAxisNo]._bHomeDir)
+            if (m_HomePrm[nAxisNo]._bHomeDir)
                 nDir = 0;
             else
                 nDir = 1;
             Result |= Motion.mAcm_AxHome(m_Axishand[nAxisNo], (uint)m_HomePrm[nAxisNo]._nHomeMode, nDir);
-           
-            return Result== (uint)ErrorCode.SUCCESS;
+
+            return Result == (uint)ErrorCode.SUCCESS;
         }
 
         public override bool SetActutalPos(int nAxisNo, double pos)
@@ -422,7 +416,6 @@ namespace MotionIoLib
             uint Result = 0;
             Result |= Motion.mAcm_AxSetActualPosition(m_Axishand[nAxisNo], pos);
             return Result == (uint)ErrorCode.SUCCESS;
-
         }
 
         public override bool SetCmdPos(int nAxisNo, double pos)
@@ -434,6 +427,7 @@ namespace MotionIoLib
             Result |= Motion.mAcm_AxSetCmdPosition(m_Axishand[nAxisNo], pos);
             return Result == (uint)ErrorCode.SUCCESS;
         }
+
         public override AxisState IsHomeNormalStop(int nAxisNo)
         {
             if (m_Axishand == null || m_Axishand[nAxisNo] == null)
@@ -461,15 +455,17 @@ namespace MotionIoLib
             else
                 return AxisState.ErrAlarm;   //轴错误停止
         }
+
         public override int GetAxisActPos(int nAxisNo)
         {
             if (m_Axishand == null || m_Axishand[nAxisNo] == null)
                 return 0;
-            double pos=0;
-            uint  sRtn = 0;
-            sRtn |= Motion.mAcm_AxGetActualPosition(m_Axishand[nAxisNo], ref pos);  
+            double pos = 0;
+            uint sRtn = 0;
+            sRtn |= Motion.mAcm_AxGetActualPosition(m_Axishand[nAxisNo], ref pos);
             return sRtn == 0 ? (int)pos : int.MaxValue;
         }
+
         public override int GetAxisCmdPos(int nAxisNo)
         {
             if (m_Axishand == null || m_Axishand[nAxisNo] == null)
@@ -479,6 +475,7 @@ namespace MotionIoLib
             sRtn |= Motion.mAcm_AxGetCmdPosition(m_Axishand[nAxisNo], ref pos);
             return sRtn == 0 ? (int)pos : int.MaxValue;
         }
+
         public override int GetAxisPos(int nAxisNo)
         {
             int pos = 0;
@@ -488,23 +485,23 @@ namespace MotionIoLib
                 pos = GetAxisActPos(nAxisNo);
             else
                 pos = GetAxisCmdPos(nAxisNo);
-            return pos ;
+            return pos;
         }
-       
 
         public override bool isOrgTrig(int nAxisNo)
         {
             //  throw new NotImplementedException();
             return true;
         }
+
         public override bool AddAxisToGroup(int[] nAxisArr, ref object group)
         {
             if (nAxisArr == null || group == null || nAxisArr.Length <= 0)
                 return false;
             uint reslut = 0;
-            IntPtr gouppId =IntPtr.Zero;
+            IntPtr gouppId = IntPtr.Zero;
             for (int i = 0; i < nAxisArr.Length; i++)
-                reslut|= Motion.mAcm_GpAddAxis(ref gouppId, m_Axishand[nAxisArr[i]]);
+                reslut |= Motion.mAcm_GpAddAxis(ref gouppId, m_Axishand[nAxisArr[i]]);
             if (reslut == (uint)ErrorCode.SUCCESS)
             {
                 group = gouppId;
@@ -513,6 +510,7 @@ namespace MotionIoLib
             else
                 return false;
         }
+
         public override bool CloseAxisGroup(int[] nAxisArr, ref object group)
         {
             uint reslut = 0;
@@ -523,13 +521,13 @@ namespace MotionIoLib
                 Motion.mAcm_GpRemAxis(intPtr, m_Axishand[nAxisArr[i]]);
             reslut |= Motion.mAcm_GpClose(ref intPtr);
             return reslut == (uint)ErrorCode.SUCCESS;
-
         }
+
         public override GpState GetGpState(object group)
         {
             uint reslut = 0;
 
-            ushort groupstate=0;
+            ushort groupstate = 0;
             try
             {
                 reslut |= Motion.mAcm_GpGetState((IntPtr)group, ref groupstate);
@@ -540,47 +538,54 @@ namespace MotionIoLib
                 }
                 switch (groupstate)
                 {
-                    case  (ushort)GroupState.STA_Gp_Ready:
+                    case (ushort)GroupState.STA_Gp_Ready:
                         return GpState.GpReady;
+
                     case (ushort)GroupState.STA_Gp_Motion:
                         return GpState.GpMotion;
+
                     case (ushort)GroupState.STA_Gp_Stopping:
                         return GpState.GpStoping;
+
                     case (ushort)GroupState.STA_Gp_Disable:
                         return GpState.GpDisable;
+
                     case (ushort)GroupState.STA_Gp_ErrorStop:
                         return GpState.GpErrStop;
+
                     case (ushort)GroupState.STA_GP_PAUSE:
                         return GpState.GpPause;
+
                     case (ushort)GroupState.STA_GP_AX_MOTION:
                         return GpState.Gp_AX_Motion;
                 }
                 return GpState.GpReady;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 logger.Info("获取群组状态异常（GetGpState）");
                 return GpState.GpErrStop;
             }
         }
+
         public override bool StopGp(object group)
         {
             uint reslut = 0;
             reslut |= Motion.mAcm_GpStopDec((IntPtr)group);
             return reslut == (uint)ErrorCode.SUCCESS;
         }
+
         public override bool ResetGpErr(object group)
         {
             uint reslut = 0;
             reslut |= Motion.mAcm_GpResetError((IntPtr)group);
             return reslut == (uint)ErrorCode.SUCCESS;
         }
-        public override bool Line2Axisabs(IntPtr group, int xAxis, int yAxis,double xpos, double ypos, double acc,double dec, double velrun,double velori=0)
+
+        public override bool Line2Axisabs(IntPtr group, int xAxis, int yAxis, double xpos, double ypos, double acc, double dec, double velrun, double velori = 0)
         {
-            
             try
             {
-             
                 uint reslut = 0;
                 reslut |= Motion.mAcm_SetF64Property(group, (uint)PropertyID.PAR_GpVelLow, velori);
                 reslut |= Motion.mAcm_SetF64Property(group, (uint)PropertyID.PAR_GpVelHigh, velrun);
@@ -598,43 +603,47 @@ namespace MotionIoLib
 
                 return reslut == (uint)ErrorCode.SUCCESS;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 logger.Info("Line2Axisabs运动异常：" + e.Message);
-              
+
                 return false;
             }
             return false;
-
         }
-        public override bool AddBufMove(object objGroup,BufMotionType type, int mode, int nAxisNum, double velHigh, double velLow, double[] Point1, double[] Point2)
-        {
 
+        public override bool AddBufMove(object objGroup, BufMotionType type, int mode, int nAxisNum, double velHigh, double velLow, double[] Point1, double[] Point2)
+        {
             ushort Cmd = 0;
             switch (type)
             {
                 case BufMotionType.buf_Line3dAbs:
                     Cmd = (ushort)PathCmd.Abs3DLine;
                     break;
-               
+
                     break;
+
                 case BufMotionType.buf_Line2dAbs:
                     Cmd = (ushort)PathCmd.Abs2DLine;
                     break;
+
                 case BufMotionType.buf_Arc2dAbsCCW:
                     Cmd = (ushort)PathCmd.Abs2DArcCCW;
                     break;
+
                 case BufMotionType.buf_Arc2dAbsCW:
                     Cmd = (ushort)PathCmd.Abs2DArcCW;
                     break;
+
                 case BufMotionType.buf_end:
                     Cmd = (ushort)PathCmd.EndPath;
                     break;
+
                 default:
-                        MessageBox.Show("path运动类型不对", "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("path运动类型不对", "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return false;
             }
-            uint nAxisCount =(uint) nAxisNum;
+            uint nAxisCount = (uint)nAxisNum;
 
             IntPtr GpHand = (IntPtr)objGroup;
             uint reslut = 0;
@@ -643,19 +652,20 @@ namespace MotionIoLib
               Point1,
               Point2 //  new double[] { 0,0}
             , ref nAxisCount);
-           
+
             return reslut == (uint)ErrorCode.SUCCESS;
         }
-        public override bool AddBufIo(object objGroup,string strIoName, bool bVal, int nAxisIndexInGroup)
+
+        public override bool AddBufIo(object objGroup, string strIoName, bool bVal, int nAxisIndexInGroup)
         {
             bool bFindIo = false;
-            int nAxisIndex=0, nIoIndex = 0;
-            if(IOMgr.GetInstace().GetOutputDic()!=null)
+            int nAxisIndex = 0, nIoIndex = 0;
+            if (IOMgr.GetInstace().GetOutputDic() != null)
             {
                 if (IOMgr.GetInstace().GetOutputDic().ContainsKey(strIoName))
                 {
                     bFindIo = true;
-                    nAxisIndex=IOMgr.GetInstace().GetOutputDic()[strIoName]._AxisIndex;
+                    nAxisIndex = IOMgr.GetInstace().GetOutputDic()[strIoName]._AxisIndex;
                     nIoIndex = IOMgr.GetInstace().GetOutputDic()[strIoName]._IoIndex;
                 }
             }
@@ -669,13 +679,13 @@ namespace MotionIoLib
                 MessageBox.Show("轴号在群组的索引超出", "Err", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
-              
-            double[] Point1 = new double[3] { 0, 0, 0 }; 
-            if(bVal)
-                Point1[nAxisIndexInGroup] = ((0x1 << nIoIndex )) << 16 | (0x1 << nIoIndex);
+
+            double[] Point1 = new double[3] { 0, 0, 0 };
+            if (bVal)
+                Point1[nAxisIndexInGroup] = ((0x1 << nIoIndex)) << 16 | (0x1 << nIoIndex);
             else
-                Point1[nAxisIndexInGroup] = ((0x1 << nIoIndex )) << 16 | (0x0 << nIoIndex);
-      
+                Point1[nAxisIndexInGroup] = ((0x1 << nIoIndex)) << 16 | (0x0 << nIoIndex);
+
             uint ArraryElements = 3;
             IntPtr GpHand = (IntPtr)objGroup;
             ushort Cmd = (ushort)PathCmd.DOControl;
@@ -695,15 +705,16 @@ namespace MotionIoLib
             ushort Cmd = (ushort)PathCmd.GPDELAY;
             uint reslut = 0;
             reslut = Motion.mAcm_GpAddPath(GpHand, Cmd, 0, nTime, 2000, null, null, ref ArraryElements);
-       
-            return reslut== (uint)ErrorCode.SUCCESS;
+
+            return reslut == (uint)ErrorCode.SUCCESS;
         }
+
         public override bool ClearBufMove(object objGroup)
         {
             IntPtr GpHand = (IntPtr)objGroup;
-           // Motion.mAcm_GpResetPath(ref GpHand);
+            // Motion.mAcm_GpResetPath(ref GpHand);
             Motion.mAcm_GpResetError(GpHand);
-            return Motion.mAcm_GpResetPath(ref GpHand)== (uint)ErrorCode.SUCCESS;
+            return Motion.mAcm_GpResetPath(ref GpHand) == (uint)ErrorCode.SUCCESS;
         }
 
         public override bool StartBufMove(object objGroup)
@@ -712,15 +723,12 @@ namespace MotionIoLib
             uint reslut = 0;
             reslut = Motion.mAcm_GpMovePath(GpHand, IntPtr.Zero);
             return reslut == (uint)ErrorCode.SUCCESS;
-
-
         }
-        public override bool SetBufMoveParam(object objGroup,double velhigh,double vellow,double acc, double dec)
+
+        public override bool SetBufMoveParam(object objGroup, double velhigh, double vellow, double acc, double dec)
         {
             IntPtr GpHand = (IntPtr)objGroup;
             uint reslut = 0;
-
-        
 
             reslut |= Motion.mAcm_SetF64Property(GpHand, (uint)PropertyID.PAR_GpVelHigh, velhigh);
             reslut |= Motion.mAcm_SetF64Property(GpHand, (uint)PropertyID.PAR_GpVelLow, vellow);
@@ -736,7 +744,6 @@ namespace MotionIoLib
         public override bool IsInpos(int nAxisNo)
         {
             return IsAxisNormalStop(nAxisNo) == AxisState.NormalStop;
-          
         }
     }
 }

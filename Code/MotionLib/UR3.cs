@@ -1,9 +1,5 @@
 ﻿using MotionIoLib;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MotionLib
 {
@@ -12,7 +8,7 @@ namespace MotionLib
         public RobotUR3(string strName, string strPwd, string strEth, int nAxisNoMin, int nAxisNoMax, RobotCommunicateType robotCommunicateType = RobotCommunicateType.Eth) : base(strName, strPwd, strEth, nAxisNoMin, nAxisNoMax, robotCommunicateType)
         {
         }
-            
+
         public override bool Abort()
         {
             throw new NotImplementedException();

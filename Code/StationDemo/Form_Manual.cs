@@ -1,30 +1,10 @@
-﻿using BaseDll;
-using EpsonRobot;
+﻿using CameraLib;
+using CommonTools;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using UserData;
-using VisionProcess;
-using HalconDotNet;
-using CommonTools;
-using UserCtrl;
-using CameraLib;
-using System.IO;
-using System.Diagnostics;
 using System.Threading;
-using MotionIoLib;
-using System.Threading.Tasks;
-
-using System.Reflection;
-using OtherDevice;
-
-using CommonDlg;
-using MachineSafe;
+using System.Windows.Forms;
+using VisionProcess;
 
 namespace StationDemo
 {
@@ -34,6 +14,7 @@ namespace StationDemo
         {
             InitializeComponent();
         }
+
         public void ChagedPrItem(string name)
         {
             if (InvokeRequired)
@@ -72,32 +53,17 @@ namespace StationDemo
             }
             VisionMgr.GetInstance().PrItemChangedEvent += ChagedPrItem;
             ChagedPrItem("");
-
- 
         }
-
-       
-      
-
-
-     
-     
-
-
-
-      
 
         private void OnVisibleChanged(object sender, EventArgs e)
         {
             if (Visible)
             {
-
-               // IOMgr.GetInstace().m_eventIoOutputChanageByName += ChangedIoOutState;
+                // IOMgr.GetInstace().m_eventIoOutputChanageByName += ChangedIoOutState;
             }
             else
             {
-
-               // IOMgr.GetInstace().m_eventIoOutputChanageByName -= ChangedIoOutState;
+                // IOMgr.GetInstace().m_eventIoOutputChanageByName -= ChangedIoOutState;
             }
         }
 
@@ -156,8 +122,6 @@ namespace StationDemo
                 CameraMgr.GetInstance().BindWindow(camname, visionControl1);
                 CameraMgr.GetInstance().ClaerPr(camname);
                 CameraMgr.GetInstance().GetCamera(camname).SetTriggerMode(CameraModeType.Software);
-
- 
             }
             );
 
@@ -173,20 +137,11 @@ namespace StationDemo
             if (dialogResult == DialogResult.Yes)
             {
                 DoWhile.StopCirculate();
-
             }
-
         }
 
         public void BtnEnable(bool benable = true)
         {
-     
         }
-
-     
-
-       
-
-   
     }
 }

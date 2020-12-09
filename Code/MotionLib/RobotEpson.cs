@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using BaseDll;
 using Communicate;
 using Microsoft.VisualBasic;
-using System.Windows.Forms;
-using System.Threading;
-using System.Globalization;
-using BaseDll;
+using System;
 using System.Diagnostics;
+using System.Globalization;
+using System.Linq;
+using System.Threading;
+using System.Windows.Forms;
+
 namespace MotionIoLib
 {
     public class Robot_EPSON : RobotBase
@@ -38,12 +38,12 @@ namespace MotionIoLib
             EpsonErrLog.ErrorMess = "";
             ConnectRemoteEpsonTCPIPOk = false;
 
-
             if (CommuncateType == CommuncateItf.Internet)
             {
                 RobotCommucate = (TcpLink)CommuncateInterface;
             }
         }
+
         /// <summary>
         /// 构造命令
         /// </summary>
@@ -63,7 +63,7 @@ namespace MotionIoLib
                         strPara += ',';
                     }
                     strPara = strPara.Substring(0, strPara.Length - 1);
-                  
+
                     string a = string.Format("${0},\"{1} {2}\"", cmd.ToString(), args[0], strPara);
                     return string.Format("${0},\"{1} {2}\"", cmd.ToString(), args[0], strPara);
                 }
@@ -72,9 +72,8 @@ namespace MotionIoLib
                     string a = string.Format("${0},\"{1} {2}\"", cmd.ToString(), args[0], strPara);
                     return string.Format("${0},\"{1}\"", cmd.ToString(), args[0]);
                 }
-
             }
-            else if (cmd== ERemotCMD.GetIO)
+            else if (cmd == ERemotCMD.GetIO)
             {
                 string a = string.Format("${0},{1}\" {2}", cmd.ToString(), args[0], RobotCommucate.GetEndFlag());
                 return a;// string.Format("${0}{1}", cmd.ToString(), strPara);
@@ -94,7 +93,6 @@ namespace MotionIoLib
                 string a = string.Format("${0},\" {1}{2}\"", cmd.ToString(), args[0], strPara);
                 return string.Format("${0}{1}", cmd.ToString(), strPara);
             }
-
         }
 
         /// <summary>
@@ -106,7 +104,7 @@ namespace MotionIoLib
         {
             int lengthEndFlag = RobotCommucate.GetEndFlag().Length;
             if (errorID.Length > lengthEndFlag)
-                errorID= errorID.Substring(0, errorID.Length - lengthEndFlag);
+                errorID = errorID.Substring(0, errorID.Length - lengthEndFlag);
             switch (errorID)
             {
                 case "10": return "远程命令未以$开头";
@@ -136,7 +134,6 @@ namespace MotionIoLib
                     {
                         WResponseInfo(ERemotCMD.Login, true);
                         rs.Login = true;
-
                     }
                     else
                     {
@@ -146,7 +143,6 @@ namespace MotionIoLib
                 //登出
                 else if (args.Message.Contains("Logout"))
                 {
-
                     if (args.Message.Contains("#Logout"))
                     {
                         WResponseInfo(ERemotCMD.Logout, true);
@@ -265,7 +261,6 @@ namespace MotionIoLib
                     {
                         WResponseInfo(ERemotCMD.GetCurRobot, false);
                     }
-
                 }
                 //原点
                 else if (args.Message.Contains("Home"))
@@ -325,8 +320,6 @@ namespace MotionIoLib
                         string bit16high = args.Message.Split(',')[1].Substring(0, 2);
                         Status.IoIn0 = Int16.Parse(bit16low, NumberStyles.HexNumber);
                         Status.IoIn1 = Int16.Parse(bit16high, NumberStyles.HexNumber);
-
-                      
                     }
                     else
                     {
@@ -341,8 +334,8 @@ namespace MotionIoLib
                         WResponseInfo(ERemotCMD.GetIO, true);
                         int nIndex = Convert.ToInt32(CEParam);
                         string str = args.Message.Split(',')[1];
-                        int temp=((short)(Convert.ToUInt16(str) << nIndex));
-                        if(temp>0)
+                        int temp = ((short)(Convert.ToUInt16(str) << nIndex));
+                        if (temp > 0)
                             Status.IoIn0 = (short)((int)Status.IoIn0 | temp);
                         else
                             Status.IoIn0 = (short)((int)Status.IoIn0 & temp);
@@ -509,7 +502,6 @@ namespace MotionIoLib
                         {
                             if (args.Message.Length > 12) ResolveHordr(args.Message);
                         }
-
                     }
                 }
                 //中止命令
@@ -552,15 +544,16 @@ namespace MotionIoLib
                     int lengthEndFlag = RobotCommucate.GetEndFlag().Length;
                     string str = args.Message.Length > lengthEndFlag ? args.Message.Substring(0, args.Message.Length - lengthEndFlag) : args.Message;
 
-                    Warn(string.Format("应答:错误内容 {0}，{1},{2}", str, CEParam, ConvertErrorID(array[1]))+"\r\n");
+                    Warn(string.Format("应答:错误内容 {0}，{1},{2}", str, CEParam, ConvertErrorID(array[1])) + "\r\n");
                 }
             }
         }
+
         ///接收其他响应信息
         private void ReceiveOthre(object sender, AsyTcpSocketEventArgs args)
         {
             //if (config.DisplayResponce)
-            
+
             {
                 if (!args.Message.Contains("!") &&
                     !args.Message.Contains("#GetStatus") &&
@@ -568,17 +561,17 @@ namespace MotionIoLib
                     !CEParam.Contains(Spel.PrintRobotInfo_0) &&
                     !CEParam.Contains(Spel.PrintRobotInfo_2))
                 {
-                   // if (config.EnableDisplayInfo)
+                    // if (config.EnableDisplayInfo)
                     {
-                        
                         Console.WriteLine("recive ReceiveOthre");
                         int lengthEndFlag = RobotCommucate.GetEndFlag().Length;
                         string str = args.Message.Length > lengthEndFlag ? args.Message.Substring(0, args.Message.Length - lengthEndFlag) : args.Message;
-                         ShowLog(string.Format("应答:内容 {0} 用时 {1} ", str, swOutTime.ElapsedMilliseconds)+"\r\n");
+                        ShowLog(string.Format("应答:内容 {0} 用时 {1} ", str, swOutTime.ElapsedMilliseconds) + "\r\n");
                     }
                 }
             }
         }
+
         ///过滤响应信息
         private bool ReceiveFilt(object sender, AsyTcpSocketEventArgs args)
         {
@@ -593,6 +586,7 @@ namespace MotionIoLib
         }
 
         #region 解析
+
         // 解析控制器状态
         private bool ResolveControlInfo(string str)
         {
@@ -691,8 +685,8 @@ namespace MotionIoLib
                     Status.ControlInfo.Ready = false;
                 }
                 //if (statusOld.ControlInfo != Status.ControlInfo)
-                    if (m_GetRobotStateChangedHandle != null)
-                        m_GetRobotStateChangedHandle(statusOld.ControlInfo);
+                if (m_GetRobotStateChangedHandle != null)
+                    m_GetRobotStateChangedHandle(statusOld.ControlInfo);
                 statusOld.ControlInfo = Status.ControlInfo;
             }
             catch (Exception ex)
@@ -782,7 +776,7 @@ namespace MotionIoLib
                 Status.PosInfo.W = double.Parse(value[6].Substring(0, 9).Replace(" ", ""));
                 Status.PosInfo.Hand = value[6].Contains("R") ? true : false;
                 Status.PosInfo.LocalNo = Convert.ToInt32(value[6].Substring(6, value.Length - 6));
-             //   if(Status.PosInfo!= statusOld.PosInfo)
+                //   if(Status.PosInfo!= statusOld.PosInfo)
                 if (m_UpdateRobotStateChangedHandle != null)
                     m_UpdateRobotStateChangedHandle(Status.PosInfo);
                 statusOld.PosInfo = Status.PosInfo;
@@ -795,7 +789,7 @@ namespace MotionIoLib
             return true;
         }
 
-        //解析点信息 
+        //解析点信息
         private bool ResolvePoint(string str)
         {
             try
@@ -855,7 +849,6 @@ namespace MotionIoLib
                 {
                     Status.PosInfo.P4 = Convert.ToInt32(str.Substring(10, str.Length - 10));
                 }
-
             }
             catch (Exception ex)
             {
@@ -864,7 +857,8 @@ namespace MotionIoLib
             }
             return true;
         }
-        #endregion
+
+        #endregion 解析
 
         /// <summary>
         /// 执行的go函数
@@ -943,7 +937,6 @@ namespace MotionIoLib
                     RobotExecuteBusy = false;
                     return false;
                 }
-
             }
             catch (Exception ex)
             {
@@ -955,11 +948,11 @@ namespace MotionIoLib
                 return false;
             }
         }
+
         public override bool AbsMove(string EpsonPoint)
         {
             try
             {
-
                 //远程以太网命令格式：$ 远程命令{, parameter....} 终端
                 //Execute           命令字符串              执行命令                                          Auto开/Ready开/Error关/EStop关/Safeguard关
                 //----------------------------------------------------
@@ -1028,7 +1021,6 @@ namespace MotionIoLib
                     RobotExecuteBusy = false;
                     return false;
                 }
-
             }
             catch (Exception ex)
             {
@@ -1042,7 +1034,6 @@ namespace MotionIoLib
 
         public override bool Close()
         {
-
             if (Logout() == false)
             {
                 return false;
@@ -1055,6 +1046,7 @@ namespace MotionIoLib
                 return false;
             }
         }
+
         /// <summary>
         /// 获取实际坐标值（不可用）
         /// </summary>
@@ -1064,23 +1056,24 @@ namespace MotionIoLib
         {
             return -1;
         }
+
         public override bool GetAxisActPos(ref PositionInfo EpsonPos)
         {
             try
             {
-               bool? bRtn=  ExecuteCMD(ERemotCMD.Execute, Spel.RealPos);
+                bool? bRtn = ExecuteCMD(ERemotCMD.Execute, Spel.RealPos);
                 if (bRtn == null)
                     return false;
-                else if (bRtn==true)
+                else if (bRtn == true)
                 {
-
-                    EpsonPos= Status.PosInfo;
+                    EpsonPos = Status.PosInfo;
                     return true;
                 }
                 else
                     return false;
 
                 #region old code
+
 #if false
                 //判断是否正在执行命令，不然会丢失指令
                 if (this.RobotExecuteBusy == true)
@@ -1129,7 +1122,6 @@ namespace MotionIoLib
 
                 if (FeedBackMessageFromRobot.IndexOf("!") == -1 && FeedBackMessageFromRobot != "") //& FeedBackMessageFromRobot.Length > 40
                 {
-
                     try
                     {
                         int i;
@@ -1161,7 +1153,6 @@ namespace MotionIoLib
                         {
                             EpsonPos.HandStyle = RobotHand.RightHand;
                         }
-
                     }
                     catch (Exception ex)
                     {
@@ -1184,7 +1175,8 @@ namespace MotionIoLib
                     return false;
                 }
 #endif
-                    #endregion
+
+                #endregion old code
             }
             catch (Exception ex)
             {
@@ -1195,6 +1187,7 @@ namespace MotionIoLib
                 return false;
             }
         }
+
         /// <summary>
         /// 获取当前位置坐标值（不可用）
         /// </summary>
@@ -1204,6 +1197,7 @@ namespace MotionIoLib
         {
             return -1;
         }
+
         public override int GetAxisPos(int nAxisNo)
         {
             return -1;
@@ -1254,7 +1248,7 @@ namespace MotionIoLib
                 //int i;
                 //i = FeedBackMessageFromRobot.IndexOf(",");
 
-                //if (FeedBackMessageFromRobot[i + 3] == '1')  //& FeedBackMessageFromRobot[i + 11]=='1' 
+                //if (FeedBackMessageFromRobot[i + 3] == '1')  //& FeedBackMessageFromRobot[i + 11]=='1'
                 //{
                 FeedBackMessageFromRobot = RobotSendCmd("$GetIOWord," + nAxisNo);
                 //}
@@ -1293,7 +1287,6 @@ namespace MotionIoLib
                     RobotExecuteBusy = false;
                     return -1;
                 }
-
             }
             catch (Exception ex)
             {
@@ -1314,7 +1307,7 @@ namespace MotionIoLib
         {
             try
             {
-             bool? bRtn=   ExecuteCMD(ERemotCMD.Execute, Spel.Home);
+                bool? bRtn = ExecuteCMD(ERemotCMD.Execute, Spel.Home);
                 if (bRtn == null)
                     return false;
                 else
@@ -1339,6 +1332,7 @@ namespace MotionIoLib
         {
             return true;
         }
+
         public override bool JogMove(int nAxisNo, bool bPositive, int bStart, int nSpeed)
         {
             return RelativeMove(nAxisNo, 1, nSpeed);
@@ -1348,7 +1342,6 @@ namespace MotionIoLib
         {
             Receive_Data(null, e);
         }
-
 
         public override bool Open()
         {
@@ -1361,7 +1354,6 @@ namespace MotionIoLib
             }
             else
             {
-
                 Thread.Sleep(100);
                 if (ConnectEPSON() == false)
                 {
@@ -1394,10 +1386,11 @@ namespace MotionIoLib
             }
             return true;
         }
+
         public bool? ExecuteCMD(ERemotCMD cmd, params string[] param)
         {
             if (!RobotCommucate.IsConnected) { return null; }
-            bool bIsLogin = rs.Login == null ? false :(bool) rs.Login;
+            bool bIsLogin = rs.Login == null ? false : (bool)rs.Login;
             if (!bIsLogin) { Warn("未连接登陆,执行远程命令失败."); return null; }
             lock (lockER)
             {
@@ -1413,8 +1406,8 @@ namespace MotionIoLib
                     byte[] buffer = System.Text.Encoding.Default.GetBytes(strCmd);
 
                     RobotCommucate.WriteData(buffer, strCmd.Length);
-                   
-                    if (false )//config.DisplayTime
+
+                    if (false)//config.DisplayTime
                     {
                         //if (cmd != ERemotCMD.GetStatus && cmd != ERemotCMD.GetIOWord)
                         //{
@@ -1424,7 +1417,7 @@ namespace MotionIoLib
                     }
                     while (RResponseInfo(cmd) == null)
                     {
-                        if (swOutTime.ElapsedMilliseconds >robotInfo.timeout)
+                        if (swOutTime.ElapsedMilliseconds > robotInfo.timeout)
                         {
                             ShowLog(string.Format("应答超时：命令 {0} 超时 {1}", cmd, robotInfo));
                             return false;
@@ -1440,14 +1433,13 @@ namespace MotionIoLib
                 }
             }
             return RResponseInfo(cmd);
-
         }
 
-      
         public override bool ReasetAxis(int nAxisNo)
         {
             return ResetRobot();
         }
+
         /// <summary>
         /// 默认是本地坐标系
         /// </summary>
@@ -1471,21 +1463,27 @@ namespace MotionIoLib
                 case 0:
                     AxisNum = "X";
                     break;
+
                 case 1:
                     AxisNum = "Y";
                     break;
+
                 case 2:
                     AxisNum = "Z";
                     break;
+
                 case 3:
                     AxisNum = "U";
                     break;
+
                 case 4:
                     AxisNum = "V";
                     break;
+
                 case 5:
                     AxisNum = "W";
                     break;
+
                 default:
                     EpsonErrLog.ErrorMess = "Param is error\r\n";
                     EpsonErrLog.ErrorCmd = "RelativeMove";
@@ -1495,11 +1493,10 @@ namespace MotionIoLib
             }
             try
             {
-
                 bool? brtn;
-                brtn=  ExecuteCMD(ERemotCMD.Execute, new string[3] { Spel.Accel, "20", "20" });
-                brtn= brtn&ExecuteCMD(ERemotCMD.Execute, new string[3] { Spel.Accels, "20", "20" });
-                string dis = string.Format("Here + {0}({1})", AxisNum,  nPos.ToString());
+                brtn = ExecuteCMD(ERemotCMD.Execute, new string[3] { Spel.Accel, "20", "20" });
+                brtn = brtn & ExecuteCMD(ERemotCMD.Execute, new string[3] { Spel.Accels, "20", "20" });
+                string dis = string.Format("Here + {0}({1})", AxisNum, nPos.ToString());
                 if (nAxisNo != 3)
                 {
                     brtn &= ExecuteCMD(ERemotCMD.Execute, new string[] { Spel.Move, dis });
@@ -1512,7 +1509,6 @@ namespace MotionIoLib
                     return false;
                 else
                     return (bool)brtn;
-
             }
             catch (Exception ex)
             {
@@ -1524,6 +1520,7 @@ namespace MotionIoLib
                 return false;
             }
         }
+
         public override bool RelativeMove(int nAxisNo, double nPos, int nSpeed, CoordinateSys EpsonCoord)
         {
             string Cmd = string.Empty;
@@ -1556,21 +1553,27 @@ namespace MotionIoLib
                 case 0:
                     AxisNum = "X";
                     break;
+
                 case 1:
                     AxisNum = "Y";
                     break;
+
                 case 2:
                     AxisNum = "Z";
                     break;
+
                 case 3:
                     AxisNum = "U";
                     break;
+
                 case 4:
                     AxisNum = "V";
                     break;
+
                 case 5:
                     AxisNum = "W";
                     break;
+
                 default:
                     EpsonErrLog.ErrorMess = "Param is error\r\n";
                     EpsonErrLog.ErrorCmd = "RelativeMove";
@@ -1579,7 +1582,6 @@ namespace MotionIoLib
             }
             try
             {
-
                 //判断是否正在执行命令，不然会丢失指令
                 if (this.RobotExecuteBusy == true)
                 {
@@ -1605,7 +1607,7 @@ namespace MotionIoLib
                 //int i;
                 //i = FeedBackMessageFromRobot.IndexOf(",");
 
-                //if (FeedBackMessageFromRobot[i + 3] == '1')  //& FeedBackMessageFromRobot[i + 11]=='1' 
+                //if (FeedBackMessageFromRobot[i + 3] == '1')  //& FeedBackMessageFromRobot[i + 11]=='1'
                 //{
                 FeedBackMessageFromRobot = RobotSendCmd("$Execute,\"" + Cmd + " Here + " + AxisNum + "(" +
                     nPos + ")" + "\"");
@@ -1632,7 +1634,6 @@ namespace MotionIoLib
                     RobotExecuteBusy = false;
                     return false;
                 }
-
             }
             catch (Exception ex)
             {
@@ -1643,6 +1644,7 @@ namespace MotionIoLib
                 return false;
             }
         }
+
         public override bool ServoOff()
         {
             // nAxisNo = 1;
@@ -1661,12 +1663,12 @@ namespace MotionIoLib
                 return false;
             }
         }
+
         public override bool ServoOn()
         {
             // nAxisNo = 1;
             try
             {
-
                 bool? brtn = ExecuteCMD(ERemotCMD.SetMotorsOn, new string[] { "1" });
                 bool bok = brtn == null ? false : (bool)brtn;
                 return bok;
@@ -1680,11 +1682,11 @@ namespace MotionIoLib
                 return false;
             }
         }
+
         public override bool StopAxis(int nAxisNo)
         {
             try
             {
-
                 if (nAxisNo < 1 | nAxisNo > 6)
                 {
                     EpsonErrLog.ErrorMess = "Param is error\r\n";
@@ -1738,7 +1740,7 @@ namespace MotionIoLib
                 //brake on, 1
                 //brake off, 1
 
-                //if (FeedBackMessageFromRobot[i + 3] == '1')  //& FeedBackMessageFromRobot[i + 11]=='1' 
+                //if (FeedBackMessageFromRobot[i + 3] == '1')  //& FeedBackMessageFromRobot[i + 11]=='1'
                 //{
                 FeedBackMessageFromRobot = RobotSendCmd("$Execute,\"Brake on, " +
                     nAxisNo + "\"");
@@ -1765,7 +1767,6 @@ namespace MotionIoLib
                     RobotExecuteBusy = false;
                     return false;
                 }
-
             }
             catch (Exception ex)
             {
@@ -1776,6 +1777,7 @@ namespace MotionIoLib
                 return false;
             }
         }
+
         public override string RobotSendCmd(string Command)
         {
             string strReceived = "";
@@ -1821,11 +1823,12 @@ namespace MotionIoLib
                 return strReceived;
             }
         }
+
         public override bool Login(string LoginRobotPassword)
         {
             try
             {
-                string strCmd=  CreateCMD(ERemotCMD.Login, robotInfo.PassWard);
+                string strCmd = CreateCMD(ERemotCMD.Login, robotInfo.PassWard);
                 strCmd = strCmd + RobotCommucate.GetEndFlag();
                 byte[] buffer = System.Text.Encoding.Default.GetBytes(strCmd);
                 RobotCommucate.WriteData(buffer, strCmd.Length);
@@ -1833,24 +1836,23 @@ namespace MotionIoLib
                 Thread.Sleep(200);
                 bool bExceRtn = false;
                 stopwatch.Restart();
-                while (rs.Login ==null)
+                while (rs.Login == null)
                 {
-                    if(stopwatch.ElapsedMilliseconds > 3000)
+                    if (stopwatch.ElapsedMilliseconds > 3000)
                         break;
                     Thread.Sleep(1);
                 }
-               if( rs.Login==null )
-                    { ShowLog("登陆机器人失败"); return false; } 
-               else if(rs.Login==false)
+                if (rs.Login == null)
+                { ShowLog("登陆机器人失败"); return false; }
+                else if (rs.Login == false)
                 {
                     ShowLog("登陆机器人失败"); return false;
                 }
-               else
+                else
                 {
                     ShowLog("登陆机器人成功");
                     return true;
                 }
-                     
             }
             catch (Exception ex)
             {
@@ -1861,6 +1863,7 @@ namespace MotionIoLib
                 return false;
             }
         }
+
         public override bool Logout()
         {
             try
@@ -1899,8 +1902,8 @@ namespace MotionIoLib
                 ErrorDisPlay(this, ea);
                 return false;
             }
-
         }
+
         public override bool StartMission(int NumberOfMission)
         {
             try
@@ -1970,7 +1973,6 @@ namespace MotionIoLib
                     this.RobotExecuteBusy = false;
                     return false;
                 }
-
             }
             catch (Exception ex)
             {
@@ -1981,18 +1983,18 @@ namespace MotionIoLib
                 return false;
             }
         }
-        public override bool GetRobotStatus(ref string Statuss, bool bGetFromBuff=false )
+
+        public override bool GetRobotStatus(ref string Statuss, bool bGetFromBuff = false)
         {
-            
             try
             {
-            //  if(bGetFromBuff)
+                //  if(bGetFromBuff)
 
-             //   bool? brtn = ExecuteCMD(ERemotCMD.GetStatus);
+                //   bool? brtn = ExecuteCMD(ERemotCMD.GetStatus);
                 ExecuteCMD(ERemotCMD.GetIOWord, "0");
-               // ExecuteCMD(ERemotCMD.Execute, Spel.RealPos);
-              //  int nBit = BitOperat.GetBit16((ushort)Status.IoIn0, 1);
-               // ShowLog(nBit.ToString());
+                // ExecuteCMD(ERemotCMD.Execute, Spel.RealPos);
+                //  int nBit = BitOperat.GetBit16((ushort)Status.IoIn0, 1);
+                // ShowLog(nBit.ToString());
                 return true;
             }
             catch (Exception ex)
@@ -2005,6 +2007,7 @@ namespace MotionIoLib
                 return false;
             }
         }
+
         public override string ProcessResponse(string ResponseString)
         {
             string TempResponse = "", TempStr = "";
@@ -2095,6 +2098,7 @@ namespace MotionIoLib
                 return "";
             }
         }
+
         public override bool GetPointPos(string PointName, ref RobotPoint PointData)
         {
             try
@@ -2163,33 +2167,25 @@ namespace MotionIoLib
 
                 if (FeedBackMessageFromRobot.IndexOf("!") == -1 && FeedBackMessageFromRobot != "") //& FeedBackMessageFromRobot.Length > 40
                 {
-
                     try
                     {
-
                         //i = FeedBackMessageFromRobot.IndexOf(":", 0);
                         //PointData.X = Conversion.Val(FeedBackMessageFromRobot.Substring(i + 1, 9));
-
 
                         //i = FeedBackMessageFromRobot.IndexOf(":", i + 1);
                         //PointData.Y = Conversion.Val(FeedBackMessageFromRobot.Substring(i + 1, 9));
 
-
                         //i = FeedBackMessageFromRobot.IndexOf(":", i + 1);
                         //PointData.Z = Conversion.Val(FeedBackMessageFromRobot.Substring(i + 1, 9));
-
 
                         //i = FeedBackMessageFromRobot.IndexOf(":", i + 1);
                         //PointData.U = Conversion.Val(FeedBackMessageFromRobot.Substring(i + 1, 9));
 
-
                         //i = FeedBackMessageFromRobot.IndexOf(":", i + 1);
                         //PointData.V = Conversion.Val(FeedBackMessageFromRobot.Substring(i + 1, 9));
 
-
                         //i = FeedBackMessageFromRobot.IndexOf(":", i + 1);
                         //PointData.W = Conversion.Val(FeedBackMessageFromRobot.Substring(i + 1, 9));
-
 
                         //判断左右手势
                         if (FeedBackMessageFromRobot.ToUpper().IndexOf("/L") != -1)
@@ -2201,7 +2197,6 @@ namespace MotionIoLib
                         {
                             PointData.HandStyle = RobotHand.RightHand;
                         }
-
                     }
                     catch (Exception ex)
                     {
@@ -2223,7 +2218,6 @@ namespace MotionIoLib
                     RobotExecuteBusy = false;
                     return false;
                 }
-
             }
             catch (Exception ex)
             {
@@ -2235,6 +2229,7 @@ namespace MotionIoLib
                 //MessageBox.Show(ex.Message);
             }
         }
+
         //获取当前位置的坐标值
         /// <summary>
         /// 获取当前位置的坐标值
@@ -2243,7 +2238,6 @@ namespace MotionIoLib
         /// <returns></returns>
         public override bool GetCurrentPos(ref RobotPoint PointData)
         {
-
             try
             {
                 //远程以太网命令格式：$ 远程命令{, parameter....} 终端
@@ -2253,7 +2247,6 @@ namespace MotionIoLib
                 //判断是否正在执行命令，不然会丢失指令
                 if (this.RobotExecuteBusy == true)
                 {
-
                     return false;
                 }
                 else
@@ -2297,33 +2290,26 @@ namespace MotionIoLib
 
                 if (FeedBackMessageFromRobot.IndexOf("!") == -1 && FeedBackMessageFromRobot != "") //& FeedBackMessageFromRobot.Length > 40
                 {
-
                     try
                     {
                         int i;
                         i = FeedBackMessageFromRobot.IndexOf(":", 0);
                         PointData.X = Conversion.Val(FeedBackMessageFromRobot.Substring(i + 1, 9));
 
-
                         i = FeedBackMessageFromRobot.IndexOf(":", i + 1);
                         PointData.Y = Conversion.Val(FeedBackMessageFromRobot.Substring(i + 1, 9));
-
 
                         i = FeedBackMessageFromRobot.IndexOf(":", i + 1);
                         PointData.Z = Conversion.Val(FeedBackMessageFromRobot.Substring(i + 1, 9));
 
-
                         i = FeedBackMessageFromRobot.IndexOf(":", i + 1);
                         PointData.U = Conversion.Val(FeedBackMessageFromRobot.Substring(i + 1, 9));
-
 
                         i = FeedBackMessageFromRobot.IndexOf(":", i + 1);
                         PointData.V = Conversion.Val(FeedBackMessageFromRobot.Substring(i + 1, 9));
 
-
                         i = FeedBackMessageFromRobot.IndexOf(":", i + 1);
                         PointData.W = Conversion.Val(FeedBackMessageFromRobot.Substring(i + 1, 9));
-
 
                         //判断左右手势
                         if (FeedBackMessageFromRobot.ToUpper().IndexOf("/L") != -1)
@@ -2335,7 +2321,6 @@ namespace MotionIoLib
                         {
                             PointData.HandStyle = RobotHand.RightHand;
                         }
-
                     }
                     catch (Exception ex)
                     {
@@ -2358,8 +2343,6 @@ namespace MotionIoLib
                     RobotExecuteBusy = false;
                     return false;
                 }
-
-
             }
             catch (Exception ex)
             {
@@ -2371,8 +2354,8 @@ namespace MotionIoLib
                 return false;
                 //MessageBox.Show(ex.Message);
             }
-
         }
+
         public override bool SetPointPos(string PointID, string strLabel, PositionInfo NewPointData)
         {
             try
@@ -2390,9 +2373,9 @@ namespace MotionIoLib
                     NewPointData.Hand?"R":"L",NewPointData.LocalNo)};
 
                 ExecuteCMD(ERemotCMD.Execute, cmd);
-                bRtn= ExecuteCMD(ERemotCMD.Execute, string.Format("{0} {1},\"{2}\"", Spel.PLabel, index, strLabel));
-               
-                if(m_dicPointIdLabel.ContainsKey(PointID))
+                bRtn = ExecuteCMD(ERemotCMD.Execute, string.Format("{0} {1},\"{2}\"", Spel.PLabel, index, strLabel));
+
+                if (m_dicPointIdLabel.ContainsKey(PointID))
                     m_dicPointIdLabel[PointID] = strLabel;
                 else
                     m_dicPointIdLabel.Add(PointID, strLabel);
@@ -2401,7 +2384,7 @@ namespace MotionIoLib
                     m_dicLabelPointId[strLabel] = PointID;
                 else
                     m_dicLabelPointId.Add(strLabel, PointID);
-               if (bRtn == null)
+                if (bRtn == null)
                     return false;
                 else
                     return (bool)bRtn;
@@ -2491,7 +2474,6 @@ namespace MotionIoLib
                     return false;
                 }
 #endif
-
             }
             catch (Exception ex)
             {
@@ -2503,21 +2485,21 @@ namespace MotionIoLib
                 return false;
             }
         }
+
         public override bool Jump(string PointName)
         {
             try
             {
-              string   cmd = "Jump";
-              string point = PointName;
-              bool? bRtn=  ExecuteCMD(ERemotCMD.Execute, string.Format("{0} {1} ",
-                      cmd,
-                      point));
-                      
+                string cmd = "Jump";
+                string point = PointName;
+                bool? bRtn = ExecuteCMD(ERemotCMD.Execute, string.Format("{0} {1} ",
+                        cmd,
+                        point));
+
                 if (bRtn == null)
                     return false;
                 else
                     return (bool)bRtn;
-
             }
             catch (Exception ex)
             {
@@ -2529,11 +2511,12 @@ namespace MotionIoLib
                 //MessageBox.Show(ex.Message);
             }
         }
+
         public override bool SavePointPos()
         {
             try
             {
-             bool? bRtn=   ExecuteCMD(ERemotCMD.Execute, string.Format("{0} \"{1}\"", Spel.SavePoints, "robot1.pts"));
+                bool? bRtn = ExecuteCMD(ERemotCMD.Execute, string.Format("{0} \"{1}\"", Spel.SavePoints, "robot1.pts"));
                 if (bRtn == null)
                     return false;
                 else
@@ -2548,6 +2531,7 @@ namespace MotionIoLib
                 return false;
             }
         }
+
         public override bool SavePointPosWithSaveDialog()
         {
             try
@@ -2635,7 +2619,6 @@ namespace MotionIoLib
                     RobotExecuteBusy = false;
                     return false;
                 }
-
             }
             catch (Exception ex)
             {
@@ -2646,6 +2629,7 @@ namespace MotionIoLib
                 return false;
             }
         }
+
         public override bool ConnectEPSON()
         {
             if (ConnectRemoteEpsonTCPIPOk == false)
@@ -2680,7 +2664,6 @@ namespace MotionIoLib
                     ConnectRemoteEpsonTCPIPOk = false;
                     return true;
                 }
-
             }
             else
             {
@@ -2754,7 +2737,7 @@ namespace MotionIoLib
                 int i;
                 i = FeedBackMessageFromRobot.IndexOf(",");
 
-                if (FeedBackMessageFromRobot[i + 3] == '1')  //& FeedBackMessageFromRobot[i + 11]=='1' 
+                if (FeedBackMessageFromRobot[i + 3] == '1')  //& FeedBackMessageFromRobot[i + 11]=='1'
                 {
                     FeedBackMessageFromRobot = RobotSendCmd("$GetVariable," + VariableName);
                 }
@@ -2822,7 +2805,6 @@ namespace MotionIoLib
                     RobotExecuteBusy = false;
                     return false;
                 }
-
             }
             catch (Exception ex)
             {
@@ -2839,7 +2821,6 @@ namespace MotionIoLib
         {
             try
             {
-
                 //远程以太网命令格式：$ 远程命令{, parameter....} 终端
                 //SetVariable        参数名称和值{,类型}    设置备份（Global Preserve）参数中的值             Auto开/Ready开
                 //---------------------------------------------------------------------------------------------------
@@ -2873,7 +2854,7 @@ namespace MotionIoLib
                 int i;
                 i = FeedBackMessageFromRobot.IndexOf(",");
 
-                if (FeedBackMessageFromRobot[i + 3] == '1')  //& FeedBackMessageFromRobot[i + 11]=='1' 
+                if (FeedBackMessageFromRobot[i + 3] == '1')  //& FeedBackMessageFromRobot[i + 11]=='1'
                 {
                     FeedBackMessageFromRobot = RobotSendCmd("$SetVariable,"
                         + VariableName + "," + Value + "," +
@@ -2902,7 +2883,6 @@ namespace MotionIoLib
                     RobotExecuteBusy = false;
                     return false;
                 }
-
             }
             catch (Exception ex)
             {
@@ -2911,7 +2891,6 @@ namespace MotionIoLib
                 EpsonErrLog.ErrorCmd = "SetVariable";
                 ErrorDisPlay(this, ea);
                 return false;
-
             }
         }
 
@@ -2985,7 +2964,7 @@ namespace MotionIoLib
                 int i;
                 i = FeedBackMessageFromRobot.IndexOf(",");
 
-                if (FeedBackMessageFromRobot[i + 3] == '1')  //& FeedBackMessageFromRobot[i + 11]=='1' 
+                if (FeedBackMessageFromRobot[i + 3] == '1')  //& FeedBackMessageFromRobot[i + 11]=='1'
                 {
                     FeedBackMessageFromRobot = RobotSendCmd("$Execute,\"print TLSET(" + NumberOfTool + ")\"");
                 }
@@ -3000,7 +2979,6 @@ namespace MotionIoLib
 
                 if (FeedBackMessageFromRobot.IndexOf("!") == -1) //& FeedBackMessageFromRobot.Length > 40
                 {
-
                     // 需要得到返回值得样本再进行处理
                     // $Execute,"tlset 1"
                     // !Execute, 99
@@ -3030,7 +3008,6 @@ namespace MotionIoLib
                     RobotExecuteBusy = false;
                     return false;
                 }
-
             }
             catch (Exception ex)
             {
@@ -3047,7 +3024,6 @@ namespace MotionIoLib
         {
             try
             {
-
                 //远程以太网命令格式：$ 远程命令{, parameter....} 终端
                 //Execute           命令字符串              执行命令                                          Auto开/Ready开/Error关/EStop关/Safeguard关
                 //----------------------------------------------------
@@ -3118,7 +3094,7 @@ namespace MotionIoLib
                 strToolSetting = "XY(" + X.ToString() + "," + Y.ToString() + "," +
                     Z.ToString() + "," + U.ToString() + ")";
 
-                if (FeedBackMessageFromRobot[i + 3] == '1')  //& FeedBackMessageFromRobot[i + 11]=='1' 
+                if (FeedBackMessageFromRobot[i + 3] == '1')  //& FeedBackMessageFromRobot[i + 11]=='1'
                 {
                     FeedBackMessageFromRobot = RobotSendCmd("$Execute,\"TLSET(" + NumberOfTool
                         + "," + strToolSetting + ")\"");
@@ -3145,7 +3121,6 @@ namespace MotionIoLib
                     RobotExecuteBusy = false;
                     return false;
                 }
-
             }
             catch (Exception ex)
             {
@@ -3191,7 +3166,7 @@ namespace MotionIoLib
                 //int i;
                 //i = FeedBackMessageFromRobot.IndexOf(",");
 
-                //if (FeedBackMessageFromRobot[i + 3] == '1')  //& FeedBackMessageFromRobot[i + 11]=='1' 
+                //if (FeedBackMessageFromRobot[i + 3] == '1')  //& FeedBackMessageFromRobot[i + 11]=='1'
                 //{
                 FeedBackMessageFromRobot = RobotSendCmd("$Abort");
                 //}
@@ -3206,7 +3181,6 @@ namespace MotionIoLib
 
                 if (FeedBackMessageFromRobot.IndexOf("!") == -1 && FeedBackMessageFromRobot != "") //& FeedBackMessageFromRobot.Length > 40
                 {
-
                     RobotExecuteBusy = false;
                     return true;
                 }
@@ -3218,7 +3192,6 @@ namespace MotionIoLib
                     RobotExecuteBusy = false;
                     return false;
                 }
-
             }
             catch (Exception ex)
             {
@@ -3230,6 +3203,7 @@ namespace MotionIoLib
                 //MessageBox.Show(ex.Message);
             }
         }
+
         public override bool SetPowerMode(RobotPower PowerMode)
         {
             try
@@ -3279,7 +3253,7 @@ namespace MotionIoLib
                 //High ： 如果将功率模式设为High，低功率模式则会变为OFF状态。这表示机械手以由Speed、Accel、
                 //SpeedS、AccelS 指定的速度、加减速度进行动作。
 
-                if (FeedBackMessageFromRobot[i + 3] == '1')  //& FeedBackMessageFromRobot[i + 11]=='1' 
+                if (FeedBackMessageFromRobot[i + 3] == '1')  //& FeedBackMessageFromRobot[i + 11]=='1'
                 {
                     if (PowerMode == RobotPower.HIGHPOWER)
                     {
@@ -3319,7 +3293,6 @@ namespace MotionIoLib
                     RobotExecuteBusy = false;
                     return false;
                 }
-
             }
             catch (Exception ex)
             {
@@ -3337,7 +3310,6 @@ namespace MotionIoLib
         {
             try
             {
-
                 if (TargetAxis < 0 | TargetAxis > 6)
                 {
                     EpsonErrLog.ErrorMess = "Param is error\r\n";
@@ -3393,7 +3365,7 @@ namespace MotionIoLib
 
                 //SLock 1, 2 '对J1 和J2 进行励磁
 
-                if (FeedBackMessageFromRobot[i + 3] == '1')  //& FeedBackMessageFromRobot[i + 11]=='1' 
+                if (FeedBackMessageFromRobot[i + 3] == '1')  //& FeedBackMessageFromRobot[i + 11]=='1'
                 {
                     FeedBackMessageFromRobot = RobotSendCmd("$Execute,\"SLock " +
                         TargetAxis + "\"");
@@ -3420,7 +3392,6 @@ namespace MotionIoLib
                     RobotExecuteBusy = false;
                     return false;
                 }
-
             }
             catch (Exception ex)
             {
@@ -3437,7 +3408,6 @@ namespace MotionIoLib
         {
             try
             {
-
                 if (AxisQty != 4 & AxisQty != 6)
                 {
                     EpsonErrLog.ErrorMess = "Param is error\r\n";
@@ -3460,7 +3430,6 @@ namespace MotionIoLib
                 {
                     return false;
                 }
-
             }
             catch (Exception ex)
             {
@@ -3531,7 +3500,7 @@ namespace MotionIoLib
 
                 //SFree 1, 2 '将J1 和J2 设为非励磁状态，然后移动Z 和U 关节以安装部件
 
-                if (FeedBackMessageFromRobot[i + 3] == '1')  //& FeedBackMessageFromRobot[i + 11]=='1' 
+                if (FeedBackMessageFromRobot[i + 3] == '1')  //& FeedBackMessageFromRobot[i + 11]=='1'
                 {
                     FeedBackMessageFromRobot = RobotSendCmd("$Execute,\"SFree " + TargetAxis + "\"");
                 }
@@ -3557,7 +3526,6 @@ namespace MotionIoLib
                     RobotExecuteBusy = false;
                     return false;
                 }
-
             }
             catch (Exception ex)
             {
@@ -3574,7 +3542,6 @@ namespace MotionIoLib
         {
             try
             {
-
                 if (AxisQty != 4 & AxisQty != 6)
                 {
                     EpsonErrLog.ErrorMess = "Param is error\r\n";
@@ -3599,7 +3566,6 @@ namespace MotionIoLib
                     //ExecutingBusy = false;
                     return false;
                 }
-
             }
             catch (Exception ex)
             {
@@ -3621,15 +3587,12 @@ namespace MotionIoLib
                     return (bool)bRtn;
                 else
                     return false;
-
             }
             catch (Exception ex)
             {
-           
                 return false;
             }
         }
-
 
         public override bool SetSpeed(int TargetSpeed)
         {
@@ -3646,7 +3609,7 @@ namespace MotionIoLib
                     return false;
                 }
                 // FeedBackMessageFromRobot = RobotSendCmd("$Execute,\"Speed " + TargetSpeed + "\"");
-              bool? brtn=  ExecuteCMD(ERemotCMD.Execute, new string[2] { Spel.Speed, TargetSpeed.ToString() });
+                bool? brtn = ExecuteCMD(ERemotCMD.Execute, new string[2] { Spel.Speed, TargetSpeed.ToString() });
                 if (brtn == null)
                     return false;
                 else
@@ -3661,6 +3624,7 @@ namespace MotionIoLib
                 return false;
             }
         }
+
         /// <summary>
         /// 查询EPSON机械手返回的状态位的所有位代表的含义
         /// </summary>
@@ -3683,7 +3647,6 @@ namespace MotionIoLib
 
             try
             {
-
                 //*3 错误/警告代码
                 //以 4 位数字表示。如果没有错误和警告,则为 0000。
 
@@ -3740,9 +3703,7 @@ namespace MotionIoLib
                         ErrorDisPlay(this, ea);
                         return TempStatus;
                     }
-
                 }
-
 
                 //Test/Teach/Auto/Warning/SError/Safeguard/EStop/Error/Paused/Running/Ready 1 为开/0 为关
 
@@ -3860,7 +3821,6 @@ namespace MotionIoLib
                 }
 
                 return TempStatus;
-
             }
             catch (Exception ex)
             {
@@ -3871,6 +3831,7 @@ namespace MotionIoLib
                 //MessageBox.Show(ex.Message);
             }
         }
+
         /// <summary>
         /// 释放资源
         /// </summary>
@@ -3935,7 +3896,7 @@ namespace MotionIoLib
                 int i;
                 i = FeedBackMessageFromRobot.IndexOf(",");
 
-                if (FeedBackMessageFromRobot[i + 3] == '1')  //& FeedBackMessageFromRobot[i + 11]=='1' 
+                if (FeedBackMessageFromRobot[i + 3] == '1')  //& FeedBackMessageFromRobot[i + 11]=='1'
                 {
                     FeedBackMessageFromRobot = RobotSendCmd("$SetCurRobot," + NumberOfRobot);
                 }
@@ -3961,7 +3922,6 @@ namespace MotionIoLib
                     RobotExecuteBusy = false;
                     return false;
                 }
-
             }
             catch (Exception ex)
             {
@@ -4005,7 +3965,7 @@ namespace MotionIoLib
                 }
                 int i;
                 i = FeedBackMessageFromRobot.IndexOf(",");
-                if (FeedBackMessageFromRobot[i + 3] == '1')  //& FeedBackMessageFromRobot[i + 11]=='1' 
+                if (FeedBackMessageFromRobot[i + 3] == '1')  //& FeedBackMessageFromRobot[i + 11]=='1'
                 {
                     FeedBackMessageFromRobot = RobotSendCmd("$GetCurRobot");
                 }
@@ -4044,7 +4004,6 @@ namespace MotionIoLib
                     RobotExecuteBusy = false;
                     return -1;
                 }
-
             }
             catch (Exception ex)
             {
@@ -4061,7 +4020,6 @@ namespace MotionIoLib
         {
             try
             {
-
                 if (TargetAccelSpeed < 1 | TargetAccelSpeed > 100)
                 {
                     EpsonErrLog.ErrorMess = "Param is error\r\n";
@@ -4122,7 +4080,7 @@ namespace MotionIoLib
                 //加速设定值 以大于1 的整数指定相对于最大加速度的比例。（单位：%）
                 //减速设定值 以大于1 的整数指定相对于最大减速度的比例。（单位：%）
 
-                if (FeedBackMessageFromRobot[i + 3] == '1')  //& FeedBackMessageFromRobot[i + 11]=='1' 
+                if (FeedBackMessageFromRobot[i + 3] == '1')  //& FeedBackMessageFromRobot[i + 11]=='1'
                 {
                     FeedBackMessageFromRobot = RobotSendCmd("$Execute\"Accel " +
                         TargetAccelSpeed + "," + TargetDecelSpeed);
@@ -4149,7 +4107,6 @@ namespace MotionIoLib
                     RobotExecuteBusy = false;
                     return false;
                 }
-
             }
             catch (Exception ex)
             {
@@ -4161,6 +4118,7 @@ namespace MotionIoLib
                 //MessageBox.Show(ex.Message);
             }
         }
+
         /// <summary>
         /// 获取当前速度
         /// </summary>
@@ -4169,7 +4127,6 @@ namespace MotionIoLib
         {
             try
             {
-
                 //判断是否正在执行命令，不然会丢失指令
                 if (this.RobotExecuteBusy == true)
                 {
@@ -4209,7 +4166,7 @@ namespace MotionIoLib
                 //速度设置是指以1～100 的整数指定相对于最大速度的比例（%）。如果指定“100”，则以最大速度进
                 //行动作。
 
-                if (FeedBackMessageFromRobot[i + 3] == '1')  //& FeedBackMessageFromRobot[i + 11]=='1' 
+                if (FeedBackMessageFromRobot[i + 3] == '1')  //& FeedBackMessageFromRobot[i + 11]=='1'
                 {
                     FeedBackMessageFromRobot = RobotSendCmd("$Execute,\"Speed" + "\"");
                 }
@@ -4224,7 +4181,6 @@ namespace MotionIoLib
 
                 if (FeedBackMessageFromRobot.IndexOf("!") == -1) //& FeedBackMessageFromRobot.Length > 40
                 {
-
                     //$Execute,"Speed"
                     //#Execute,"Low Power Mode
                     //1
@@ -4249,7 +4205,6 @@ namespace MotionIoLib
                     RobotExecuteBusy = false;
                     return -1;
                 }
-
             }
             catch (Exception ex)
             {
@@ -4261,6 +4216,7 @@ namespace MotionIoLib
                 //MessageBox.Show(ex.Message);
             }
         }
+
         /// <summary>
         /// 获取加速度
         /// </summary>
@@ -4273,7 +4229,6 @@ namespace MotionIoLib
 
             try
             {
-
                 //判断是否正在执行命令，不然会丢失指令
                 if (this.RobotExecuteBusy == true)
                 {
@@ -4309,7 +4264,7 @@ namespace MotionIoLib
                 //(2) Accel
                 //如果省略参数，将返回当前的Accel 参数
 
-                if (FeedBackMessageFromRobot[i + 3] == '1')  //& FeedBackMessageFromRobot[i + 11]=='1' 
+                if (FeedBackMessageFromRobot[i + 3] == '1')  //& FeedBackMessageFromRobot[i + 11]=='1'
                 {
                     FeedBackMessageFromRobot = RobotSendCmd("$Execute,\"Accel" + "\"");
                 }
@@ -4338,7 +4293,7 @@ namespace MotionIoLib
                     //TempStr2=TempStr[1].Split(',');
                     //if(TempStr2[0]!="#Execute")
                     //    {
-                    //    ExecutingBusy = false;                        
+                    //    ExecutingBusy = false;
                     //    return TempAccel;
                     //    }
 
@@ -4364,7 +4319,6 @@ namespace MotionIoLib
                     RobotExecuteBusy = false;
                     return TempAccel;
                 }
-
             }
             catch (Exception ex)
             {
@@ -4376,6 +4330,7 @@ namespace MotionIoLib
                 //MessageBox.Show(ex.Message);
             }
         }
+
         /// <summary>
         /// 获取当前功率模式
         /// </summary>
@@ -4386,7 +4341,6 @@ namespace MotionIoLib
 
             try
             {
-
                 //判断是否正在执行命令，不然会丢失指令
                 if (this.RobotExecuteBusy == true)
                 {
@@ -4425,7 +4379,7 @@ namespace MotionIoLib
                 //结果
                 //如果省略参数，则显示当前的功率模式。
 
-                //if (FeedBackMessageFromRobot[i + 3] == '1')  //& FeedBackMessageFromRobot[i + 11]=='1' 
+                //if (FeedBackMessageFromRobot[i + 3] == '1')  //& FeedBackMessageFromRobot[i + 11]=='1'
                 //{
                 FeedBackMessageFromRobot = RobotSendCmd("$Execute,\"Speed" + "\"");
                 //FeedBackMessageFromRobot = SendCommand("$Execute,\"Power" + "\"" + Suffix);
@@ -4482,7 +4436,6 @@ namespace MotionIoLib
                     RobotExecuteBusy = false;
                     return TempPower;
                 }
-
             }
             catch (Exception ex)
             {
@@ -4494,6 +4447,7 @@ namespace MotionIoLib
                 //MessageBox.Show(ex.Message);
             }
         }
+
         /// <summary>
         /// 设置原点坐标
         /// </summary>
@@ -4555,7 +4509,6 @@ namespace MotionIoLib
                     RobotExecuteBusy = false;
                     return false;
                 }
-
             }
             catch (Exception ex)
             {
@@ -4566,6 +4519,7 @@ namespace MotionIoLib
                 return false;
             }
         }
+
         public override bool Loacl(int LocalNo, RobotPoint LocalPoint)
         {
             try
@@ -4622,7 +4576,6 @@ namespace MotionIoLib
                     RobotExecuteBusy = false;
                     return false;
                 }
-
             }
             catch (Exception ex)
             {
@@ -4638,7 +4591,6 @@ namespace MotionIoLib
         {
             try
             {
-
                 //远程以太网命令格式：$ 远程命令{, parameter....} 终端
                 //Execute           命令字符串              执行命令                                          Auto开/Ready开/Error关/EStop关/Safeguard关
                 //----------------------------------------------------
@@ -4696,7 +4648,6 @@ namespace MotionIoLib
                     RobotExecuteBusy = false;
                     return false;
                 }
-
             }
             catch (Exception ex)
             {
@@ -4707,6 +4658,7 @@ namespace MotionIoLib
                 return false;
             }
         }
+
         /// <summary>
         /// 松开刹车功能
         /// </summary>
@@ -4716,7 +4668,6 @@ namespace MotionIoLib
         {
             try
             {
-
                 if (TargetAxis < 1 | TargetAxis > 6)
                 {
                     EpsonErrLog.ErrorMess = "Param is error\r\n";
@@ -4770,7 +4721,7 @@ namespace MotionIoLib
                 //brake on, 1
                 //brake off, 1
 
-                if (FeedBackMessageFromRobot[i + 3] == '1')  //& FeedBackMessageFromRobot[i + 11]=='1' 
+                if (FeedBackMessageFromRobot[i + 3] == '1')  //& FeedBackMessageFromRobot[i + 11]=='1'
                 {
                     FeedBackMessageFromRobot = RobotSendCmd("$Execute,\"Brake off, " +
                         TargetAxis + "\"");
@@ -4797,7 +4748,6 @@ namespace MotionIoLib
                     RobotExecuteBusy = false;
                     return false;
                 }
-
             }
             catch (Exception ex)
             {
@@ -4818,7 +4768,6 @@ namespace MotionIoLib
         /// <returns></returns>
         public override bool GetInputBit(int TargetInputBit, ref bool IsOn)
         {
-
             try
             {
                 //远程以太网命令格式：$ 远程命令{, parameter....} 终端
@@ -4827,14 +4776,12 @@ namespace MotionIoLib
 
                 if (TargetInputBit < 0 | TargetInputBit > 23)
                 {
-
                     return false;
                 }
 
                 //判断是否正在执行命令，不然会丢失指令
                 if (RobotExecuteBusy == true)
                 {
-
                     return false;
                 }
                 else
@@ -4851,7 +4798,7 @@ namespace MotionIoLib
                 //int i;
                 //i = FeedBackMessageFromRobot.IndexOf(",");
 
-                //if (FeedBackMessageFromRobot[i + 3] == '1')  //& FeedBackMessageFromRobot[i + 11]=='1' 
+                //if (FeedBackMessageFromRobot[i + 3] == '1')  //& FeedBackMessageFromRobot[i + 11]=='1'
                 //{
                 FeedBackMessageFromRobot = RobotSendCmd("$GetIO," + TargetInputBit + "\"");
                 //}
@@ -4891,7 +4838,6 @@ namespace MotionIoLib
                     RobotExecuteBusy = false;
                     return false;
                 }
-
             }
             catch (Exception ex)
             {
@@ -4899,8 +4845,8 @@ namespace MotionIoLib
                 return false;
                 //MessageBox.Show(ex.Message);
             }
-
         }
+
         //设置指定输出位的状态【true：打开此位,false：关闭此位】
         /// <summary>
         /// 设置指定输出位的状态【true：打开此位,false：关闭此位】
@@ -4910,7 +4856,6 @@ namespace MotionIoLib
         /// <returns></returns>
         public override bool SetOutputBit(int TargetOutputBit, bool TurnOn)
         {
-
             try
             {
                 //远程以太网命令格式：$ 远程命令{, parameter....} 终端
@@ -4947,7 +4892,7 @@ namespace MotionIoLib
                 //int TempOut = 0;
                 //TempOut = (TurnOn == true) ? 1 : 0;
 
-                //if (FeedBackMessageFromRobot[i + 3] == '1')  //& FeedBackMessageFromRobot[i + 11]=='1' 
+                //if (FeedBackMessageFromRobot[i + 3] == '1')  //& FeedBackMessageFromRobot[i + 11]=='1'
                 //{
                 FeedBackMessageFromRobot = RobotSendCmd("$GetIO," + TargetOutputBit + "\"");
                 //}
@@ -4967,7 +4912,6 @@ namespace MotionIoLib
                     RobotExecuteBusy = false;
                     return false;
                 }
-
             }
             catch (Exception ex)
             {

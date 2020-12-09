@@ -1,28 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using gts;
-using System.Diagnostics;
-using log4net;
+﻿using LS;
+using System;
 using System.Windows.Forms;
-using LS;
+
 namespace MotionIoLib
 {
-
     public class IoCtrl_LeiSai : IoCtrl
     {
-
-        IntPtr[] m_Axishand = null;
-        IntPtr m_devPtr = new IntPtr();
+        private IntPtr[] m_Axishand = null;
+        private IntPtr m_devPtr = new IntPtr();
 
         public IoCtrl_LeiSai(int nIndex, ulong nCardNo)
             : base(nIndex, nCardNo)
         {
             m_strCardName = "IoCtrl_LeiSai";
-
-
         }
 
         public override bool Init()
@@ -41,9 +31,8 @@ namespace MotionIoLib
             return true;
         }
 
-
         /// <summary>
-        ///释放IO卡 
+        ///释放IO卡
         /// </summary>
         public override void DeInit()
         {
@@ -51,7 +40,7 @@ namespace MotionIoLib
         }
 
         /// <summary>
-        ///获取卡所有的输入信号 
+        ///获取卡所有的输入信号
         /// </summary>
         /// <param name="nData"></param>
         /// <returns></returns>
@@ -61,18 +50,17 @@ namespace MotionIoLib
         }
 
         /// <summary>
-        ///获取卡所有的输出信号 
+        ///获取卡所有的输出信号
         /// </summary>
         /// <param name="nData"></param>
         /// <returns></returns>
         public override bool ReadIOOut(ref int nData)
         {
-
             return true;
         }
 
         /// <summary>
-        ///按位获取输入信号 
+        ///按位获取输入信号
         /// </summary>
         /// <param name="nIndex"></param>
         /// <returns></returns>
@@ -85,11 +73,10 @@ namespace MotionIoLib
 
             int a = IOC0640.ioc_read_inbit((ushort)m_nCardNo, (ushort)nIndex);
             return a == 0;
-
         }
 
         /// <summary>
-        ///按位获取输出信号 
+        ///按位获取输出信号
         /// </summary>
         /// <param name="nIndex"></param>
         /// <returns></returns>
@@ -101,9 +88,8 @@ namespace MotionIoLib
             return a == 0;
         }
 
-
         /// <summary>
-        /// 按位输出信号 
+        /// 按位输出信号
         /// </summary>
         /// <param name="nIndex"></param>
         /// <param name="bBit"></param>
@@ -117,7 +103,7 @@ namespace MotionIoLib
         }
 
         /// <summary>
-        /// 输出整个卡的信号 
+        /// 输出整个卡的信号
         /// </summary>
         /// <param name="nData"></param>
         /// <returns></returns>
@@ -130,16 +116,15 @@ namespace MotionIoLib
         {
             return true;
         }
+
         public override bool InStopState(int nIndex, bool bState)
         {
             return true;
         }
 
-
         public override bool InStopDisenable(int nIndex)
         {
             return true;
         }
-
     }
 }
