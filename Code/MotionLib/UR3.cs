@@ -11,6 +11,7 @@ namespace MotionLib
 
         public override bool Abort()
         {
+            //试试
             throw new NotImplementedException();
         }
 
